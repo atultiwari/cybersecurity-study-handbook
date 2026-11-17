@@ -941,7 +941,7 @@ Common initial TTL values: **64 and 128 for TCP and UDP; 128 and 255 for ICMP.**
     Be the defender. The lab web server announces its version. Read the banner you would have to hide:
 
     ```bash
-    curl -sI http://10.77.0.20/ | grep -i -E 'server|powered'
+    curl -s -D - -o /dev/null http://10.77.0.20/ | grep -i -E 'server|powered'
     ```
 
 !!! recap "Recap: section 9"

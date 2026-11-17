@@ -1209,7 +1209,7 @@ hostname -I            # your own address
 cat /etc/resolv.conf   # the lab's name server
 
 # 3. Make one harmless, in-scope request
-curl -sI http://10.77.0.20/
+curl -s -D - -o /dev/null http://10.77.0.20/
 exit
 
 # 4. Back on your own computer: find your request in the target's log

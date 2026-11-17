@@ -1725,7 +1725,7 @@ nmap -sS -f -D RND:3 -p 80 --packet-trace 10.77.0.20</code></p>
 <p class="admonition-title">Try it</p>
 <p>Be the defender. The lab web server announces its version. Read the banner you would have to hide:</p>
 <p><code>bash
-curl -sI http://10.77.0.20/ | grep -i -E 'server|powered'</code></p>
+curl -s -D - -o /dev/null http://10.77.0.20/ | grep -i -E 'server|powered'</code></p>
 </div>
 <div class="admonition recap">
 <p class="admonition-title">Recap: section 9</p>
