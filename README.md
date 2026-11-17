@@ -19,7 +19,7 @@ Original, plain-language study handbooks for ethical hacking (CEH), penetration 
 
 | Track | Chapters published |
 | --- | --- |
-| Ethical hacking (CEH v13 syllabus) | Module 1, Module 2, Module 3 (review drafts) |
+| Ethical hacking (CEH v13 syllabus) | Modules 1 to 4 (review drafts) |
 | Penetration testing bridge | Not started |
 | Offensive AI security (COASP) | Not started |
 

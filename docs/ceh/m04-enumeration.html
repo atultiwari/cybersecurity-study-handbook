@@ -1,0 +1,1790 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="author" content="Dr. Atul Tiwari"><title>Module 4 - Enumeration</title><style>:root{--bg:#fbfaf7;--fg:#1d2127;--mut:#5d6570;--line:#d9d5cc;--card:#fff;--acc:#0b6e69;--acc2:#b4530f;--ok:#1d7a3e;--bad:#b3261e;--code:#f1eee7;--cp:#5b3fa8;--ai:#0b5cab;--mem:#a3123a;--und:#0b5cab;--rec:#6a5a12;--do:#1d7a3e;--gold:#8a6500}
+@media(prefers-color-scheme:dark){:root{--bg:#14171b;--fg:#e6e3dc;--mut:#9aa3ad;--line:#333a42;--card:#1b1f24;--acc:#4fc3bb;--acc2:#f0a25e;--ok:#6fcf8e;--bad:#ff8a80;--code:#22272e;--cp:#b9a3ff;--ai:#7fb8ff;--mem:#ff8fab;--und:#7fb8ff;--rec:#d9c46a;--do:#6fcf8e;--gold:#e0bd55}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.65 Georgia,"Iowan Old Style",serif}
+.top{position:sticky;top:0;z-index:5;display:flex;gap:16px;align-items:center;justify-content:space-between;padding:10px 20px;background:var(--bg);border-bottom:1px solid var(--line);font-family:system-ui,sans-serif;font-size:14px}
+.top a{color:var(--fg);text-decoration:none;font-weight:600}.top input{width:220px;max-width:45vw;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg)}
+.wrap{display:grid;grid-template-columns:270px minmax(0,1fr);max-width:1240px;margin:0 auto}
+.side{position:sticky;top:50px;align-self:start;max-height:calc(100vh - 50px);overflow:auto;padding:20px 12px 40px 20px;font:13.5px/1.4 system-ui,sans-serif}
+.side ul{list-style:none;margin:0;padding-left:0}.side ul ul{padding-left:12px;border-left:1px solid var(--line);margin:2px 0 8px}
+.side a{display:block;padding:3px 6px;color:var(--mut);text-decoration:none;border-radius:4px}.side a:hover,.side a.on{color:var(--acc);background:var(--card)}
+.side li.done>a::after{content:" \2713";color:var(--ok)}
+main{padding:28px 36px 80px;max-width:860px;min-width:0}
+.kicker{font:600 12.5px system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--acc2);margin:0}
+h1{font-size:2.1em;line-height:1.15;margin:.2em 0 .5em;text-wrap:balance}h2{font-size:1.5em;margin:2.2em 0 .5em;padding-top:.6em;border-top:2px solid var(--fg)}
+h3{font-size:1.15em;margin:1.8em 0 .4em}h4{font:600 .95em system-ui,sans-serif;margin:1.4em 0 .3em}
+h2 .mark{float:right;font:500 12px system-ui,sans-serif;color:var(--mut);cursor:pointer;border:1px solid var(--line);border-radius:12px;padding:2px 10px;background:var(--card)}
+h2.done .mark{color:var(--ok);border-color:var(--ok)}
+a{color:var(--acc)}code{font:.86em ui-monospace,Menlo,monospace;background:var(--code);padding:1px 5px;border-radius:4px}
+pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow:auto;line-height:1.45;border:1px solid var(--line)}pre code{background:none;padding:0;font-size:.82em}
+.tw{overflow-x:auto;margin:1em 0}table{border-collapse:collapse;width:100%;font:14.5px/1.45 system-ui,sans-serif}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}th{font-weight:600;border-bottom:2px solid var(--fg)}
+.dg{margin:1.4em 0;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow-x:auto}
+.dg svg{display:block;margin:0 auto;max-width:100%;height:auto;font-family:system-ui,sans-serif}
+.dg figcaption{font:13.5px system-ui,sans-serif;color:var(--mut);margin-top:8px;text-align:center}
+svg .b{fill:var(--card);stroke:var(--fg);stroke-width:1.3}svg .d{fill:var(--code);stroke:var(--acc2);stroke-width:1.5}svg .t{fill:var(--code);stroke:var(--acc);stroke-width:1.5}
+svg .g{fill:none;stroke:var(--ok);stroke-width:1.6}svg .r{fill:none;stroke:var(--bad);stroke-width:1.6}
+svg text{fill:var(--fg);font-size:13px}svg .s{font-size:11.5px;fill:var(--mut)}svg .h{font-weight:600}
+svg .ln{stroke:var(--fg);stroke-width:1.4;fill:none}svg .lf{stroke:var(--mut);stroke-width:1;stroke-dasharray:4 4;fill:none}svg .da{stroke-dasharray:6 4}
+svg .ar{fill:var(--fg)}svg .ok{fill:var(--ok)}svg .bad{fill:var(--bad)}svg .acc{fill:var(--acc)}
+/* memorise / understand / recognise / do tags */
+.tag{display:inline-block;font:700 10.5px/1 system-ui,sans-serif;letter-spacing:.07em;padding:3px 6px;border-radius:4px;border:1px solid currentColor;vertical-align:middle;white-space:nowrap;cursor:help}
+.tag-M{color:var(--mem)}.tag-U{color:var(--und)}.tag-R{color:var(--rec)}.tag-D{color:var(--do)}
+h2 .tag,h3 .tag{margin-left:6px}
+.legend{list-style:none;padding:10px 14px;margin:1em 0;background:var(--card);border:1px solid var(--line);border-radius:8px;font:14px/1.9 system-ui,sans-serif}
+.legend .tag{min-width:92px;text-align:center;margin-right:8px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;font:13.5px system-ui,sans-serif;color:var(--mut);margin:0 0 1.4em}.meta b{color:var(--fg);font-weight:600}
+/* boxes */
+.admonition{margin:1.3em 0;padding:10px 16px 6px;border-left:4px solid var(--acc);background:var(--card);border-radius:0 8px 8px 0;font-size:.96em}
+.admonition-title{font:600 12.5px system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;margin:0 0 4px;color:var(--acc)}
+.admonition.cpent{border-color:var(--cp)}.cpent .admonition-title{color:var(--cp)}.admonition.coasp{border-color:var(--ai)}.coasp .admonition-title{color:var(--ai)}
+.admonition.trap{border-color:var(--bad)}.trap .admonition-title{color:var(--bad)}.admonition.hospital{border-color:var(--acc2)}.hospital .admonition-title{color:var(--acc2)}
+.admonition.try{border-color:var(--do)}.try .admonition-title{color:var(--do)}.try .admonition-title::before{content:"\25B6  "}
+.admonition.remember{border-color:var(--gold);border-style:dashed;border-width:1px 1px 1px 4px}.remember .admonition-title{color:var(--gold)}
+.admonition.recap{border:1px solid var(--line);border-top:3px solid var(--fg);border-radius:0 0 8px 8px}.recap .admonition-title{color:var(--fg)}
+.admonition.exam{border-color:var(--mem);background:linear-gradient(90deg,color-mix(in srgb,var(--mem) 7%,var(--card)),var(--card))}.exam .admonition-title{color:var(--mem)}
+.admonition.story{border-color:var(--mut);font-style:italic}.story .admonition-title{color:var(--mut);font-style:normal}
+.admonition.before,.admonition.why{border:1px solid var(--line);border-left:4px solid var(--acc);}
+.cheat{border:2px solid var(--mem);border-radius:10px;padding:6px 18px 10px;background:var(--card);font-size:.93em}
+.cheat ul{margin:.3em 0 .8em;padding-left:1.2em}.cheat table{font-size:13.5px}.cheat p{margin:.7em 0 .2em}
+.pbtn{font:600 13px system-ui,sans-serif;padding:6px 12px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
+.pn{display:flex;justify-content:space-between;margin-top:50px;font:600 14px system-ui,sans-serif}
+.quiz .q{border:1px solid var(--line);border-radius:8px;padding:8px 14px 12px;margin:10px 0;background:var(--card)}
+.quiz button{display:block;width:100%;text-align:left;margin:5px 0;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);font:14.5px system-ui,sans-serif;cursor:pointer}
+.quiz button.right{border-color:var(--ok);color:var(--ok);font-weight:600}.quiz button.wrong{border-color:var(--bad);color:var(--bad)}
+.quiz .why{font:14px system-ui,sans-serif;color:var(--mut);margin:6px 0 0}.score{font:600 15px system-ui,sans-serif}
+footer{margin-top:60px;padding-top:14px;border-top:1px solid var(--line);font:13px system-ui,sans-serif;color:var(--mut)}
+section.hide{display:none}
+.admonition.update{border-color:var(--ai);border-width:1px 1px 1px 4px;border-style:solid}.update .admonition-title{color:var(--ai)}.update .admonition-title::before{content:"\21BB  "}
+.mbtn{display:none;font:600 13px system-ui,sans-serif;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
+.byline{font:14.5px system-ui,sans-serif;color:var(--mut);margin:-.3em 0 1.2em}
+@media(max-width:860px){.wrap{display:block}.mbtn{display:inline-block}.top{padding:8px 12px;gap:10px;justify-content:flex-start}.top a{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.top input{width:120px}
+.side{display:none;position:fixed;top:46px;left:0;right:0;bottom:0;max-height:none;z-index:4;background:var(--bg);padding:14px 18px 60px;font-size:15px}.side a{padding:7px 6px}body.nav .side{display:block}body.nav{overflow:hidden}
+main{padding:18px 15px 60px}body{font-size:16.5px}h1{font-size:1.75em}h2{font-size:1.32em}h2 .mark{float:none;display:inline-block;margin-left:8px}
+.dg{padding:10px}.dg svg{max-width:none}.dg figcaption{text-align:left}table{font-size:14px}th,td{padding:6px 8px}pre{font-size:.92em}.admonition{padding:9px 12px 5px}.legend .tag{min-width:86px}}
+@media print{.top,.side,.mark,.pbtn,.pn{display:none}.wrap{display:block}body{font-size:11.5pt}.dg{break-inside:avoid}
+body.sheet main>*{display:none}body.sheet main>section.sheet{display:block}body.sheet .cheat{border:none;padding:0;font-size:9.5pt}body.sheet h2{border:none;margin-top:0}}
+@page sheet{size:A4 landscape;margin:8mm}
+@media print{body.sheet{page:sheet}body.sheet .cheat{columns:3;column-gap:16px;font-size:6.9pt;line-height:1.2}body.sheet .cheat ul{margin:.1em 0 .4em}body.sheet .cheat p{margin:.4em 0 .1em}body.sheet .tw{overflow:visible;margin:.3em 0}body.sheet section.sheet h2{font-size:12pt;margin:0 0 2pt;padding:0}body.sheet .cheat table{font-size:6.3pt;break-inside:avoid}body.sheet .cheat th,body.sheet .cheat td{padding:1px 2px}body.sheet .cheat code{font-size:.95em;padding:0}body.sheet section.sheet>p{display:none}@page{margin:9mm}}
+</style></head>
+<body><header class="top"><button type="button" id="menu" class="mbtn" aria-expanded="false" aria-controls="side">Contents</button><a href="index.html">Ethical Hacking Study Handbook</a>
+<input id="find" type="search" placeholder="Filter sections" aria-label="Filter sections"></header>
+<div class="wrap"><nav class="side" id="side" aria-label="Contents"><div class="toc">
+<ul>
+<li><a href="#what-this-chapter-is-about">What this chapter is about</a><ul>
+<li><a href="#how-the-tags-work">How the tags work</a></li>
+</ul>
+</li>
+<li><a href="#1-enumeration-concepts">1. Enumeration concepts</a><ul>
+<li><a href="#what-it-collects">What it collects</a></li>
+<li><a href="#seven-techniques">Seven techniques</a></li>
+<li><a href="#services-and-ports">Services and ports</a></li>
+</ul>
+</li>
+<li><a href="#2-netbios-enumeration">2. NetBIOS enumeration</a><ul>
+<li><a href="#netbios-names">NetBIOS names</a></li>
+<li><a href="#nbtstat">nbtstat</a></li>
+<li><a href="#other-netbios-tools">Other NetBIOS tools</a></li>
+<li><a href="#pstools-and-net-view">PsTools and Net View</a></li>
+</ul>
+</li>
+<li><a href="#3-snmp-enumeration">3. SNMP enumeration</a><ul>
+<li><a href="#managers-agents-and-community-strings">Managers, agents and community strings</a></li>
+<li><a href="#the-mib">The MIB</a></li>
+<li><a href="#snmpwalk-and-nmap">snmpwalk and Nmap</a></li>
+<li><a href="#tools">Tools</a></li>
+</ul>
+</li>
+<li><a href="#4-ldap-enumeration">4. LDAP enumeration</a><ul>
+<li><a href="#how-ldap-works">How LDAP works</a></li>
+<li><a href="#manual-and-automated-enumeration">Manual and automated enumeration</a></li>
+<li><a href="#tools_1">Tools</a></li>
+</ul>
+</li>
+<li><a href="#5-ntp-and-nfs-enumeration">5. NTP and NFS enumeration</a><ul>
+<li><a href="#ntp-enumeration">NTP enumeration</a></li>
+<li><a href="#nfs-enumeration">NFS enumeration</a></li>
+</ul>
+</li>
+<li><a href="#6-smtp-enumeration">6. SMTP enumeration</a><ul>
+<li><a href="#vrfy-expn-and-rcpt-to">VRFY, EXPN and RCPT TO</a></li>
+<li><a href="#tools_2">Tools</a></li>
+</ul>
+</li>
+<li><a href="#7-dns-enumeration">7. DNS enumeration</a><ul>
+<li><a href="#zone-transfer">Zone transfer</a></li>
+<li><a href="#dns-cache-snooping">DNS cache snooping</a></li>
+<li><a href="#dnssec-zone-walking">DNSSEC zone walking</a></li>
+<li><a href="#owasp-amass-and-nmap">OWASP Amass and Nmap</a></li>
+</ul>
+</li>
+<li><a href="#8-other-enumeration-techniques">8. Other enumeration techniques</a><ul>
+<li><a href="#ipsec-enumeration">IPsec enumeration</a></li>
+<li><a href="#voip-enumeration">VoIP enumeration</a></li>
+<li><a href="#rpc-enumeration">RPC enumeration</a></li>
+<li><a href="#unix-and-linux-user-enumeration">Unix and Linux user enumeration</a></li>
+<li><a href="#smb-enumeration">SMB enumeration</a></li>
+</ul>
+</li>
+<li><a href="#9-enumeration-with-an-ai-assistant">9. Enumeration with an AI assistant</a></li>
+<li><a href="#10-enumeration-countermeasures">10. Enumeration countermeasures</a><ul>
+<li><a href="#snmp">SNMP</a></li>
+<li><a href="#ldap">LDAP</a></li>
+<li><a href="#nfs">NFS</a></li>
+<li><a href="#smtp">SMTP</a></li>
+<li><a href="#smb">SMB</a></li>
+<li><a href="#dns">DNS</a></li>
+</ul>
+</li>
+<li><a href="#11-lab-walk-through">11. Lab walk-through</a></li>
+<li><a href="#quiz">Quiz</a></li>
+<li><a href="#exam-cheat-sheet">Exam cheat sheet</a></li>
+<li><a href="#coverage-check-against-the-official-module-4">Coverage check against the official Module 4</a></li>
+</ul>
+</div>
+</nav>
+<main><p class="kicker">Ethical hacking track · Module 4 of 20</p><h1 id="enumeration">Enumeration</h1>
+<p class="meta"><span><b>Reading</b> about 50 min</span><span><b>Lab</b> 60 min</span><span><b>Difficulty</b> Beginner to intermediate</span><span><b>Checked</b> 18 Nov 2026: CEH v13 courseware Module 04, Microsoft Learn, Nmap reference guide, OpenLDAP admin guide</span></p>
+<h2 id="what-this-chapter-is-about">What this chapter is about</h2>
+<p>Scanning told you which doors are open. Enumeration walks up to each open door and asks the service behind it to list what it knows: user names, machine names, shared folders, running software. Many services answer far more freely than their owners realise.</p>
+<div class="admonition story">
+<p class="admonition-title">An everyday picture</p>
+<p>You are in the lobby of an office block. Scanning was reading the board that shows which floors are occupied. Enumeration is going to each reception desk and asking, politely, "Who works here? Which rooms do you have? Is Mr Kapoor in?" A well-run desk says "I cannot tell you that." A badly run desk hands you the staff list. You have not broken anything. You asked, and the desk answered.</p>
+</div>
+<p>Every list you collect here feeds a later attack. User names feed password guessing. Share names feed data theft. Software versions feed exploit selection. That is why the defender's version of this chapter is short: stop the desk handing out the list.</p>
+<div class="admonition before">
+<p class="admonition-title">Before you start</p>
+<p>This chapter assumes five ideas. The one-line version is enough to carry on.</p>
+<ul>
+<li><strong>Port.</strong> A number that says which program on a machine a connection is for. Port 25 is mail, port 53 is DNS. Module 3 covers ports.</li>
+<li><strong>Service.</strong> A program that waits on a port for requests: a mail server, a file server, a directory.</li>
+<li><strong>TCP and UDP.</strong> The two ways of carrying data. TCP sets up a connection and confirms delivery. UDP just sends.</li>
+<li><strong>Protocol.</strong> The agreed language a service speaks. Enumeration means speaking that language well enough to ask questions.</li>
+<li><strong>Active Directory.</strong> Microsoft's central list of an organisation's users, computers and groups. Section 4 explains how it is queried.</li>
+</ul>
+<p>Modules 2 and 3 help but are not required.</p>
+</div>
+<div class="admonition why">
+<p class="admonition-title">Why this matters to you</p>
+<ul>
+<li><strong>Exam candidate.</strong> This module is ports, protocols and commands. Expect "which port", "which tool", "which command returned this output" and "which countermeasure" for each of about a dozen services.</li>
+<li><strong>Defending a network.</strong> Every technique here works only because a service was left on, left open or left on its defaults. Section 10 lists the fix for each, and most are one configuration line.</li>
+<li><strong>Working with sensitive data.</strong> Shared folders, printers, scanners and medical or industrial devices often speak these old protocols with no password. If you run such a device, this chapter shows what it tells anyone on the network who asks.</li>
+</ul>
+</div>
+<h3 id="how-the-tags-work">How the tags work</h3>
+<ul class="legend"><li><span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span> Likely to be asked directly. Know it exactly.</li><li><span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span> Needed to reason through scenario questions. Do not recite it.</li><li><span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span> Know the name and what it does when you see it in an option list.</li><li><span class="tag tag-D" title="A hands-on skill for the practical exams. Run it at a keyboard.">DO</span> A hands-on skill for the practical exams. Run it at a keyboard.</li></ul>
+<p>Facts tagged MEMORISE are collected automatically into the <a href="#exam-cheat-sheet">cheat sheet</a> at the end.</p>
+<p><strong>How to use this chapter.</strong> Read section 1 first. Sections 2 to 8 each cover one family of services and can be read in any order. Lab L01 offers DNS, web, FTP and mail services, so the "Try it" boxes for those are hands-on; for Windows-only services the box shows you how to confirm the service is absent and names what you would run where it is present.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>After this chapter you can</th>
+<th>Section</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Define enumeration and match each service to its port</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Enumerate NetBIOS names and read an <code>nbtstat</code> table</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Explain SNMP community strings, the MIB and <code>snmpwalk</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td>Query an LDAP directory</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Use the NTP and NFS enumeration commands</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Confirm user names through SMTP</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Perform zone transfers, cache snooping and zone walking</td>
+<td>7</td>
+</tr>
+<tr>
+<td>Recognise IPsec, VoIP, RPC, Unix user and SMB enumeration</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Read AI-generated enumeration commands</td>
+<td>9</td>
+</tr>
+<tr>
+<td>Recommend countermeasures for each service</td>
+<td>10</td>
+</tr>
+</tbody>
+</table></div>
+<h2 class="tg-U" id="1-enumeration-concepts">1. Enumeration concepts <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h2>
+<p><strong>Enumeration</strong> is extracting user names, machine names, network resources, shares and services from a system or network. The attacker makes <strong>active connections</strong> to the target and sends <strong>directed queries</strong>.</p>
+<figure class="dg"><svg viewBox="0 0 700 198" width="700" role="img" aria-label="Where enumeration sits between scanning and vulnerability analysis"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="b" x="14" y="8" width="180" height="32" rx="6"/><text x="104.0" y="29" text-anchor="middle" class="h">Footprinting</text><text x="210" y="29" text-anchor="start" class="s">Module 2. What is published about the organisation? Mostly without touching it.</text><line class="ln" x1="104.0" y1="40" x2="104.0" y2="58" marker-end="url(#a)"/><rect class="b" x="14" y="58" width="180" height="32" rx="6"/><text x="104.0" y="79" text-anchor="middle" class="h">Scanning</text><text x="210" y="79" text-anchor="start" class="s">Module 3. Which hosts are up and which ports are open?</text><line class="ln" x1="104.0" y1="90" x2="104.0" y2="108" marker-end="url(#a)"/><rect class="b" x="14" y="108" width="180" height="32" rx="6"/><text x="104.0" y="129" text-anchor="middle" class="h">Enumeration</text><text x="210" y="129" text-anchor="start" class="s">This module. Log in to each open service and ask it to list what it knows.</text><line class="ln" x1="104.0" y1="140" x2="104.0" y2="158" marker-end="url(#a)"/><rect class="b" x="14" y="158" width="180" height="32" rx="6"/><text x="104.0" y="179" text-anchor="middle" class="h">Vulnerability analysis</text><text x="210" y="179" text-anchor="start" class="s">Module 5. Which of those services, versions and accounts are weak?</text></svg><figcaption>Scanning finds the open doors. Enumeration asks what is behind each one.</figcaption></figure>
+<h3 class="tg-M" id="what-it-collects">What it collects <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>Eight kinds of information: network resources; network shares; routing tables; audit and service settings; SNMP and fully qualified domain name (FQDN) details; machine names; users and groups; applications and banners.</p>
+<p>The courseware adds that enumeration techniques work in an <strong>intranet</strong> environment: most of these services are meant to be reachable only from inside. It also warns that, unlike the earlier phases, enumeration may be illegal without authorisation.</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> the previous phases gathered information "without any illegal activity"; enumeration needs authorisation.</p>
+<p><strong>In practice:</strong> you need written authorisation from the moment you send the first packet. Port scanning without permission is already an offence in many countries. Do not read the courseware's sentence as permission to scan freely.</p>
+</div>
+<h3 class="tg-M" id="seven-techniques">Seven techniques <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>The idea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Extract user names using email IDs</td>
+<td>An address is <code>username@domain</code>; the part before the @ is usually the login name</td>
+</tr>
+<tr>
+<td>Extract information using default passwords</td>
+<td>Manufacturers publish default credentials; many are never changed</td>
+</tr>
+<tr>
+<td>Brute-force Active Directory</td>
+<td>Active Directory answers differently for valid and invalid user names, so names can be confirmed, then passwords guessed</td>
+</tr>
+<tr>
+<td>Extract information using DNS zone transfer</td>
+<td>A misconfigured name server hands over its whole list of hosts (section 7)</td>
+</tr>
+<tr>
+<td>Extract user groups from Windows</td>
+<td>A registered user can list the groups they belong to and their members</td>
+</tr>
+<tr>
+<td>Extract user names using SNMP</td>
+<td>Guess the community string, then read the user table (section 3)</td>
+</tr>
+<tr>
+<td>Extract network resources and topology using SNMP</td>
+<td>Walk the SNMP tree for interfaces, routes and neighbours</td>
+</tr>
+</tbody>
+</table></div>
+<h3 class="tg-M" id="services-and-ports">Services and ports <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>This table is the backbone of the module. The exam asks it directly.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Service</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCP 20, 21</td>
+<td>FTP (data, control)</td>
+</tr>
+<tr>
+<td>TCP 22</td>
+<td>SSH and SFTP</td>
+</tr>
+<tr>
+<td>TCP 23</td>
+<td>Telnet</td>
+</tr>
+<tr>
+<td>TCP 25</td>
+<td>SMTP</td>
+</tr>
+<tr>
+<td>TCP/UDP 53</td>
+<td>DNS, including zone transfer</td>
+</tr>
+<tr>
+<td>UDP 69</td>
+<td>TFTP</td>
+</tr>
+<tr>
+<td>TCP/UDP 111</td>
+<td>RPC portmapper (Unix)</td>
+</tr>
+<tr>
+<td>UDP 123</td>
+<td>NTP</td>
+</tr>
+<tr>
+<td>TCP/UDP 135</td>
+<td>Microsoft RPC endpoint mapper</td>
+</tr>
+<tr>
+<td>UDP 137</td>
+<td>NetBIOS name service</td>
+</tr>
+<tr>
+<td>UDP 138</td>
+<td>NetBIOS datagram service</td>
+</tr>
+<tr>
+<td>TCP 139</td>
+<td>NetBIOS session service (SMB over NetBIOS)</td>
+</tr>
+<tr>
+<td>UDP 161</td>
+<td>SNMP</td>
+</tr>
+<tr>
+<td>TCP/UDP 162</td>
+<td>SNMP trap</td>
+</tr>
+<tr>
+<td>TCP 179</td>
+<td>BGP</td>
+</tr>
+<tr>
+<td>TCP/UDP 389</td>
+<td>LDAP</td>
+</tr>
+<tr>
+<td>TCP/UDP 445</td>
+<td>SMB over TCP (direct host)</td>
+</tr>
+<tr>
+<td>UDP 500</td>
+<td>ISAKMP / IKE (IPsec VPN)</td>
+</tr>
+<tr>
+<td>TCP 2049</td>
+<td>NFS</td>
+</tr>
+<tr>
+<td>TCP/UDP 3268</td>
+<td>Global Catalog service</td>
+</tr>
+<tr>
+<td>TCP/UDP 5060, 5061</td>
+<td>SIP (5061 is encrypted with TLS)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Notes worth understanding: <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></p>
+<ul>
+<li><strong>DNS</strong> normally answers over UDP. A reply larger than 512 bytes is cut short and flagged, and the client asks again over TCP. Zone transfers always use TCP.</li>
+<li><strong>Port 139</strong> carries file and printer sharing on older Windows systems, including the anonymous "null session". The courseware calls restricting it a top priority.</li>
+<li><strong>Port 445</strong> carries the same sharing protocol directly over TCP, without NetBIOS.</li>
+<li><strong>Global Catalog</strong> (3268) is a domain controller's index of every object in the whole organisation, not just one domain.</li>
+<li><strong>FTP</strong> and <strong>Telnet</strong> send passwords in clear text. <strong>TFTP</strong> has no login at all and is used to load firmware on to devices.</li>
+<li><strong>BGP</strong> (179) is the protocol internet providers use to exchange routes.</li>
+</ul>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>The Windows cluster is consecutive: <strong>135</strong> RPC, <strong>137</strong> names, <strong>138</strong> datagrams, <strong>139</strong> sessions, then SMB alone at <strong>445</strong>. SNMP is a pair: <strong>161</strong> asks, <strong>162</strong> receives traps. LDAP <strong>389</strong>, and its organisation-wide cousin the Global Catalog <strong>3268</strong>.</p>
+</div>
+<div class="admonition trap">
+<p class="admonition-title">Exam traps</p>
+<ul>
+<li>NetBIOS <strong>name</strong> service is UDP <strong>137</strong>. NetBIOS <strong>session</strong> service is TCP <strong>139</strong>. Questions swap them.</li>
+<li>SNMP queries go to <strong>161</strong>. Traps go to <strong>162</strong>.</li>
+<li>"SMB over NetBIOS" is 139. "SMB direct host" is 445.</li>
+</ul>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Decide which sections apply to the lab network. In the L01 attacker container:</p>
+<p><code>bash
+nmap -p 21,25,53,80,111,139,389,445,2049 --open 10.77.0.10,20,30,40 | grep -E 'report|open'</code></p>
+<p>Four services answer: DNS, web, FTP and mail. Those are the ones you can enumerate hands-on. The Windows and Unix file-sharing ports are closed here.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 1</p>
+<ul>
+<li>Enumeration makes active connections and directed queries to list users, machines, shares and services.</li>
+<li>It works mainly inside an intranet and needs authorisation.</li>
+<li>Techniques: email IDs, default passwords, brute-forcing Active Directory, zone transfer, Windows groups, SNMP.</li>
+<li>Know the port table: 25 SMTP, 53 DNS, 137/138/139 NetBIOS, 161/162 SNMP, 389 LDAP, 445 SMB, 2049 NFS.</li>
+<li>500 is IKE, 3268 the Global Catalog, 5060/5061 SIP, 179 BGP.</li>
+</ul>
+</div>
+<h2 class="tg-M" id="2-netbios-enumeration">2. NetBIOS enumeration <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h2>
+<p><strong>NetBIOS</strong> (Network Basic Input/Output System) is the naming and session layer Windows has used for file and printer sharing since the 1980s. The courseware treats it first because it gives away so much: the computers in a domain, the shares on each host, and policies and passwords.</p>
+<h3 class="tg-M" id="netbios-names">NetBIOS names <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<figure class="dg"><svg viewBox="0 0 660 96" width="660" role="img" aria-label="A NetBIOS name is 16 characters: 15 for the name and one for the service type"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="t" x="10" y="14" width="533.3333333333334" height="50" rx="4"/><text x="276.6666666666667" y="36" text-anchor="middle" class="h">15 characters</text><text x="276.6666666666667" y="54" text-anchor="middle" class="s">the device name, padded with spaces</text><rect class="d" x="543.3333333333334" y="14" width="106.66666666666667" height="50" rx="4"/><text x="596.6666666666667" y="36" text-anchor="middle" class="h">16th</text><text x="596.6666666666667" y="54" text-anchor="middle" class="s">service code</text><text x="330.0" y="84" text-anchor="middle" class="s">Example: FILESRV01 plus code 20 means &quot;the file server service on FILESRV01&quot;.</text></svg><figcaption>The sixteenth character is a code that says which service the name belongs to.</figcaption></figure>
+<p>A NetBIOS name is a unique <strong>16-character</strong> ASCII string. Fifteen characters name the device; the sixteenth is a code for the service or record type.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Type</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;00&gt;</code></td>
+<td>Unique</td>
+<td>The host name (workstation service)</td>
+</tr>
+<tr>
+<td><code>&lt;00&gt;</code></td>
+<td>Group</td>
+<td>The domain or workgroup name</td>
+</tr>
+<tr>
+<td><code>&lt;03&gt;</code></td>
+<td>Unique</td>
+<td>Messenger service, for the computer or the logged-in user</td>
+</tr>
+<tr>
+<td><code>&lt;20&gt;</code></td>
+<td>Unique</td>
+<td>Server service: the host is sharing files</td>
+</tr>
+<tr>
+<td><code>&lt;1D&gt;</code></td>
+<td>Group</td>
+<td>Master browser for the subnet</td>
+</tr>
+<tr>
+<td><code>&lt;1B&gt;</code></td>
+<td>Unique</td>
+<td>Domain master browser</td>
+</tr>
+</tbody>
+</table></div>
+<p>To enumerate NetBIOS names the remote system must have file and printer sharing enabled. Microsoft does not support NetBIOS name resolution for IPv6.</p>
+<h3 class="tg-M" id="nbtstat">nbtstat <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>nbtstat</strong> is the built-in Windows utility for NetBIOS over TCP/IP. Its switches are case-sensitive.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Switch</th>
+<th>Shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-a &lt;name&gt;</code></td>
+<td>The name table of a remote computer, given its <strong>name</strong></td>
+</tr>
+<tr>
+<td><code>-A &lt;IP&gt;</code></td>
+<td>The name table of a remote computer, given its <strong>IP address</strong></td>
+</tr>
+<tr>
+<td><code>-c</code></td>
+<td>The local cache of NetBIOS names and their IP addresses</td>
+</tr>
+<tr>
+<td><code>-n</code></td>
+<td>The names registered by the local computer</td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td>Counts of names resolved by broadcast and by WINS</td>
+</tr>
+<tr>
+<td><code>-R</code></td>
+<td>Purges the cache and reloads it</td>
+</tr>
+<tr>
+<td><code>-RR</code></td>
+<td>Releases and refreshes the names registered with the name server</td>
+</tr>
+<tr>
+<td><code>-s</code></td>
+<td>Current sessions, with remote computers shown by name</td>
+</tr>
+<tr>
+<td><code>-S</code></td>
+<td>Current sessions, with remote computers shown by IP address</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>Small letter, friendly form; capital letter, numbers. <code>-a</code> takes a n<strong>a</strong>me, <code>-A</code> takes an <strong>A</strong>ddress. <code>-s</code> shows names, <code>-S</code> shows addresses. <code>-c</code> is the <strong>c</strong>ache, <code>-n</code> is <strong>n</strong>ames of this machine.</p>
+</div>
+<h3 class="tg-R" id="other-netbios-tools">Other NetBIOS tools <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h3>
+<ul>
+<li><strong>NetBIOS Enumerator</strong>: scans a range of IP addresses for NetBIOS names, user names, domain names and MAC addresses.</li>
+<li><strong>Nmap</strong>: the <code>nbstat</code> script returns NetBIOS names and the MAC address: <code>nmap -sV -v --script nbstat.nse &lt;target&gt;</code>.</li>
+<li>Also named: Global Network Inventory, Advanced IP Scanner, Hyena, Nsauditor Network Security Auditor.</li>
+</ul>
+<h3 class="tg-M" id="pstools-and-net-view">PsTools and Net View <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>PsTools</strong> is Microsoft's suite of command-line tools for managing remote Windows systems. With valid credentials it enumerates a great deal.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PsExec</td>
+<td>Runs a process on a remote system; opens a remote command prompt</td>
+</tr>
+<tr>
+<td>PsFile</td>
+<td>Lists files on a system that are opened remotely</td>
+</tr>
+<tr>
+<td>PsGetSid</td>
+<td>Translates a security identifier (SID) to a name and back</td>
+</tr>
+<tr>
+<td>PsKill</td>
+<td>Kills processes locally or remotely</td>
+</tr>
+<tr>
+<td>PsInfo</td>
+<td>Shows key system facts: build, owner, processors, memory, install date</td>
+</tr>
+<tr>
+<td>PsList</td>
+<td>Shows process, CPU and memory details</td>
+</tr>
+<tr>
+<td>PsLoggedOn</td>
+<td>Shows who is logged on locally and through shared resources</td>
+</tr>
+<tr>
+<td>PsLogList</td>
+<td>Dumps event logs from a local or remote computer</td>
+</tr>
+<tr>
+<td>PsPasswd</td>
+<td>Changes account passwords, locally or remotely</td>
+</tr>
+<tr>
+<td>PsShutdown</td>
+<td>Shuts down or reboots a local or remote computer</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Net View</strong> lists shared resources:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>net view \\&lt;computer&gt;</code></td>
+<td>The shares on that computer</td>
+</tr>
+<tr>
+<td><code>net view \\&lt;computer&gt; /ALL</code></td>
+<td>All shares, including hidden ones</td>
+</tr>
+<tr>
+<td><code>net view /domain</code></td>
+<td>The domains on the network</td>
+</tr>
+<tr>
+<td><code>net view /domain:&lt;name&gt;</code></td>
+<td>The computers in that domain</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> NetBIOS is enumerated first, with <code>nbtstat</code>, <code>net view</code> and the tools above, on ports 137 to 139.</p>
+<p><strong>In practice:</strong> current Windows has largely left this behind (see the box below). On a modern network <code>net view</code> often returns an error, and testers enumerate shares and users over port 445 with tools such as <code>smbclient</code>, enum4linux-ng and NetExec. Old servers, printers and storage boxes still answer NetBIOS, which is why it stays worth checking.</p>
+</div>
+<div class="admonition update">
+<p class="admonition-title">Updated: Windows has moved away from NetBIOS and SMBv1</p>
+<p>Each line gives what changed and when. The exam still expects the courseware's version.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>What changed</th>
+<th>When</th>
+<th>Exam still expects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SMB version 1</td>
+<td>No longer installed by default, starting with Windows 10 version 1709. The Computer Browser service that <code>net view</code> browsing relies on goes with it</td>
+<td><strong>October 2017</strong></td>
+<td>NetBIOS and SMB enumeration as described</td>
+</tr>
+<tr>
+<td>Computer Browser service</td>
+<td>Listed by Microsoft as deprecated</td>
+<td><strong>November 2023</strong></td>
+<td><code>net view</code> lists shares and domains</td>
+</tr>
+<tr>
+<td>NTLM authentication</td>
+<td>Deprecated; NTLMv1 removed in Windows 11 24H2 and Windows Server 2025</td>
+<td><strong>June 2024</strong></td>
+<td>NTLM named as an authentication option</td>
+</tr>
+<tr>
+<td>SMB signing and NetBIOS ports</td>
+<td>Signing required by default; the NetBIOS ports are no longer in the built-in firewall rules, in Windows 11 24H2 and Windows Server 2025</td>
+<td><strong>October 2024</strong></td>
+<td>Ports 137, 138 and 139 open on Windows hosts</td>
+</tr>
+</tbody>
+</table></div>
+<p>Status checked 18 November 2026 on Microsoft Learn.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>The lab hosts are Linux, so NetBIOS is absent. Confirm it, and read why Nmap says so:</p>
+<p><code>bash
+nmap -p 139,445 --reason 10.77.0.20</code></p>
+<p>Both ports are <code>closed</code> with reason <code>reset</code>. On a Windows machine you own, run <code>nbtstat -n</code> and find the <code>&lt;00&gt;</code> and <code>&lt;20&gt;</code> entries.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 2</p>
+<ul>
+<li>NetBIOS name: 16 characters, 15 for the name, the 16th a service code. Ports UDP 137, UDP 138, TCP 139.</li>
+<li><code>&lt;00&gt;</code> host or domain, <code>&lt;03&gt;</code> messenger, <code>&lt;20&gt;</code> server service, <code>&lt;1D&gt;</code> master browser, <code>&lt;1B&gt;</code> domain master browser.</li>
+<li><code>nbtstat -a</code> name, <code>-A</code> address, <code>-c</code> cache, <code>-n</code> local names.</li>
+<li>PsTools manage remote Windows hosts; <code>net view</code> lists shares and domains.</li>
+<li>In practice modern Windows has SMBv1 and NetBIOS browsing off by default.</li>
+</ul>
+</div>
+<h2 class="tg-M" id="3-snmp-enumeration">3. SNMP enumeration <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h2>
+<p>The <strong>Simple Network Management Protocol (SNMP)</strong> lets administrators monitor and configure routers, switches, printers and servers from one place. It runs over UDP. Almost every network device has it, and a great many still accept the default password.</p>
+<h3 class="tg-M" id="managers-agents-and-community-strings">Managers, agents and community strings <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<ul>
+<li>The <strong>SNMP agent</strong> runs on the managed device.</li>
+<li>The <strong>SNMP management station</strong> (the manager) sends requests to agents and receives their replies.</li>
+<li>A <strong>community string</strong> is SNMP's password. The <strong>read</strong> community string lets you view the device's configuration and is <strong>public</strong> by default. The <strong>read/write</strong> community string lets you change it and is <strong>private</strong> by default.</li>
+</ul>
+<p><strong>SNMP enumeration</strong> uses those strings to list user accounts and devices, and to read ARP tables, routing tables, device details and traffic statistics.</p>
+<figure class="dg"><svg viewBox="0 0 580 386" width="580" role="img" aria-label="SNMP messages between a manager and an agent"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="b" x="18" y="22" width="124" height="28" rx="6"/><text x="80" y="41" text-anchor="middle" class="h">SNMP manager</text><rect class="b" x="438" y="22" width="124" height="28" rx="6"/><text x="500" y="41" text-anchor="middle" class="h">SNMP agent</text><line class="lf" x1="80" y1="50" x2="80" y2="372"/><line class="lf" x1="500" y1="50" x2="500" y2="372"/><line class="ln" x1="83" y1="80" x2="497" y2="80" marker-end="url(#a)"/><text x="290.0" y="73" text-anchor="middle" class="s">GetRequest: what is the value of this object?</text><line class="ln" x1="497" y1="120" x2="83" y2="120" marker-end="url(#a)"/><text x="290.0" y="113" text-anchor="middle" class="s">Response: the value</text><line class="ln" x1="83" y1="160" x2="497" y2="160" marker-end="url(#a)"/><text x="290.0" y="153" text-anchor="middle" class="s">GetNextRequest: and the next object in the tree?</text><line class="ln" x1="497" y1="200" x2="83" y2="200" marker-end="url(#a)"/><text x="290.0" y="193" text-anchor="middle" class="s">Response</text><line class="ln" x1="83" y1="240" x2="497" y2="240" marker-end="url(#a)"/><text x="290.0" y="233" text-anchor="middle" class="s">SetRequest: change this value (needs the read/write string)</text><line class="ln" x1="497" y1="280" x2="83" y2="280" marker-end="url(#a)"/><text x="290.0" y="273" text-anchor="middle" class="s">Response</text><text x="290.0" y="320" text-anchor="middle" class="s">Unprompted, when something happens:</text><line class="ln" x1="497" y1="346" x2="83" y2="346" marker-end="url(#a)"/><text x="290.0" y="339" text-anchor="middle" class="s">Trap: &quot;I have just rebooted&quot; (sent to port 162)</text></svg><figcaption>The manager asks; the agent answers. A trap is the one message the agent sends without being asked.</figcaption></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Message</th>
+<th>Sent by</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GetRequest</td>
+<td>Manager</td>
+<td>Read one value</td>
+</tr>
+<tr>
+<td>GetNextRequest</td>
+<td>Manager</td>
+<td>Read the next value in the tree, without knowing its name</td>
+</tr>
+<tr>
+<td>GetBulkRequest</td>
+<td>Manager</td>
+<td>Read many values in one request (added in SNMPv2)</td>
+</tr>
+<tr>
+<td>SetRequest</td>
+<td>Manager</td>
+<td>Change a value</td>
+</tr>
+<tr>
+<td>Response</td>
+<td>Agent</td>
+<td>The answer to any of the above</td>
+</tr>
+<tr>
+<td>Trap</td>
+<td>Agent</td>
+<td>Unprompted alert about an event, such as a reboot or a failed link</td>
+</tr>
+<tr>
+<td>InformRequest</td>
+<td>Agent or manager</td>
+<td>An alert that must be acknowledged; also used between managers</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> the agent receives requests on port 161 "and responds to the managers on port 162".</p>
+<p><strong>In practice:</strong> the agent sends its response back to whichever port the request came from. Port <strong>162</strong> is where the manager listens for <strong>traps</strong>. If a question separates the two, queries are 161 and traps are 162.</p>
+</div>
+<h3 class="tg-M" id="the-mib">The MIB <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>The <strong>Management Information Base (MIB)</strong> is a virtual database holding a formal description of every object SNMP can manage. It is organised as a tree. Each object has an <strong>object identifier (OID)</strong>: a string of numbers that traces the path from the root.</p>
+<figure class="dg"><svg viewBox="0 0 640 314" width="640" role="img" aria-label="The MIB is a tree; an OID is the path of numbers from the root to one object"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="t" x="14" y="8" width="110" height="26" rx="6"/><text x="26" y="26" text-anchor="start" class="h">iso (1)</text><path class="lf" d="M26 34V55H42"/><rect class="b" x="42" y="42" width="110" height="26" rx="6"/><text x="54" y="60" text-anchor="start" class="h">org (3)</text><path class="lf" d="M54 68V89H70"/><rect class="b" x="70" y="76" width="110" height="26" rx="6"/><text x="82" y="94" text-anchor="start" class="">dod (6)</text><path class="lf" d="M82 102V123H98"/><rect class="b" x="98" y="110" width="114" height="26" rx="6"/><text x="110" y="128" text-anchor="start" class="">internet (1)</text><path class="lf" d="M110 136V157H126"/><rect class="b" x="126" y="144" width="110" height="26" rx="6"/><text x="138" y="162" text-anchor="start" class="">mgmt (2)</text><path class="lf" d="M138 170V191H154"/><rect class="b" x="154" y="178" width="110" height="26" rx="6"/><text x="166" y="196" text-anchor="start" class="">mib-2 (1)</text><path class="lf" d="M166 204V225H182"/><rect class="b" x="182" y="212" width="110" height="26" rx="6"/><text x="194" y="230" text-anchor="start" class="">system (1)</text><path class="lf" d="M194 238V259H210"/><rect class="b" x="210" y="246" width="277" height="26" rx="6"/><text x="222" y="264" text-anchor="start" class="">sysDescr (1)   =   1.3.6.1.2.1.1.1</text><path class="lf" d="M194 238V293H210"/><rect class="b" x="210" y="280" width="292" height="26" rx="6"/><text x="222" y="298" text-anchor="start" class="">sysContact (4)   =   1.3.6.1.2.1.1.4</text></svg><figcaption>Read an OID as directions: start at the root and take the numbered branch at each level.</figcaption></figure>
+<p><strong>Scalar</strong> objects have a single instance. <strong>Tabular</strong> objects group related instances, like the rows of an interface table. The manager uses the MIB as a codebook to turn OIDs into readable names.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Windows MIB file</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td R="R">DHCP.MIB</td>
+<td>Traffic between DHCP servers and remote hosts</td>
+</tr>
+<tr>
+<td R="R">HOSTMIB.MIB</td>
+<td>Host resources</td>
+</tr>
+<tr>
+<td R="R">LNMIB2.MIB</td>
+<td>Workstation and server services</td>
+</tr>
+<tr>
+<td R="R">MIB_II.MIB</td>
+<td>The TCP/IP-based internet, using a simple architecture</td>
+</tr>
+<tr>
+<td R="R">WINS.MIB</td>
+<td>The Windows Internet Name Service</td>
+</tr>
+</tbody>
+</table></div>
+<h3 class="tg-M" id="snmpwalk-and-nmap">snmpwalk and Nmap <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>snmpwalk</strong> starts at a point in the tree and issues GetNext requests until it runs out, printing every OID and value.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>snmpwalk -v1 -c public &lt;target&gt;</code></td>
+<td>Everything the device will reveal to the string <code>public</code>, over SNMPv1</td>
+</tr>
+<tr>
+<td><code>snmpwalk -v2c -c public &lt;target&gt;</code></td>
+<td>The same over SNMPv2c</td>
+</tr>
+<tr>
+<td><code>snmpwalk -v2c -c public &lt;target&gt; hrSWInstalledName</code></td>
+<td>Installed software</td>
+</tr>
+<tr>
+<td><code>snmpwalk -v2c -c public &lt;target&gt; hrMemorySize</code></td>
+<td>Amount of RAM</td>
+</tr>
+<tr>
+<td><code>nmap -sU -p 161 --script snmp-processes &lt;target&gt;</code></td>
+<td>Running processes</td>
+</tr>
+<tr>
+<td><code>nmap -sU -p 161 --script snmp-sysdescr &lt;target&gt;</code></td>
+<td>Server type and operating system</td>
+</tr>
+<tr>
+<td><code>nmap -sU -p 161 --script snmp-win32-software &lt;target&gt;</code></td>
+<td>Applications installed on a Windows host</td>
+</tr>
+<tr>
+<td><code>nmap -sU -p 161 --script snmp-info &lt;target&gt;</code></td>
+<td>Basic SNMP information</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> the courseware lists <code>snmpwalk -v2c -c public &lt;target&gt; &lt;OID&gt; &lt;new value&gt;</code> as the command "to change an OID to a different value".</p>
+<p><strong>In practice:</strong> <code>snmpwalk</code> only reads. Changing a value is a Set request, done with <code>snmpset</code> and the read/write community string. Recognise the courseware's line; use <code>snmpset</code> at a keyboard.</p>
+</div>
+<h3 class="tg-R" id="tools">Tools <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h3>
+<ul>
+<li><strong>snmp-check</strong>: gathers and neatly prints contact, description, devices, domain, hardware, storage, host name, listening ports, network interfaces, routing, software, uptime and <strong>user accounts</strong>.</li>
+<li><strong>SoftPerfect Network Scanner</strong>: pings hosts, scans ports, finds shared folders and reads device details through SNMP, WMI, HTTP, SSH and PowerShell.</li>
+<li>Also named: Network Performance Monitor and Engineer's Toolset (SolarWinds), OpUtils (ManageEngine), PRTG Network Monitor.</li>
+</ul>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>No lab host runs SNMP. See what "closed" looks like for a UDP port:</p>
+<p><code>bash
+nmap -sU -p 161,162 --reason 10.77.0.10</code></p>
+<p>The reason is <code>port-unreach</code>: the host itself said nothing is listening. Had the state been <code>open|filtered</code>, the next command would be <code>snmpwalk -v2c -c public 10.77.0.10</code>.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 3</p>
+<ul>
+<li>SNMP runs on UDP: agent on 161, traps to 162.</li>
+<li>Community strings are the passwords: read is "public", read/write is "private" by default.</li>
+<li>The MIB is a tree of objects; an OID is an object's numeric path.</li>
+<li><code>snmpwalk -v1 -c public &lt;target&gt;</code> dumps the tree; Nmap has <code>snmp-processes</code>, <code>snmp-sysdescr</code>, <code>snmp-win32-software</code>.</li>
+<li>Tools: snmp-check, SoftPerfect Network Scanner, OpUtils, PRTG.</li>
+</ul>
+</div>
+<h2 class="tg-U" id="4-ldap-enumeration">4. LDAP enumeration <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h2>
+<p>The <strong>Lightweight Directory Access Protocol (LDAP)</strong> is how programs query a <strong>directory</strong>: an organised, tree-shaped store of records about users, groups and computers. Microsoft Active Directory is the best-known one.</p>
+<h3 class="tg-M" id="how-ldap-works">How LDAP works <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<figure class="dg"><svg viewBox="0 0 660 296" width="660" role="img" aria-label="An LDAP directory is a tree of entries, each with attributes"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="t" x="14" y="8" width="388" height="26" rx="6"/><text x="26" y="26" text-anchor="start" class="h">dc=example,dc=com  (the root: its naming context)</text><path class="lf" d="M26 34V57H44"/><rect class="b" x="44" y="44" width="110" height="26" rx="6"/><text x="56" y="62" text-anchor="start" class="h">ou=People</text><path class="lf" d="M56 70V93H74"/><rect class="b" x="74" y="80" width="440" height="26" rx="6"/><text x="86" y="98" text-anchor="start" class="">cn=Asha Verma  (sAMAccountName=averma, mail, department)</text><path class="lf" d="M56 70V129H74"/><rect class="b" x="74" y="116" width="277" height="26" rx="6"/><text x="86" y="134" text-anchor="start" class="">cn=svc_backup  (a service account)</text><path class="lf" d="M26 34V165H44"/><rect class="b" x="44" y="152" width="110" height="26" rx="6"/><text x="56" y="170" text-anchor="start" class="h">ou=Groups</text><path class="lf" d="M56 178V201H74"/><rect class="b" x="74" y="188" width="270" height="26" rx="6"/><text x="86" y="206" text-anchor="start" class="">cn=Domain Admins  (member=cn=...)</text><path class="lf" d="M26 34V237H44"/><rect class="b" x="44" y="224" width="110" height="26" rx="6"/><text x="56" y="242" text-anchor="start" class="h">ou=Servers</text><path class="lf" d="M56 250V273H74"/><rect class="b" x="74" y="260" width="114" height="26" rx="6"/><text x="86" y="278" text-anchor="start" class="">cn=FILESRV01</text></svg><figcaption>A directory is a tree. Every entry has a full name that spells out its path, and a set of attributes.</figcaption></figure>
+<p>A client starts a session by connecting to a <strong>Directory System Agent (DSA)</strong>, normally on <strong>TCP port 389</strong>, and sending an operation request. Information travels in <strong>Basic Encoding Rules (BER)</strong> format. Secure LDAP uses port <strong>636</strong>.</p>
+<p>If the server allows it, an attacker can query <strong>anonymously</strong> for user names, addresses, departmental details and server names.</p>
+<h3 class="tg-M" id="manual-and-automated-enumeration">Manual and automated enumeration <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>With Python.</strong> Install the <code>ldap3</code> library (<code>pip3 install ldap3</code>), then: create a server object for the target and port, asking for all server information; create a connection; call <code>bind()</code>. A result of <code>True</code> means you are connected. The server information reveals the <strong>naming context</strong>, the root of the tree. Searching from that root with a filter that matches every object class returns the directory's entries.</p>
+<p><strong>With ldapsearch</strong>, in the same order:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ldapsearch -h &lt;target&gt; -x</code></td>
+<td>Test a connection with simple (password-less) authentication</td>
+</tr>
+<tr>
+<td><code>ldapsearch -h &lt;target&gt; -x -s base namingcontexts</code></td>
+<td>Ask for the naming contexts</td>
+</tr>
+<tr>
+<td><code>ldapsearch -h &lt;target&gt; -x -b "DC=example,DC=local"</code></td>
+<td>List everything under that base</td>
+</tr>
+<tr>
+<td><code>ldapsearch -h &lt;target&gt; -x -b "DC=example,DC=local" '(objectClass=Employee)'</code></td>
+<td>Only entries of one object class</td>
+</tr>
+<tr>
+<td><code>... '(objectClass=Employee)' sAMAccountName sAMAccountType</code></td>
+<td>Only the login-name attributes of those entries</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>With Nmap</strong>: <code>nmap -p 389 --script ldap-brute --script-args ldap.base='"cn=users,dc=CEH,dc=com"' &lt;target&gt;</code> tries a list of user names and passwords.</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> <code>ldapsearch -h &lt;target&gt; -x</code> connects with simple authentication.</p>
+<p><strong>In practice:</strong> OpenLDAP 2.5 and later removed the <code>-h</code> and <code>-p</code> options. Current systems need a URI: <code>ldapsearch -H ldap://&lt;target&gt; -x</code>. On a patched Active Directory, anonymous binds return almost nothing; testers use any low-privileged domain account, which can read most of the directory.</p>
+</div>
+<h3 class="tg-R" id="tools_1">Tools <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h3>
+<p><strong>Softerra LDAP Administrator</strong> (featured) browses and manages LDAP directories, including Active Directory. Also named: <strong>AD Explorer</strong> (Microsoft), LDAP Admin Tool, LDAP Account Manager and LDAP Search.</p>
+<div class="admonition cpent">
+<p class="admonition-title">CPENT depth: enumerating Active Directory for real</p>
+<ul>
+<li><strong>Start with one account.</strong> Any valid domain user can read users, groups, computers and trust relationships. That is by design, and it is the heart of internal testing.</li>
+<li><strong>Graph it.</strong> BloodHound collects those objects and draws the shortest path from the account you hold to a domain administrator.</li>
+<li><strong>Confirm names without logging on.</strong> Kerberos answers differently for valid and invalid user names, so a tool such as kerbrute can test a name list against port 88 without causing failed logons.</li>
+<li><strong>One tool, many protocols.</strong> NetExec and enum4linux-ng wrap SMB, LDAP and RPC queries behind single commands. Learn what each wraps before you trust it.</li>
+</ul>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>No lab host runs a directory. Check the three LDAP ports:</p>
+<p><code>bash
+nmap -p 389,636,3268 --reason 10.77.0.20</code></p>
+<p>Then, on paper, write the <code>ldapsearch</code> command you would run first if 389 were open, in both its exam form and its current form.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 4</p>
+<ul>
+<li>LDAP queries a directory, such as Active Directory, through a Directory System Agent on TCP 389.</li>
+<li>Data is BER-encoded; secure LDAP is 636; the Global Catalog is 3268.</li>
+<li>Anonymous queries can reveal users, departments and server names.</li>
+<li><code>ldapsearch -x</code> with <code>-b</code> base; the naming context is the root. Python uses <code>ldap3</code>.</li>
+<li>Tools: Softerra LDAP Administrator, AD Explorer; Nmap <code>ldap-brute</code>.</li>
+</ul>
+</div>
+<h2 class="tg-M" id="5-ntp-and-nfs-enumeration">5. NTP and NFS enumeration <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h2>
+<h3 class="tg-M" id="ntp-enumeration">NTP enumeration <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>The <strong>Network Time Protocol (NTP)</strong> keeps computer clocks in step. It uses <strong>UDP port 123</strong>. It can hold time to within <strong>10 milliseconds</strong> over the public internet and <strong>200 microseconds</strong> or better on a local network.</p>
+<p>Administrators rarely think of a time server as sensitive. Queried in the right way it can reveal the hosts connected to it; clients' IP addresses, system names and operating systems; and internal addresses, if the server sits in the DMZ.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+<th>Switches to recognise</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ntpdate</code></td>
+<td>Collects time samples from one or more servers</td>
+<td><code>-d</code> debug, <code>-q</code> query only, <code>-u</code> unprivileged port, <code>-v</code> verbose</td>
+</tr>
+<tr>
+<td><code>ntptrace</code></td>
+<td>Follows the chain of time servers back to the primary source</td>
+<td><code>-n</code> numeric addresses, <code>-m</code> maximum hosts</td>
+</tr>
+<tr>
+<td><code>ntpdc</code></td>
+<td>Asks the <code>ntpd</code> daemon for its state and statistics</td>
+<td><code>-l</code> list peers, <code>-p</code> peers with state, <code>-n</code> numeric, <code>-i</code> interactive</td>
+</tr>
+<tr>
+<td><code>ntpq</code></td>
+<td>Monitors <code>ntpd</code> operations and performance</td>
+<td><code>-p</code> peers, <code>-n</code> numeric, <code>-i</code> interactive, <code>-c</code> run a command</td>
+</tr>
+</tbody>
+</table></div>
+<p>In <code>ntptrace</code> output each line shows a <strong>stratum</strong> number: 1 is a server attached directly to a reference clock, and each step away adds one.</p>
+<p>Tools named: PRTG Network Monitor (featured), Nmap, Wireshark, udp-proto-scanner and NTP Server Scanner. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> <code>ntpdc</code> and <code>ntpq</code> list the peers and clients of a time server.</p>
+<p><strong>In practice:</strong> the NTP project's own manual marks <code>ntpdc</code> as deprecated in favour of <code>ntpq</code>, and current <code>ntpd</code> builds do not answer its query protocol unless an administrator switches it back on. That change followed the abuse of the "monlist" query for denial-of-service amplification. Many Linux systems now run chrony, which answers none of these commands.</p>
+</div>
+<h3 class="tg-M" id="nfs-enumeration">NFS enumeration <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>The <strong>Network File System (NFS)</strong> lets a client use files on a remote server as if they were local. The server <strong>exports</strong> directories; the client <strong>mounts</strong> them. Requests are carried by <strong>remote procedure call (RPC)</strong>.</p>
+<p>The server's <code>/etc/exports</code> file lists which clients may mount which directories. In versions before NFSv4 the only credential is the <strong>client's IP address</strong>, so an attacker who can spoof an allowed address gets the files.</p>
+<figure class="dg"><svg viewBox="0 0 700 198" width="700" role="img" aria-label="The steps of NFS enumeration"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="b" x="14" y="8" width="200" height="32" rx="6"/><text x="114.0" y="29" text-anchor="middle" class="h">rpcinfo -p &lt;target&gt;</text><text x="230" y="29" text-anchor="start" class="s">Ask the portmapper (port 111) which RPC services run, and on which ports.</text><line class="ln" x1="114.0" y1="40" x2="114.0" y2="58" marker-end="url(#a)"/><rect class="b" x="14" y="58" width="200" height="32" rx="6"/><text x="114.0" y="79" text-anchor="middle" class="h">showmount -e &lt;target&gt;</text><text x="230" y="79" text-anchor="start" class="s">Ask the NFS server which directories it exports, and to whom.</text><line class="ln" x1="114.0" y1="90" x2="114.0" y2="108" marker-end="url(#a)"/><rect class="b" x="14" y="108" width="200" height="32" rx="6"/><text x="114.0" y="129" text-anchor="middle" class="h">Mount the export</text><text x="230" y="129" text-anchor="start" class="s">Before version 4 the only credential is the client&#x27;s IP address.</text><line class="ln" x1="114.0" y1="140" x2="114.0" y2="158" marker-end="url(#a)"/><rect class="b" x="14" y="158" width="200" height="32" rx="6"/><text x="114.0" y="179" text-anchor="middle" class="h">Read what is there</text><text x="230" y="179" text-anchor="start" class="s">File names, owners and contents: the enumeration result.</text></svg><figcaption>NFS enumeration in four steps.</figcaption></figure>
+<p>Tools named: <strong>RPCScan</strong> (<code>python3 rpc-scan.py &lt;target&gt; --rpc</code>) and <strong>SuperEnum</strong>, a script that enumerates every open port it finds. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>The lab has neither service. Confirm both in one line:</p>
+<p><code>bash
+nmap -sU -p 123 --reason 10.77.0.10; nmap -p 111,2049 --reason 10.77.0.30</code></p>
+<p>Where 111 and 2049 are open, <code>rpcinfo -p</code> and <code>showmount -e</code> are the next two commands.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 5</p>
+<ul>
+<li>NTP: UDP 123; accurate to 10 ms on the internet, 200 microseconds on a LAN.</li>
+<li>It can reveal connected hosts, client addresses, names and operating systems.</li>
+<li><code>ntpdate</code> samples time, <code>ntptrace</code> follows the chain, <code>ntpdc</code> and <code>ntpq</code> query the daemon.</li>
+<li>NFS: TCP 2049, exports listed in <code>/etc/exports</code>, trust by IP address before version 4.</li>
+<li><code>rpcinfo -p</code> lists RPC services; <code>showmount -e</code> lists exports.</li>
+</ul>
+</div>
+<h2 class="tg-M" id="6-smtp-enumeration">6. SMTP enumeration <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h2>
+<p>The <strong>Simple Mail Transfer Protocol (SMTP)</strong> moves email between servers. The courseware gives its ports as <strong>TCP 25, 2525 or 587</strong>. Three of its built-in commands let a stranger test whether a user exists.</p>
+<h3 class="tg-M" id="vrfy-expn-and-rcpt-to">VRFY, EXPN and RCPT TO <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Its proper purpose</th>
+<th>What it leaks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VRFY &lt;user&gt;</code></td>
+<td>Validates a user</td>
+<td>Whether that user exists</td>
+</tr>
+<tr>
+<td><code>EXPN &lt;alias&gt;</code></td>
+<td>Shows the real delivery addresses behind an alias or mailing list</td>
+<td>The members of the list</td>
+</tr>
+<tr>
+<td><code>RCPT TO:&lt;user&gt;</code></td>
+<td>Names the recipient of a message</td>
+<td>Whether the server would accept mail for that user</td>
+</tr>
+</tbody>
+</table></div>
+<figure class="dg"><svg viewBox="0 0 810 182" width="810" role="img" aria-label="An SMTP server answering VRFY differently for valid and invalid users"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><text x="195.0" y="22" text-anchor="middle" class="h">The account exists</text><rect class="b" x="18" y="44" width="124" height="28" rx="6"/><text x="80" y="63" text-anchor="middle" class="h">You</text><rect class="b" x="248" y="44" width="124" height="28" rx="6"/><text x="310" y="63" text-anchor="middle" class="h">Mail server</text><line class="lf" x1="80" y1="72" x2="80" y2="168"/><line class="lf" x1="310" y1="72" x2="310" y2="168"/><line class="ln" x1="83" y1="102" x2="307" y2="102" marker-end="url(#a)"/><text x="195.0" y="95" text-anchor="middle" class="s">VRFY svc_backup</text><line class="ln" x1="307" y1="142" x2="83" y2="142" marker-end="url(#a)"/><text x="195.0" y="135" text-anchor="middle" class="s">250 svc_backup@... : confirmed</text><line class="lf" x1="405" y1="6" x2="405" y2="176"/><text x="615.0" y="22" text-anchor="middle" class="h">No such account</text><rect class="b" x="438" y="44" width="124" height="28" rx="6"/><text x="500" y="63" text-anchor="middle" class="h">You</text><rect class="b" x="668" y="44" width="124" height="28" rx="6"/><text x="730" y="63" text-anchor="middle" class="h">Mail server</text><line class="lf" x1="500" y1="72" x2="500" y2="168"/><line class="lf" x1="730" y1="72" x2="730" y2="168"/><line class="ln" x1="503" y1="102" x2="727" y2="102" marker-end="url(#a)"/><text x="615.0" y="95" text-anchor="middle" class="s">VRFY nobody</text><line class="ln" x1="727" y1="142" x2="503" y2="142" marker-end="url(#a)"/><text x="615.0" y="135" text-anchor="middle" class="s">550 user unknown</text></svg><figcaption>The same question, two different answers. The difference is the leak.</figcaption></figure>
+<p>A server that replies <code>250</code> for a real user and <code>550</code> for a made-up one has just confirmed the user name. Repeat with a list of likely names and you have the valid accounts.</p>
+<p>The other SMTP commands in the courseware's table: <code>HELO</code> (introduce yourself), <code>MAIL FROM</code> (sender), <code>DATA</code> (message body), <code>HELP</code> and <code>QUIT</code>.</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> the courseware's command table gives the reset command as <code>RESET</code>, and one Nmap example lists the mail ports as 25, 365 and 587.</p>
+<p><strong>In practice:</strong> the SMTP reset command is <code>RSET</code>, and the encrypted mail submission port is <strong>465</strong>, not 365. Port 2525 is an unofficial alternative used by some providers. Most modern mail servers disable VRFY and EXPN, so testers fall back on RCPT TO.</p>
+</div>
+<h3 class="tg-M" id="tools_2">Tools <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Telnet or netcat</td>
+<td>Type the commands by hand</td>
+</tr>
+<tr>
+<td><code>nmap -p 25 --script smtp-commands &lt;target&gt;</code></td>
+<td>Lists the commands the server supports</td>
+</tr>
+<tr>
+<td><code>nmap -p 25 --script smtp-open-relay &lt;target&gt;</code></td>
+<td>Tests whether the server will relay mail for anyone</td>
+</tr>
+<tr>
+<td><code>nmap -p 25 --script smtp-enum-users &lt;target&gt;</code></td>
+<td>Enumerates mail users</td>
+</tr>
+<tr>
+<td>Metasploit <code>auxiliary/scanner/smtp/smtp_enum</code></td>
+<td>Tries a wordlist of names with VRFY. <code>set RHOSTS</code>, <code>set USER_FILE</code>, <code>run</code></td>
+</tr>
+<tr>
+<td><strong>smtp-user-enum</strong></td>
+<td>Guesses names with VRFY, EXPN or RCPT TO. <code>-M</code> mode, <code>-u</code> one user, <code>-U</code> a file of users, <code>-t</code> one host, <code>-T</code> a file of hosts</td>
+</tr>
+<tr>
+<td>NetScanTools Pro</td>
+<td>Its SMTP Email Generator tests sending through a server and logs the session</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p><strong>V</strong>RFY <strong>v</strong>erifies one person. <strong>EXP</strong>N <strong>exp</strong>ands a list into its members. <strong>RCPT</strong> TO is the <strong>rec</strong>i<strong>p</strong>ien<strong>t</strong>. Capital letter means "file" in smtp-user-enum: <code>-u</code> one user, <code>-U</code> a user file; <code>-t</code> one target, <code>-T</code> a target file.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Confirm three accounts by hand. In the L01 attacker container (use <code>mnair</code> in the healthcare skin):</p>
+<p><code>bash
+for u in mfernandes nobody svc_backup; do printf "VRFY $u\r\nQUIT\r\n" | nc -w 3 10.77.0.40 25 | sed -n 2p; done</code></p>
+<p>Two names get <code>250</code>, one gets <code>550</code>. The staff page from Module 2 has just become a confirmed account list.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 6</p>
+<ul>
+<li>SMTP on TCP 25 (also 2525, 587).</li>
+<li>VRFY validates a user, EXPN expands a list, RCPT TO names a recipient.</li>
+<li>Different replies for valid and invalid users (250, 550) reveal the valid names.</li>
+<li>Tools: telnet or netcat, Nmap <code>smtp-enum-users</code>, Metasploit <code>smtp_enum</code>, smtp-user-enum.</li>
+<li>smtp-user-enum: <code>-M</code> mode, <code>-u</code>/<code>-U</code> users, <code>-t</code>/<code>-T</code> targets.</li>
+</ul>
+</div>
+<h2 class="tg-M" id="7-dns-enumeration">7. DNS enumeration <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h2>
+<p>Module 2 introduced DNS records and the zone transfer as footprinting. Here they return as enumeration, with two further techniques.</p>
+<h3 class="tg-M" id="zone-transfer">Zone transfer <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>A <strong>zone transfer</strong> copies the whole zone file from the primary name server to a secondary. An attacker pretends to be a secondary. If the server allows it, the reply lists DNS server names, host names, machine names, user names, IP addresses and aliases.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Commands</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dig</code> (Linux)</td>
+<td><code>dig ns &lt;domain&gt;</code> to find the name servers, then <code>dig @&lt;name server&gt; &lt;domain&gt; axfr</code></td>
+</tr>
+<tr>
+<td><code>nslookup</code> (Windows)</td>
+<td><code>set querytype=soa</code>, enter the domain, then <code>ls -d &lt;domain&gt;</code></td>
+</tr>
+<tr>
+<td>DNSRecon</td>
+<td><code>dnsrecon -t axfr -d &lt;domain&gt;</code> tests every name server for a zone transfer</td>
+</tr>
+</tbody>
+</table></div>
+<p>A properly configured server answers with a refusal.</p>
+<h3 class="tg-M" id="dns-cache-snooping">DNS cache snooping <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>A resolving DNS server remembers recent answers in its <strong>cache</strong>. <strong>Cache snooping</strong> asks the server whether a particular record is in that cache. If it is, someone who uses that server looked the name up recently. That reveals which banks, suppliers and services an organisation's staff use.</p>
+<figure class="dg"><svg viewBox="0 0 810 182" width="810" role="img" aria-label="Non-recursive DNS cache snooping: a cached record versus an uncached one"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><text x="195.0" y="22" text-anchor="middle" class="h">Record is in the cache</text><rect class="b" x="18" y="44" width="124" height="28" rx="6"/><text x="80" y="63" text-anchor="middle" class="h">You</text><rect class="b" x="248" y="44" width="124" height="28" rx="6"/><text x="310" y="63" text-anchor="middle" class="h">DNS resolver</text><line class="lf" x1="80" y1="72" x2="80" y2="168"/><line class="lf" x1="310" y1="72" x2="310" y2="168"/><line class="ln" x1="83" y1="102" x2="307" y2="102" marker-end="url(#a)"/><text x="195.0" y="95" text-anchor="middle" class="s">A record for bank.example? (no recursion)</text><line class="ln" x1="307" y1="142" x2="83" y2="142" marker-end="url(#a)"/><text x="195.0" y="135" text-anchor="middle" class="s">Answer from cache: someone here asked before</text><line class="lf" x1="405" y1="6" x2="405" y2="176"/><text x="615.0" y="22" text-anchor="middle" class="h">Record is not in the cache</text><rect class="b" x="438" y="44" width="124" height="28" rx="6"/><text x="500" y="63" text-anchor="middle" class="h">You</text><rect class="b" x="668" y="44" width="124" height="28" rx="6"/><text x="730" y="63" text-anchor="middle" class="h">DNS resolver</text><line class="lf" x1="500" y1="72" x2="500" y2="168"/><line class="lf" x1="730" y1="72" x2="730" y2="168"/><line class="ln" x1="503" y1="102" x2="727" y2="102" marker-end="url(#a)"/><text x="615.0" y="95" text-anchor="middle" class="s">A record for bank.example? (no recursion)</text><line class="ln" x1="727" y1="142" x2="503" y2="142" marker-end="url(#a)"/><text x="615.0" y="135" text-anchor="middle" class="s">No answer, only a referral</text></svg><figcaption>The non-recursive method. The server may only answer from memory.</figcaption></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Command</th>
+<th>How to read the result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Non-recursive</td>
+<td><code>dig @&lt;DNS server&gt; &lt;domain&gt; A +norecurse</code></td>
+<td>The Recursion Desired bit is 0, so the server may not go and ask. An answer means <strong>cached</strong>. No answer, or a referral to other servers, means <strong>not cached</strong></td>
+</tr>
+<tr>
+<td>Recursive</td>
+<td><code>dig @&lt;DNS server&gt; &lt;domain&gt; A +recurse</code></td>
+<td>Compare the TTL in the answer with the record's normal TTL. A <strong>lower</strong> TTL means the record had already been sitting in the cache</td>
+</tr>
+</tbody>
+</table></div>
+<h3 class="tg-M" id="dnssec-zone-walking">DNSSEC zone walking <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>DNSSEC</strong> adds digital signatures to DNS records so answers can be verified. To prove that a name does <em>not</em> exist, a signed zone returns an <strong>NSEC</strong> record that says "the next name after this one is...". Follow those records from one name to the next and you have walked the entire zone.</p>
+<p><strong>NSEC3</strong> fixes this by replacing the names with cryptographic hashes.</p>
+<p>Tools: <strong>LDNS</strong> (<code>ldns-walk @&lt;DNS server&gt; &lt;domain&gt;</code>), <strong>DNSRecon</strong> (<code>dnsrecon -d &lt;domain&gt; -z</code>), nsec3map, nsec3walker and DNSwalk.</p>
+<h3 class="tg-M" id="owasp-amass-and-nmap">OWASP Amass and Nmap <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>amass enum -d &lt;domain&gt;</code></td>
+<td>Map a domain's DNS, subdomains and related addresses</td>
+</tr>
+<tr>
+<td><code>amass enum -passive -d &lt;domain&gt; -src</code></td>
+<td>Passive sources only</td>
+</tr>
+<tr>
+<td><code>amass enum -active -d &lt;domain&gt; -brute -w &lt;wordlist&gt;</code></td>
+<td>Active enumeration with brute-forced names</td>
+</tr>
+<tr>
+<td><code>amass track</code>, <code>amass db</code>, <code>amass viz -d3</code></td>
+<td>Compare scans, list stored results, draw a graph</td>
+</tr>
+<tr>
+<td><code>nmap -T4 -p 53 --script dns-brute &lt;domain&gt;</code></td>
+<td>Brute-force subdomains</td>
+</tr>
+<tr>
+<td><code>nmap -Pn -sU -p 53 --script dns-recursion &lt;server&gt;</code></td>
+<td>Check whether recursion is enabled</td>
+</tr>
+<tr>
+<td><code>nmap -sU -p 53 --script dns-nsec-enum --script-args dns-nsec-enum.domains=&lt;domain&gt; &lt;server&gt;</code></td>
+<td>Walk a DNSSEC zone</td>
+</tr>
+<tr>
+<td><code>nmap --script broadcast-dns-service-discovery</code></td>
+<td>Discover services advertised on the local network</td>
+</tr>
+</tbody>
+</table></div>
+<p>Other DNS enumeration tools named: Knock, Raccoon, Subfinder and Turbolist3r. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> the Amass subcommands <code>enum</code>, <code>track</code>, <code>db</code> and <code>viz</code> as listed.</p>
+<p><strong>In practice:</strong> Amass has been restructured more than once since the courseware was written. As checked in November 2026 its documentation lists <code>enum</code>, <code>subs</code>, <code>track</code>, <code>viz</code>, <code>assoc</code> and <code>engine</code>; <code>db</code> has gone, and several options have changed. Run <code>amass -h</code> on your own version.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Two questions for the lab's name server. In the L01 attacker container:</p>
+<p><code>bash
+dig axfr kestrel-freight.lab @10.77.0.10; dig @10.77.0.10 example.com A +norecurse | grep status</code></p>
+<p>The first hands over the zone: the leak. The second is <code>REFUSED</code>: this server answers only for its own zone and keeps no cache, so there is nothing to snoop. That second answer is what a well-separated authoritative server looks like.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 7</p>
+<ul>
+<li>Zone transfer: <code>dig @&lt;server&gt; &lt;domain&gt; axfr</code>; nslookup <code>ls -d</code>; <code>dnsrecon -t axfr</code>.</li>
+<li>Cache snooping: <code>+norecurse</code>, an answer means cached; <code>+recurse</code>, a lowered TTL means cached.</li>
+<li>DNSSEC zone walking follows NSEC records; NSEC3 hashes the names to stop it.</li>
+<li>Zone walking tools: <code>ldns-walk</code>, <code>dnsrecon -z</code>, nsec3map, nsec3walker, DNSwalk.</li>
+<li>Amass <code>enum -d</code>; Nmap <code>dns-brute</code>, <code>dns-recursion</code>, <code>dns-nsec-enum</code>.</li>
+</ul>
+</div>
+<h2 class="tg-U" id="8-other-enumeration-techniques">8. Other enumeration techniques <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h2>
+<h3 class="tg-M" id="ipsec-enumeration">IPsec enumeration <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>IPsec</strong> is the most common technology behind site-to-site and remote-access VPNs. It protects traffic with the <strong>Encapsulating Security Payload (ESP)</strong>, the <strong>Authentication Header (AH)</strong> and <strong>Internet Key Exchange (IKE)</strong>. <strong>ISAKMP</strong>, part of IKE, sets up, negotiates and deletes <strong>security associations (SAs)</strong> and keys on <strong>UDP port 500</strong>.</p>
+<ul>
+<li><code>nmap -sU -p 500 &lt;target&gt;</code> shows whether a VPN gateway is present.</li>
+<li><code>ike-scan -M &lt;target&gt;</code> goes further: it reports the encryption and hashing algorithms, authentication type, key distribution algorithm and SA lifetime.</li>
+</ul>
+<p><strong>ike-scan</strong> has five functions: <strong>discovery</strong> of IKE hosts; <strong>fingerprinting</strong> of the implementation, by retransmission back-off pattern or Vendor ID; <strong>transform enumeration</strong>; <strong>user enumeration</strong> on some VPN systems; and <strong>pre-shared key cracking</strong>, offline, for IKE Aggressive Mode, using the bundled <code>psk-crack</code>.</p>
+<h3 class="tg-M" id="voip-enumeration">VoIP enumeration <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>Voice over IP</strong> carries phone calls over the data network. Calls are set up with the <strong>Session Initiation Protocol (SIP)</strong>, which the courseware places on <strong>UDP/TCP ports 2000, 2001, 5060 and 5061</strong>.</p>
+<p>Enumeration yields VoIP gateways and servers, IP-PBX systems (the telephone exchange), and the addresses and extension numbers of phones. That enables denial of service, session hijacking, caller ID spoofing, eavesdropping, spam over internet telephony (<strong>SPIT</strong>) and voice phishing (<strong>vishing</strong>).</p>
+<p>Tools: <strong>Svmap</strong>, which finds SIP devices and PBX servers across a range and can ring every phone at once with the INVITE method; and Metasploit's <strong>SIP Username Enumerator</strong>, which finds numeric extensions.</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> SIP uses ports 2000, 2001, 5060 and 5061.</p>
+<p><strong>In practice:</strong> SIP's registered ports are 5060 and 5061. Port 2000 is Cisco's own phone protocol (SCCP), which is why it appears beside SIP on networks with Cisco phones.</p>
+</div>
+<h3 class="tg-M" id="rpc-enumeration">RPC enumeration <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>Remote procedure call (RPC)</strong> lets a program on one machine run a function on another. On Unix and Linux the <strong>portmapper</strong> listens on <strong>TCP and UDP port 111</strong> and tells clients which RPC services exist and where. Enumerating it shows which of those services might be vulnerable.</p>
+<p>Commands: <code>nmap -sR &lt;target&gt;</code> and <code>nmap -T4 -A &lt;target&gt;</code>. NetScanTools Pro has an RPC Info tool for the same job.</p>
+<div class="admonition update">
+<p class="admonition-title">Updated: March 2011</p>
+<p><strong>What changed.</strong> Nmap's separate RPC scan no longer exists. Since <strong>March 2011</strong>, <code>-sR</code> has been only an alias for <code>-sV</code>: RPC identification is part of ordinary version detection and runs automatically when an RPC service is found.</p>
+<p><strong>The exam still expects:</strong> <code>nmap -sR</code> as the RPC scan.</p>
+</div>
+<h3 class="tg-M" id="unix-and-linux-user-enumeration">Unix and Linux user enumeration <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Shows</th>
+<th>Switches</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rusers</code></td>
+<td>Users logged in to remote machines on the local network, like <code>who</code></td>
+<td><code>-a</code> include hosts with nobody logged in; <code>-l</code> long listing; <code>-h</code>, <code>-u</code>, <code>-i</code> sort by host, user count, idle time</td>
+</tr>
+<tr>
+<td><code>rwho</code></td>
+<td>Users logged in to hosts on the local network running the rwho daemon</td>
+<td><code>-a</code> include users idle for an hour or more</td>
+</tr>
+<tr>
+<td><code>finger</code></td>
+<td>A user's login name, real name, terminal, idle time, login time, office and phone number</td>
+<td><code>-s</code> short; <code>-l</code> long, with home directory, shell and the <code>.plan</code>, <code>.project</code>, <code>.pgpkey</code> and <code>.forward</code> files; <code>-p</code> omit those files; <code>-m</code> no name matching</td>
+</tr>
+</tbody>
+</table></div>
+<p>These services are switched off on almost every current system. They survive on old Unix hosts and in exam questions.</p>
+<h3 class="tg-M" id="smb-enumeration">SMB enumeration <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>Server Message Block (SMB)</strong> is the protocol Windows uses to share files, printers and serial ports. It runs directly on <strong>TCP 445</strong>, or through NetBIOS on UDP 137 and 138 and TCP 139.</p>
+<p>SMB enumeration usually starts with banner grabbing for the operating system and SMB version, then lists shares and users. The results feed SMB relay and brute-force attacks.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nmap -p 445 -A &lt;target&gt;</code></td>
+<td>Operating system, version and script results for the SMB port</td>
+</tr>
+<tr>
+<td><code>nmap -p 445 --script smb-protocols &lt;target&gt;</code></td>
+<td>The SMB versions the server supports</td>
+</tr>
+<tr>
+<td><code>nmap -p 445 --script smb-enum-shares &lt;target&gt;</code></td>
+<td>The shares on the server</td>
+</tr>
+</tbody>
+</table></div>
+<p>Tools named: <strong>SMBMap</strong>, <strong>enum4linux</strong>, nullinux, SMBeagle and NetScanTools Pro.</p>
+<div class="admonition trap">
+<p class="admonition-title">Exam traps</p>
+<ul>
+<li>ISAKMP is <strong>UDP 500</strong>. <code>ike-scan</code> fingerprints VPN gateways; <code>psk-crack</code> cracks the pre-shared key.</li>
+<li>The Unix portmapper is <strong>111</strong>. The Microsoft RPC endpoint mapper is <strong>135</strong>.</li>
+<li><code>finger -l</code> is the long form and shows the <code>.plan</code> file; <code>-p</code> suppresses it.</li>
+<li>SPIT is spam over internet telephony. Vishing is voice phishing.</li>
+</ul>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>FTP is in the port table and the lab has it. Enumerate the file server without a password:</p>
+<p><code>bash
+printf 'QUIT\r\n' | nc -w 3 10.77.0.30 21; curl -s ftp://10.77.0.30/pub/</code></p>
+<p>The first line is the banner, with a software name and version. The listing is what "anonymous" is allowed to see. Read the files; one tells you which account to verify in section 6.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 8</p>
+<ul>
+<li>IPsec: ISAKMP on UDP 500; <code>ike-scan -M</code> fingerprints the gateway; <code>psk-crack</code> cracks Aggressive Mode keys.</li>
+<li>VoIP: SIP on 5060 and 5061 (exam adds 2000, 2001); Svmap and Metasploit's SIP Username Enumerator.</li>
+<li>RPC: portmapper on 111; <code>nmap -sR</code>.</li>
+<li>Unix users: <code>rusers</code>, <code>rwho</code>, <code>finger</code>.</li>
+<li>SMB: TCP 445; Nmap <code>smb-protocols</code>, <code>smb-enum-shares</code>; SMBMap, enum4linux.</li>
+</ul>
+</div>
+<h2 class="tg-D" id="9-enumeration-with-an-ai-assistant">9. Enumeration with an AI assistant <span class="tag tag-D" title="A hands-on skill for the practical exams. Run it at a keyboard.">DO</span></h2>
+<p>The v13 syllabus pairs most techniques with an AI prompt. The exam may show the prompt and ask which command fits, so read these fluently.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>You ask for</th>
+<th>A correct command looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td D="D">NetBIOS enumeration of one host</td>
+<td><code>nbtscan 10.10.1.11</code></td>
+</tr>
+<tr>
+<td D="D">NetBIOS information with the associated names</td>
+<td><code>nmblookup -A 10.10.1.11</code></td>
+</tr>
+<tr>
+<td D="D">NetBIOS enumeration with Nmap</td>
+<td><code>nmap -sU -p 137 --script nbstat.nse 10.10.1.22</code></td>
+</tr>
+<tr>
+<td D="D">SNMP enumeration with SnmpWalk</td>
+<td><code>snmpwalk -c public -v1 10.10.1.22</code></td>
+</tr>
+<tr>
+<td D="D">SNMP enumeration with Nmap</td>
+<td><code>nmap -sU -p 161 --script snmp-info 10.10.1.22</code></td>
+</tr>
+<tr>
+<td D="D">SNMP processes with Nmap</td>
+<td><code>nmap -sU -p 161 --script snmp-processes 10.10.1.22</code></td>
+</tr>
+<tr>
+<td D="D">SMTP enumeration, results saved</td>
+<td><code>nmap -p25 --script smtp-enum-users --script-args smtp-enum-users.methods={VRFY,EXPN,RCPT} 10.10.1.19 -oN smtp_enum.txt</code></td>
+</tr>
+<tr>
+<td D="D">SMTP enumeration with Metasploit</td>
+<td><code>msfconsole -q -x "use auxiliary/scanner/smtp/smtp_enum; set RHOSTS 10.10.1.19; run; exit"</code></td>
+</tr>
+<tr>
+<td D="D">DNS enumeration with Nmap</td>
+<td><code>nmap --script dns-brute --script-args dns-brute.domain=example.com</code>, then <code>nmap --script dns-zone-transfer -p 53 example.com</code></td>
+</tr>
+<tr>
+<td D="D">DNS cache snooping, recursive method</td>
+<td><code>dig @&lt;DNS server&gt; www.example.com +recurse</code></td>
+</tr>
+<tr>
+<td D="D">IPsec enumeration with Nmap</td>
+<td><code>nmap -sU -p 500 --script ike-version 10.10.1.22</code></td>
+</tr>
+<tr>
+<td D="D">SMB shares with Nmap</td>
+<td><code>nmap -p 445 --script smb-enum-shares 10.10.1.22</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>The courseware ends with an AI-written shell script. It sets a target range, creates an output folder, then runs four Nmap scans, each saved with <code>-oN</code>: a ping sweep (<code>-sn</code>), a quick scan (<code>-T4 -F</code>), a detailed scan (<code>-T4 -A</code>) and a version scan (<code>-sV</code>).</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> that script is presented as automating "network enumeration".</p>
+<p><strong>In practice:</strong> all four commands are Module 3 scans. None of them asks a service for its users, shares or records. Real enumeration scripts loop over the open ports and run the right query for each. And the usual caution applies: check every generated switch against the tool's help, and remember that a drafted command is not authorisation.</p>
+</div>
+<div class="admonition coasp">
+<p class="admonition-title">COASP link: enumerating AI services</p>
+<p>The habit carries straight over: find the service, then ask it to list what it has.</p>
+<ul>
+<li><strong>Model servers</strong> usually have a "list models" request. An unauthenticated one tells you every model loaded, and often its size and version.</li>
+<li><strong>Vector databases</strong> list their collections. Collection names and counts reveal what documents an assistant was given.</li>
+<li><strong>Experiment trackers and notebook servers</strong> list runs, parameters and files.</li>
+<li><strong>Tool servers</strong> that connect an assistant to other systems publish the list of tools they offer. That list is the assistant's reach.</li>
+</ul>
+<p>Confirm each request against the product's own documentation. In COASP the same step has a new twist: you can also ask the <em>model</em> what it has, in plain language, and a badly guarded one will tell you its instructions and its tools.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>A real enumeration script: one banner per service, then a count of zone records. In the L01 attacker container:</p>
+<p><code>bash
+for p in "30 21" "40 25"; do set -- $p; printf 'QUIT\r\n' | nc -w 3 10.77.0.$1 $2 | head -1; done; dig +short axfr kestrel-freight.lab @10.77.0.10 | wc -l</code></p>
+<p>Ask an AI assistant for the same thing and compare. Did it speak each service's own language, or did it just run more scans?</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 9</p>
+<ul>
+<li><code>nbtscan</code> and <code>nmblookup -A</code> for NetBIOS; <code>nbstat.nse</code> on UDP 137.</li>
+<li><code>snmpwalk -c public -v1</code>; Nmap <code>snmp-info</code>, <code>snmp-processes</code> on UDP 161.</li>
+<li><code>smtp-enum-users</code> with VRFY, EXPN, RCPT; Metasploit <code>smtp_enum</code>.</li>
+<li><code>dns-brute</code>, <code>dns-zone-transfer</code>; <code>dig +recurse</code> for cache snooping; <code>ike-version</code> on UDP 500.</li>
+<li><code>smb-enum-shares</code> on 445. Check generated commands; they are drafts.</li>
+</ul>
+</div>
+<h2 class="tg-M" id="10-enumeration-countermeasures">10. Enumeration countermeasures <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h2>
+<p>Each service has its own list. The pattern is the same every time: switch it off if you do not need it; if you do, change the defaults, restrict who can reach it, encrypt it and log it.</p>
+<h3 class="tg-M" id="snmp">SNMP <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<ul>
+<li>Remove the SNMP agent or turn the service off. If you cannot, <strong>change the default community strings</strong>.</li>
+<li><strong>Upgrade to SNMPv3</strong>, which encrypts passwords and messages. Avoid its <code>NoAuthNoPriv</code> mode, which protects nothing.</li>
+<li>Block access to TCP/UDP port <strong>161</strong>; restrict SNMP to management addresses with access-control lists.</li>
+<li>Do not configure read-write access where read-only will do.</li>
+<li>Keep management traffic on a separate VLAN; log SNMP access and audit it.</li>
+<li>Windows-specific: apply the Group Policy option "Additional restrictions for anonymous connections"; restrict null session pipes and shares.</li>
+</ul>
+<h3 class="tg-M" id="ldap">LDAP <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<ul>
+<li>LDAP traffic is unencrypted by default: use <strong>SSL or STARTTLS</strong>.</li>
+<li>Choose user names that differ from email addresses, and enable <strong>account lockout</strong>.</li>
+<li><strong>Disable anonymous binds</strong>; limit what authenticated users can read with ACLs.</li>
+<li>Use NTLM, Kerberos or basic authentication to limit access to legitimate users; add multi-factor authentication.</li>
+<li>Deploy <strong>canary accounts</strong> and decoy groups with "Admin" in the name to mislead and detect attackers.</li>
+<li>Log access to the directory and watch for unusual query patterns.</li>
+</ul>
+<h3 class="tg-M" id="nfs">NFS <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<ul>
+<li>Give exported file systems proper permissions; export only to named hosts in <code>/etc/exports</code>.</li>
+<li>Block NFS port <strong>2049</strong> at the firewall; use <code>/etc/hosts.allow</code> and <code>/etc/hosts.deny</code>.</li>
+<li>Keep <strong><code>root_squash</code></strong> on, so a client's root user is not trusted as root on the server.</li>
+<li>Tunnel NFS through SSH, or move to <strong>NFSv4</strong> with Kerberos, to authenticate and encrypt.</li>
+<li>Do not allow suid or sgid programs on exported file systems; log access.</li>
+</ul>
+<h3 class="tg-M" id="smtp">SMTP <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<ul>
+<li>Ignore messages to unknown recipients, and give <strong>limited information in error replies</strong>.</li>
+<li><strong>Disable open relay.</strong></li>
+<li><strong>Disable EXPN, VRFY and RCPT TO</strong>, or restrict them to authenticated users.</li>
+<li>Limit the number of connections from one source; rate-limit requests.</li>
+<li>Implement <strong>SPF, DKIM and DMARC</strong>; require authentication and TLS; log and review.</li>
+</ul>
+<h3 class="tg-M" id="smb">SMB <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<ul>
+<li>Web and DNS servers do not need SMB: disable it on them and on internet-facing ("bastion") hosts, or block <strong>TCP 139 and 445</strong>.</li>
+<li>Add the registry value <strong><code>RestrictNullSessAccess</code></strong>, set to <strong>1</strong>, under <code>LanmanServer\Parameters</code> (inside <code>HKLM\SYSTEM\CurrentControlSet\Services</code>) to restrict anonymous access.</li>
+<li>Use <strong>SMBv3</strong> or later; avoid SMBv1.</li>
+<li>Enable the Windows Firewall, patch, enforce strong passwords and tight share permissions.</li>
+<li>Use digitally signed communication; audit logs.</li>
+</ul>
+<h3 class="tg-M" id="dns">DNS <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<ul>
+<li><strong>Restrict zone transfers</strong> to the IP addresses of your own secondary name servers.</li>
+<li><strong>Restrict resolver access</strong> to hosts inside the network, and <strong>disable recursion</strong> on servers that should not offer it.</li>
+<li>Randomise source ports and query IDs against cache poisoning.</li>
+<li>Use different servers for the authoritative and resolving roles; use <strong>split DNS</strong> so internal names stay internal.</li>
+<li>Keep private hosts out of public zone files; avoid host names that describe a server's purpose; delete old records.</li>
+<li>Use <strong>DNSSEC</strong>; restrict <code>version.bind</code> queries; patch the name server; log and rate-limit queries.</li>
+</ul>
+<div class="admonition hospital">
+<p class="admonition-title">Worked example: a hospital's printers, scanners and file shares</p>
+<p>A hospital's network team asks what an ordinary computer on the staff network can learn in an hour. Nothing is exploited; services are only asked questions.</p>
+<ol>
+<li><strong>A ward printer answers SNMP with "public".</strong> Its interface and ARP tables list the addresses of every device it has printed for, including two imaging consoles.</li>
+<li><strong>The imaging archive allows guest file transfer</strong> so a scanner can drop studies there. Anyone can list the folder.</li>
+<li><strong>The mail server confirms accounts.</strong> The staff directory becomes a list of valid logins, including a backup service account whose password never expires.</li>
+<li><strong>The name server gives its whole zone</strong>, including an old laboratory interface nobody remembered.</li>
+<li><strong>A storage box exports a folder to "everyone"</strong> over NFS; it holds scanned referral letters.</li>
+</ol>
+<p>Each fix is one line from section 10: change the community string or move to SNMPv3; give the scanner its own account; disable VRFY; restrict zone transfers; export to named hosts only. The lesson for the hospital is that the leaks came from devices, not from the main servers.</p>
+<p>The same hour in a warehouse finds the same things on label printers, barcode scanners and the dispatch system.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Be the defender. This is the reply your mail server should never give:</p>
+<p><code>bash
+printf 'VRFY svc_backup\r\nQUIT\r\n' | nc -w 3 10.77.0.40 25 | sed -n 2p | cut -c1-40</code></p>
+<p>Write the reply a hardened server would give to both a real and a made-up name, and say why they must be identical.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 10</p>
+<ul>
+<li>SNMP: turn it off or change the community strings; SNMPv3; block 161.</li>
+<li>LDAP: SSL or STARTTLS; no anonymous binds; lockout; canary accounts.</li>
+<li>NFS: tight <code>/etc/exports</code>; <code>root_squash</code>; NFSv4 with Kerberos; block 2049.</li>
+<li>SMTP: disable VRFY, EXPN, RCPT TO probing and open relay; SPF, DKIM, DMARC.</li>
+<li>SMB: block 139 and 445 on exposed hosts; <code>RestrictNullSessAccess</code> = 1; SMBv3. DNS: restrict zone transfers and recursion.</li>
+</ul>
+</div>
+<h2 class="tg-D" id="11-lab-walk-through">11. Lab walk-through <span class="tag tag-D" title="A hands-on skill for the practical exams. Run it at a keyboard.">DO</span></h2>
+<p>Run this in course lab L01. The generic skin (Kestrel Freight) and the healthcare skin (Aarogya Demo Hospital, <code>aarogya-demo.lab</code>) behave identically; swap the domain and the user names. Work from the attacker container. Allow about 60 minutes including notes.</p>
+<pre><code class="language-bash"># 1. Which enumerable services exist?
+nmap -p 21,25,53,80,111,139,389,445,2049 --open 10.77.0.10,20,30,40
+
+# 2. DNS: ask for the whole zone
+dig axfr kestrel-freight.lab @10.77.0.10
+
+# 3. FTP: read the banner, then list what a guest can see
+printf 'QUIT\r\n' | nc -w 3 10.77.0.30 21
+curl -s ftp://10.77.0.30/pub/
+curl -s ftp://10.77.0.30/pub/onboarding.txt
+
+# 4. SMTP: read the banner, then confirm the accounts you have learned of
+nc 10.77.0.40 25
+#    type:  HELO x      VRFY nobody      VRFY &lt;a staff login&gt;      VRFY &lt;the service account&gt;      QUIT
+
+# 5. The quiet host: banner-grab the port your Module 3 scan found
+nc 10.77.0.45 &lt;its port&gt;
+</code></pre>
+<p>Answer these in your log as you go:</p>
+<ol>
+<li>For each of steps 2 to 5, which row of the port table in section 1 are you using?</li>
+<li>Step 4: which reply codes did you get for a valid and an invalid name? Try <code>EXPN</code> too. What does the server say?</li>
+<li>Build the table every report needs: host, port, service, version, and what it revealed.</li>
+<li>For each leak, copy the matching countermeasure from section 10.</li>
+</ol>
+<p>Module 5 takes the versions in that table and asks which are vulnerable.</p>
+<h2 id="quiz">Quiz</h2>
+<p>Twelve questions. The options are shuffled every time you load the page.</p>
+<div class="quiz">
+<div class="q"><p><b>1.</b> Which port does the NetBIOS name service use? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">TCP 139</button>
+<button type="button" data-ok>UDP 137</button>
+<button type="button">UDP 161</button>
+<button type="button">TCP 445</button>
+<p class="why" hidden>Name service is UDP 137, datagram service UDP 138, session service TCP 139. SMB direct is 445.</p></div>
+<div class="q"><p><b>2.</b> In a NetBIOS name table, what does the code <code>&lt;20&gt;</code> indicate? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">The domain master browser</button>
+<button type="button">The messenger service</button>
+<button type="button" data-ok>The server service: the host is sharing files</button>
+<button type="button">The host name only</button>
+<p class="why" hidden>20 is the server service. 00 is the host or domain name, 03 the messenger service, 1B the domain master browser.</p></div>
+<div class="q"><p><b>3.</b> You know a Windows host&#x27;s IP address but not its name. Which command shows its NetBIOS name table? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button"><code>nbtstat -a 10.0.0.5</code></button>
+<button type="button" data-ok><code>nbtstat -A 10.0.0.5</code></button>
+<button type="button"><code>nbtstat -c</code></button>
+<button type="button"><code>nbtstat -n</code></button>
+<p class="why" hidden>Capital -A takes an IP address; small -a takes a name. -c shows the cache and -n the local names.</p></div>
+<div class="q"><p><b>4.</b> What are the default SNMP community strings? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">admin and password</button>
+<button type="button">read and write</button>
+<button type="button" data-ok>public (read) and private (read/write)</button>
+<button type="button">manager and agent</button>
+<p class="why" hidden>The read community string defaults to public and the read/write string to private. Leaving them unchanged is the classic SNMP weakness.</p></div>
+<div class="q"><p><b>5.</b> In SNMP, what is an OID? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">The password for write access</button>
+<button type="button" data-ok>The numeric name of a managed object, tracing its path from the root of the MIB tree</button>
+<button type="button">The address of the management station</button>
+<button type="button">An unprompted alert from an agent</button>
+<p class="why" hidden>The MIB is a tree of objects and each has an object identifier. The unprompted alert is a trap.</p></div>
+<div class="q"><p><b>6.</b> An LDAP client connects to which component, on which default port? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">A domain controller on TCP 3268</button>
+<button type="button" data-ok>A Directory System Agent on TCP 389</button>
+<button type="button">A management station on UDP 161</button>
+<button type="button">A portmapper on TCP 111</button>
+<p class="why" hidden>LDAP sessions start with a connection to a Directory System Agent, normally on TCP 389. 3268 is the Global Catalog.</p></div>
+<div class="q"><p><b>7.</b> Which command lists the directories an NFS server exports? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button"><code>rpcinfo -p &lt;target&gt;</code></button>
+<button type="button" data-ok><code>showmount -e &lt;target&gt;</code></button>
+<button type="button"><code>ntptrace &lt;target&gt;</code></button>
+<button type="button"><code>net view \\&lt;target&gt;</code></button>
+<p class="why" hidden>showmount -e lists exports. rpcinfo -p lists RPC services and their ports; net view is for Windows shares.</p></div>
+<div class="q"><p><b>8.</b> Which SMTP command reveals the members of a mailing list? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">VRFY</button>
+<button type="button" data-ok>EXPN</button>
+<button type="button">RCPT TO</button>
+<button type="button">HELO</button>
+<p class="why" hidden>EXPN expands an alias or list into its delivery addresses. VRFY validates one user; RCPT TO names a recipient.</p></div>
+<div class="q"><p><b>9.</b> A mail server answers <code>250</code> to <code>VRFY rkapoor</code> and <code>550</code> to <code>VRFY xyzzy</code>. What has it revealed? <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></p>
+<button type="button">That it is an open relay</button>
+<button type="button" data-ok>That rkapoor is a valid account and xyzzy is not</button>
+<button type="button">Its software version</button>
+<button type="button">Nothing useful</button>
+<p class="why" hidden>Different replies for valid and invalid users let an attacker confirm user names. Hardened servers answer the same way to both.</p></div>
+<div class="q"><p><b>10.</b> With <code>dig @server example.com A +norecurse</code>, what does an answer in the reply indicate? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">The zone allows transfers</button>
+<button type="button">DNSSEC is enabled</button>
+<button type="button" data-ok>The record was in the server&#x27;s cache, so someone using it looked the name up recently</button>
+<button type="button">The server is authoritative for every domain</button>
+<p class="why" hidden>With recursion off the server may answer only from what it already holds. That is non-recursive cache snooping.</p></div>
+<div class="q"><p><b>11.</b> Which record type does DNSSEC zone walking follow, and what was introduced to stop it? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">PTR records; split DNS</button>
+<button type="button" data-ok>NSEC records; NSEC3, which hashes the names</button>
+<button type="button">MX records; SPF</button>
+<button type="button">SOA records; zone transfers</button>
+<p class="why" hidden>NSEC records name the next entry in the zone, so they can be followed end to end. NSEC3 replaces names with hashes.</p></div>
+<div class="q"><p><b>12.</b> A hospital printer answers SNMP queries with the community string &quot;public&quot;. What is the best fix? <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></p>
+<button type="button">Move the printer to a different floor</button>
+<button type="button">Block ICMP echo requests</button>
+<button type="button" data-ok>Disable SNMP on it, or change the community string and move to SNMPv3</button>
+<button type="button">Enable VRFY on the mail server</button>
+<p class="why" hidden>Remove the service if it is not needed; otherwise change the default string and use SNMPv3, which authenticates and encrypts.</p></div>
+<p class="score" aria-live="polite"></p></div>
+<h2 id="exam-cheat-sheet">Exam cheat sheet</h2>
+<p>Only the MEMORISE items from this chapter, collected automatically. If a fact is not here, you need to understand or recognise it, not recite it.</p>
+<div class="cheat">
+<p><strong>Enumeration concepts</strong></p>
+<ul>
+<li>Enumeration = active connections and directed queries to extract usernames, machine names, network resources, shares and services; also routing tables, audit and service settings, SNMP and FQDN details, applications and banners. Works in an intranet environment</li>
+<li>Enumeration techniques: extract usernames from email IDs; use default passwords; brute-force Active Directory; DNS zone transfer; extract user groups from Windows; extract usernames using SNMP; extract network resources and topology using SNMP</li>
+<li>Ports: FTP 20/21; SSH and SFTP 22; Telnet 23; SMTP 25; DNS and zone transfer 53; TFTP UDP 69; RPC portmapper 111; NTP UDP 123; Microsoft RPC endpoint mapper 135; NetBIOS name UDP 137, datagram UDP 138, session TCP 139; SNMP UDP 161, trap 162; BGP 179; LDAP 389; SMB direct 445; ISAKMP/IKE UDP 500; NFS 2049; Global Catalog 3268; SIP 5060, 5061 (TLS)</li>
+</ul>
+<p><strong>NetBIOS enumeration</strong></p>
+<ul>
+<li>NetBIOS name: 16 ASCII characters, 15 for the device name, the 16th for the service type. Codes: <code>&lt;00&gt;</code> hostname or domain, <code>&lt;03&gt;</code> messenger, <code>&lt;20&gt;</code> server (file sharing), <code>&lt;1D&gt;</code> master browser, <code>&lt;1B&gt;</code> domain master browser. No NetBIOS name resolution for IPv6</li>
+<li><code>nbtstat -a &lt;name&gt;</code> remote name table by name; <code>-A &lt;IP&gt;</code> remote name table by IP address; <code>-c</code> name cache; <code>-n</code> local names; <code>-r</code> names resolved by broadcast and WINS; <code>-R</code> purge and reload the cache; <code>-RR</code> release and refresh; <code>-s</code> sessions by name; <code>-S</code> sessions by IP address</li>
+<li>PsTools: PsExec (run processes remotely), PsFile, PsGetSid, PsKill, PsInfo, PsList, PsLoggedOn, PsLogList, PsPasswd, PsShutdown. <code>net view \\computer</code> lists shares; <code>/ALL</code> adds hidden shares; <code>net view /domain</code> lists domains</li>
+</ul>
+<p><strong>SNMP enumeration</strong></p>
+<ul>
+<li>SNMP: application-layer protocol on UDP; agent listens on 161, traps go to 162. Two components: SNMP agent (on the device) and SNMP management station. Two passwords: read community string (default "public", view configuration) and read/write community string (default "private", change configuration). SNMP enumeration lists user accounts and devices</li>
+<li>MIB (Management Information Base): virtual database describing every object SNMP manages, organized as a tree. OID: the numeric name of an object, from the root of the tree. Scalar objects have one instance; tabular objects group related instances</li>
+<li><code>snmpwalk -v1 -c public &lt;target&gt;</code> walks the tree (<code>-v2c</code> for SNMPv2c); <code>hrSWInstalledName</code> installed software, <code>hrMemorySize</code> RAM. Nmap <code>-sU -p 161 --script</code>: <code>snmp-processes</code>, <code>snmp-sysdescr</code> (server type, OS), <code>snmp-win32-software</code>, <code>snmp-info</code></li>
+</ul>
+<p><strong>LDAP enumeration</strong></p>
+<ul>
+<li>LDAP: protocol for accessing distributed directory services such as Active Directory. Client connects to a Directory System Agent (DSA) on TCP port 389 (636 for secure LDAP); data is encoded with Basic Encoding Rules (BER). An anonymous query can reveal usernames, addresses, departmental details and server names</li>
+<li><code>ldapsearch -h &lt;target&gt; -x</code> simple authentication; <code>-b</code> search base; <code>-s base namingcontexts</code> finds the naming context. Python: <code>ldap3</code>. Nmap <code>--script ldap-brute</code> brute-forces LDAP logins</li>
+</ul>
+<p><strong>NTP and NFS enumeration</strong></p>
+<ul>
+<li>NTP: UDP 123; accurate to 10 ms over the Internet, 200 microseconds on a LAN. Reveals hosts connected to the server, client IPs, system names and OS. <code>ntpdate</code> collects time samples; <code>ntptrace</code> follows the chain to the primary source; <code>ntpdc</code> queries ntpd state; <code>ntpq</code> monitors ntpd</li>
+<li>NFS: TCP 2049, uses RPC; <code>/etc/exports</code> lists allowed clients; before NFSv4 the only credential is the client's IP address. <code>rpcinfo -p</code> lists RPC services; <code>showmount -e</code> lists exports. Tools: RPCScan, SuperEnum</li>
+</ul>
+<p><strong>SMTP enumeration</strong></p>
+<ul>
+<li>SMTP (TCP 25, 2525, 587): VRFY validates a user; EXPN shows the delivery addresses of aliases and mailing lists; RCPT TO defines the recipient. Different replies for valid and invalid users (250, 550) reveal valid usernames</li>
+<li>SMTP tools: Nmap scripts <code>smtp-commands</code> (supported commands), <code>smtp-open-relay</code> (open relay test), <code>smtp-enum-users</code> (user enumeration); Metasploit <code>auxiliary/scanner/smtp/smtp_enum</code> (uses VRFY with a wordlist, option USER_FILE); smtp-user-enum (<code>-M</code> mode VRFY, EXPN or RCPT; <code>-u</code> user; <code>-U</code> user file; <code>-t</code> host; <code>-T</code> host file); NetScanTools Pro</li>
+</ul>
+<p><strong>DNS enumeration</strong></p>
+<ul>
+<li>Zone transfer copies the zone file from primary to secondary DNS server. <code>dig ns &lt;domain&gt;</code> then <code>dig @&lt;nameserver&gt; &lt;domain&gt; axfr</code>; nslookup <code>set querytype=soa</code> then <code>ls -d &lt;domain&gt;</code>; <code>dnsrecon -t axfr -d &lt;domain&gt;</code></li>
+<li>DNS cache snooping: ask a DNS server for a cached record to learn which sites its users visited. Non-recursive: <code>dig @&lt;server&gt; &lt;domain&gt; A +norecurse</code> (RD bit 0), an answer = cached. Recursive: <code>+recurse</code>, a TTL lower than the original = cached</li>
+<li>DNSSEC zone walking follows NSEC records to list a zone; NSEC3 hashes the names to prevent it. Tools: <code>ldns-walk @&lt;server&gt; &lt;domain&gt;</code>, <code>dnsrecon -d &lt;domain&gt; -z</code>, nsec3map, nsec3walker, DNSwalk</li>
+<li><code>amass enum -d &lt;domain&gt;</code> (<code>-passive</code>, or <code>-active -brute -w &lt;wordlist&gt;</code>). Nmap DNS scripts: <code>dns-brute</code>, <code>dns-recursion</code>, <code>dns-nsec-enum</code>, <code>dns-zone-transfer</code></li>
+</ul>
+<p><strong>Other enumeration techniques</strong></p>
+<ul>
+<li>IPsec: ESP, AH, IKE; ISAKMP on UDP 500 manages Security Associations. <code>nmap -sU -p 500</code> finds a VPN gateway; <code>ike-scan -M</code> fingerprints it. ike-scan: discovery, fingerprinting, transform enumeration, user enumeration, pre-shared key cracking (psk-crack)</li>
+<li>VoIP: SIP on ports 2000, 2001, 5060, 5061. Tools: Svmap, Metasploit SIP Username Enumerator. Attacks: DoS, session hijacking, caller ID spoofing, eavesdropping, SPIT, vishing</li>
+<li>RPC portmapper: TCP and UDP 111. <code>nmap -sR &lt;target&gt;</code>; NetScanTools Pro RPC Info</li>
+<li><code>rusers</code> users logged in to remote machines; <code>rwho</code> users on hosts of the local network; <code>finger</code> login name, real name, terminal, idle and login time, office, phone (<code>-l</code> long, <code>-s</code> short)</li>
+<li>SMB: TCP 445, or via NetBIOS (UDP 137, 138, TCP 139). Nmap <code>--script smb-protocols</code>, <code>smb-enum-shares</code>. Tools: SMBMap, enum4linux, nullinux, SMBeagle</li>
+</ul>
+<p><strong>Enumeration countermeasures</strong></p>
+<ul>
+<li>SNMP defence: turn the service off or change default community strings; SNMPv3; block port 161; ACLs; no read-write; avoid NoAuthNoPriv</li>
+<li>LDAP defence: SSL or STARTTLS; username different from email address; account lockout; disable anonymous binds; canary accounts and decoy Admin groups</li>
+<li>NFS defence: restrict <code>/etc/exports</code> and permissions; block 2049; <code>root_squash</code> on; tunnel through SSH; NFSv4 with Kerberos</li>
+<li>SMTP defence: disable or restrict VRFY, EXPN, RCPT TO; disable open relay; ignore mail to unknown recipients; minimal error detail; SPF, DKIM, DMARC</li>
+<li>SMB defence: disable SMB on web, DNS and bastion hosts; block TCP 139 and 445; registry <code>RestrictNullSessAccess</code> = 1; SMBv3, not SMBv1</li>
+<li>DNS defence: restrict zone transfers to secondary nameserver IPs; restrict resolver access; disable recursion; DNSSEC; split DNS; keep private hosts out of public zones</li>
+</ul>
+</div>
+<h2 id="coverage-check-against-the-official-module-4">Coverage check against the official Module 4</h2>
+<p>Each sub-topic of the official module and where this chapter covers it. The section-by-section verification report is kept with the handbook source as <code>verification/ceh/m04-enumeration.md</code>. No official text is reproduced.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Official sub-topic</th>
+<th>Covered in</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What is enumeration; information collected</td>
+<td>1</td>
+<td>OK, exam/practice note on authorisation</td>
+</tr>
+<tr>
+<td>Techniques for enumeration</td>
+<td>1</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Services and ports to enumerate</td>
+<td>1</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>NetBIOS enumeration; name list; nbtstat</td>
+<td>2</td>
+<td>OK, name and switch tables from Microsoft's documentation (official tables are images)</td>
+</tr>
+<tr>
+<td>NetBIOS enumeration tools; PsTools; Net View; with AI</td>
+<td>2, 9</td>
+<td>OK, update on SMBv1 and NetBIOS in current Windows</td>
+</tr>
+<tr>
+<td>SNMP enumeration; working of SNMP; MIB</td>
+<td>3</td>
+<td>OK, exam/practice note on port 162</td>
+</tr>
+<tr>
+<td>SnmpWalk; Nmap SNMP scripts; SNMP tools; with AI</td>
+<td>3, 9</td>
+<td>OK, exam/practice note on changing values</td>
+</tr>
+<tr>
+<td>LDAP enumeration: manual (Python), automated (Nmap), ldapsearch, tools</td>
+<td>4</td>
+<td>OK, exam/practice note on <code>-h</code></td>
+</tr>
+<tr>
+<td>NTP enumeration: commands and tools</td>
+<td>5</td>
+<td>OK, switch tables reduced; exam/practice note on ntpdc</td>
+</tr>
+<tr>
+<td>NFS enumeration: rpcinfo, showmount, RPCScan, SuperEnum</td>
+<td>5</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>SMTP enumeration: VRFY, EXPN, RCPT TO; Nmap; Metasploit; tools; with AI</td>
+<td>6, 9</td>
+<td>OK, exam/practice note on RSET and port 465</td>
+</tr>
+<tr>
+<td>DNS enumeration using zone transfer (dig, nslookup, DNSRecon)</td>
+<td>7</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>DNS cache snooping: non-recursive and recursive; with AI</td>
+<td>7, 9</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>DNSSEC zone walking and tools</td>
+<td>7</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>DNS enumeration using OWASP Amass and Nmap; with AI</td>
+<td>7, 9</td>
+<td>OK, exam/practice note on Amass</td>
+</tr>
+<tr>
+<td>IPsec enumeration; ike-scan; with AI</td>
+<td>8, 9</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>VoIP enumeration; Svmap</td>
+<td>8</td>
+<td>OK, exam/practice note on ports</td>
+</tr>
+<tr>
+<td>RPC enumeration</td>
+<td>8</td>
+<td>OK, update on <code>nmap -sR</code></td>
+</tr>
+<tr>
+<td>Unix/Linux user enumeration</td>
+<td>8</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>SMB enumeration; with AI</td>
+<td>8, 9</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Custom script to automate network enumeration with AI</td>
+<td>9</td>
+<td>OK, exam/practice note</td>
+</tr>
+<tr>
+<td>Countermeasures: SNMP, LDAP, NFS, SMTP, SMB, DNS</td>
+<td>10</td>
+<td>OK, reduced to the key measures</td>
+</tr>
+<tr>
+<td>Module summary</td>
+<td>Recaps and cheat sheet</td>
+<td>OK</td>
+</tr>
+</tbody>
+</table></div><nav class="pn" aria-label="Chapters"><a href="m03-scanning-networks.html">← Module 3</a><span></span></nav>
+<footer><p>Written and maintained by <b>Dr. Atul Tiwari</b>. &copy; 2026 Dr. Atul Tiwari. All rights reserved.</p><p>Unofficial, independent study material. Not affiliated with or endorsed by EC-Council. CEH, CPENT and COASP are trademarks of EC-Council. Written in our own words from public protocol standards and tool documentation. Use these techniques only on systems you own or are authorised in writing to test.</p></footer></main></div>
+<script>(function(){
+var key='hb:'+location.pathname,done={};try{done=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}
+function save(){try{localStorage.setItem(key,JSON.stringify(done))}catch(e){}}
+// wrap each h2 block in a section so it can be filtered and marked
+var main=document.querySelector('main'),kids=[].slice.call(main.children),sec=null;
+kids.forEach(function(el){if(el.tagName==='H2'){sec=document.createElement('section');main.insertBefore(sec,el)}if(sec&&el.tagName!=='FOOTER'&&el.className!=='pn')sec.appendChild(el)});
+function paint(h){var on=!!done[h.id];h.classList.toggle('done',on);h.querySelector('.mark').textContent=on?'Done ✓':'Mark done';
+var a=document.querySelector('.side a[href="#'+h.id+'"]');if(a)a.parentNode.classList.toggle('done',on)}
+[].forEach.call(document.querySelectorAll('main h2'),function(h){var b=document.createElement('span');b.className='mark';b.setAttribute('role','button');b.tabIndex=0;h.appendChild(b);
+function t(){done[h.id]=!done[h.id];save();paint(h)}b.onclick=t;b.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}};paint(h)});
+document.getElementById('find').addEventListener('input',function(){var q=this.value.trim().toLowerCase();
+[].forEach.call(document.querySelectorAll('main section'),function(s){s.classList.toggle('hide',!!q&&s.textContent.toLowerCase().indexOf(q)<0)})});
+// quiz: options are shuffled on every load so the position of the answer cannot be learned
+[].forEach.call(document.querySelectorAll('.quiz'),function(z){var n=0,ok=0,tot=z.querySelectorAll('.q').length;
+[].forEach.call(z.querySelectorAll('.q'),function(q){var bs=[].slice.call(q.querySelectorAll('button')),why=q.querySelector('.why');
+for(var i=bs.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=bs[i];bs[i]=bs[j];bs[j]=t}bs.forEach(function(b){q.insertBefore(b,why)})});
+z.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var q=b.parentNode;if(q.dataset.done)return;q.dataset.done=1;n++;
+if(b.hasAttribute('data-ok'))ok++;else b.classList.add('wrong');q.querySelector('button[data-ok]').classList.add('right');q.querySelector('.why').hidden=false;
+z.querySelector('.score').textContent='Score: '+ok+' of '+n+' answered ('+tot+' questions)'})});
+// cheat sheet: print only that section
+var cheat=document.querySelector('.cheat');
+if(cheat){var s=cheat.closest('section');if(s)s.classList.add('sheet');var pb=document.createElement('button');pb.type='button';pb.className='pbtn';pb.textContent='Print the cheat sheet only';
+pb.onclick=function(){document.body.classList.add('sheet');window.print();setTimeout(function(){document.body.classList.remove('sheet')},500)};cheat.parentNode.insertBefore(pb,cheat)}
+// mobile contents menu
+var mb=document.getElementById('menu');if(mb){mb.onclick=function(){var on=document.body.classList.toggle('nav');mb.setAttribute('aria-expanded',on);mb.textContent=on?'Close':'Contents'};
+document.getElementById('side').addEventListener('click',function(e){if(e.target.tagName==='A'){document.body.classList.remove('nav');mb.setAttribute('aria-expanded',false);mb.textContent='Contents'}})}
+var links=[].slice.call(document.querySelectorAll('.side a'));
+if('IntersectionObserver'in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
+[].forEach.call(document.querySelectorAll('main h2,main h3'),function(h){io.observe(h)})}
+})();
+</script></body></html>
