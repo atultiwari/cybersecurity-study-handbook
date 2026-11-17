@@ -1,0 +1,1553 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="author" content="Dr. Atul Tiwari"><title>Module 1 - Introduction to Ethical Hacking</title><style>:root{--bg:#fbfaf7;--fg:#1d2127;--mut:#5d6570;--line:#d9d5cc;--card:#fff;--acc:#0b6e69;--acc2:#b4530f;--ok:#1d7a3e;--bad:#b3261e;--code:#f1eee7;--cp:#5b3fa8;--ai:#0b5cab;--mem:#a3123a;--und:#0b5cab;--rec:#6a5a12;--do:#1d7a3e;--gold:#8a6500}
+@media(prefers-color-scheme:dark){:root{--bg:#14171b;--fg:#e6e3dc;--mut:#9aa3ad;--line:#333a42;--card:#1b1f24;--acc:#4fc3bb;--acc2:#f0a25e;--ok:#6fcf8e;--bad:#ff8a80;--code:#22272e;--cp:#b9a3ff;--ai:#7fb8ff;--mem:#ff8fab;--und:#7fb8ff;--rec:#d9c46a;--do:#6fcf8e;--gold:#e0bd55}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.65 Georgia,"Iowan Old Style",serif}
+.top{position:sticky;top:0;z-index:5;display:flex;gap:16px;align-items:center;justify-content:space-between;padding:10px 20px;background:var(--bg);border-bottom:1px solid var(--line);font-family:system-ui,sans-serif;font-size:14px}
+.top a{color:var(--fg);text-decoration:none;font-weight:600}.top input{width:220px;max-width:45vw;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg)}
+.wrap{display:grid;grid-template-columns:270px minmax(0,1fr);max-width:1240px;margin:0 auto}
+.side{position:sticky;top:50px;align-self:start;max-height:calc(100vh - 50px);overflow:auto;padding:20px 12px 40px 20px;font:13.5px/1.4 system-ui,sans-serif}
+.side ul{list-style:none;margin:0;padding-left:0}.side ul ul{padding-left:12px;border-left:1px solid var(--line);margin:2px 0 8px}
+.side a{display:block;padding:3px 6px;color:var(--mut);text-decoration:none;border-radius:4px}.side a:hover,.side a.on{color:var(--acc);background:var(--card)}
+.side li.done>a::after{content:" \2713";color:var(--ok)}
+main{padding:28px 36px 80px;max-width:860px;min-width:0}
+.kicker{font:600 12.5px system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--acc2);margin:0}
+h1{font-size:2.1em;line-height:1.15;margin:.2em 0 .5em;text-wrap:balance}h2{font-size:1.5em;margin:2.2em 0 .5em;padding-top:.6em;border-top:2px solid var(--fg)}
+h3{font-size:1.15em;margin:1.8em 0 .4em}h4{font:600 .95em system-ui,sans-serif;margin:1.4em 0 .3em}
+h2 .mark{float:right;font:500 12px system-ui,sans-serif;color:var(--mut);cursor:pointer;border:1px solid var(--line);border-radius:12px;padding:2px 10px;background:var(--card)}
+h2.done .mark{color:var(--ok);border-color:var(--ok)}
+a{color:var(--acc)}code{font:.86em ui-monospace,Menlo,monospace;background:var(--code);padding:1px 5px;border-radius:4px}
+pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow:auto;line-height:1.45;border:1px solid var(--line)}pre code{background:none;padding:0;font-size:.82em}
+.tw{overflow-x:auto;margin:1em 0}table{border-collapse:collapse;width:100%;font:14.5px/1.45 system-ui,sans-serif}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}th{font-weight:600;border-bottom:2px solid var(--fg)}
+.dg{margin:1.4em 0;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow-x:auto}
+.dg svg{display:block;margin:0 auto;max-width:100%;height:auto;font-family:system-ui,sans-serif}
+.dg figcaption{font:13.5px system-ui,sans-serif;color:var(--mut);margin-top:8px;text-align:center}
+svg .b{fill:var(--card);stroke:var(--fg);stroke-width:1.3}svg .d{fill:var(--code);stroke:var(--acc2);stroke-width:1.5}svg .t{fill:var(--code);stroke:var(--acc);stroke-width:1.5}
+svg .g{fill:none;stroke:var(--ok);stroke-width:1.6}svg .r{fill:none;stroke:var(--bad);stroke-width:1.6}
+svg text{fill:var(--fg);font-size:13px}svg .s{font-size:11.5px;fill:var(--mut)}svg .h{font-weight:600}
+svg .ln{stroke:var(--fg);stroke-width:1.4;fill:none}svg .lf{stroke:var(--mut);stroke-width:1;stroke-dasharray:4 4;fill:none}svg .da{stroke-dasharray:6 4}
+svg .ar{fill:var(--fg)}svg .ok{fill:var(--ok)}svg .bad{fill:var(--bad)}svg .acc{fill:var(--acc)}
+/* memorise / understand / recognise / do tags */
+.tag{display:inline-block;font:700 10.5px/1 system-ui,sans-serif;letter-spacing:.07em;padding:3px 6px;border-radius:4px;border:1px solid currentColor;vertical-align:middle;white-space:nowrap;cursor:help}
+.tag-M{color:var(--mem)}.tag-U{color:var(--und)}.tag-R{color:var(--rec)}.tag-D{color:var(--do)}
+h2 .tag,h3 .tag{margin-left:6px}
+.legend{list-style:none;padding:10px 14px;margin:1em 0;background:var(--card);border:1px solid var(--line);border-radius:8px;font:14px/1.9 system-ui,sans-serif}
+.legend .tag{min-width:92px;text-align:center;margin-right:8px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;font:13.5px system-ui,sans-serif;color:var(--mut);margin:0 0 1.4em}.meta b{color:var(--fg);font-weight:600}
+/* boxes */
+.admonition{margin:1.3em 0;padding:10px 16px 6px;border-left:4px solid var(--acc);background:var(--card);border-radius:0 8px 8px 0;font-size:.96em}
+.admonition-title{font:600 12.5px system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;margin:0 0 4px;color:var(--acc)}
+.admonition.cpent{border-color:var(--cp)}.cpent .admonition-title{color:var(--cp)}.admonition.coasp{border-color:var(--ai)}.coasp .admonition-title{color:var(--ai)}
+.admonition.trap{border-color:var(--bad)}.trap .admonition-title{color:var(--bad)}.admonition.hospital{border-color:var(--acc2)}.hospital .admonition-title{color:var(--acc2)}
+.admonition.try{border-color:var(--do)}.try .admonition-title{color:var(--do)}.try .admonition-title::before{content:"\25B6  "}
+.admonition.remember{border-color:var(--gold);border-style:dashed;border-width:1px 1px 1px 4px}.remember .admonition-title{color:var(--gold)}
+.admonition.recap{border:1px solid var(--line);border-top:3px solid var(--fg);border-radius:0 0 8px 8px}.recap .admonition-title{color:var(--fg)}
+.admonition.exam{border-color:var(--mem);background:linear-gradient(90deg,color-mix(in srgb,var(--mem) 7%,var(--card)),var(--card))}.exam .admonition-title{color:var(--mem)}
+.admonition.story{border-color:var(--mut);font-style:italic}.story .admonition-title{color:var(--mut);font-style:normal}
+.admonition.before,.admonition.why{border:1px solid var(--line);border-left:4px solid var(--acc);}
+.cheat{border:2px solid var(--mem);border-radius:10px;padding:6px 18px 10px;background:var(--card);font-size:.93em}
+.cheat ul{margin:.3em 0 .8em;padding-left:1.2em}.cheat table{font-size:13.5px}.cheat p{margin:.7em 0 .2em}
+.pbtn{font:600 13px system-ui,sans-serif;padding:6px 12px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
+.pn{display:flex;justify-content:space-between;margin-top:50px;font:600 14px system-ui,sans-serif}
+.quiz .q{border:1px solid var(--line);border-radius:8px;padding:8px 14px 12px;margin:10px 0;background:var(--card)}
+.quiz button{display:block;width:100%;text-align:left;margin:5px 0;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);font:14.5px system-ui,sans-serif;cursor:pointer}
+.quiz button.right{border-color:var(--ok);color:var(--ok);font-weight:600}.quiz button.wrong{border-color:var(--bad);color:var(--bad)}
+.quiz .why{font:14px system-ui,sans-serif;color:var(--mut);margin:6px 0 0}.score{font:600 15px system-ui,sans-serif}
+footer{margin-top:60px;padding-top:14px;border-top:1px solid var(--line);font:13px system-ui,sans-serif;color:var(--mut)}
+section.hide{display:none}
+.admonition.update{border-color:var(--ai);border-width:1px 1px 1px 4px;border-style:solid}.update .admonition-title{color:var(--ai)}.update .admonition-title::before{content:"\21BB  "}
+.mbtn{display:none;font:600 13px system-ui,sans-serif;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
+.byline{font:14.5px system-ui,sans-serif;color:var(--mut);margin:-.3em 0 1.2em}
+@media(max-width:860px){.wrap{display:block}.mbtn{display:inline-block}.top{padding:8px 12px;gap:10px;justify-content:flex-start}.top a{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.top input{width:120px}
+.side{display:none;position:fixed;top:46px;left:0;right:0;bottom:0;max-height:none;z-index:4;background:var(--bg);padding:14px 18px 60px;font-size:15px}.side a{padding:7px 6px}body.nav .side{display:block}body.nav{overflow:hidden}
+main{padding:18px 15px 60px}body{font-size:16.5px}h1{font-size:1.75em}h2{font-size:1.32em}h2 .mark{float:none;display:inline-block;margin-left:8px}
+.dg{padding:10px}.dg svg{max-width:none}.dg figcaption{text-align:left}table{font-size:14px}th,td{padding:6px 8px}pre{font-size:.92em}.admonition{padding:9px 12px 5px}.legend .tag{min-width:86px}}
+@media print{.top,.side,.mark,.pbtn,.pn{display:none}.wrap{display:block}body{font-size:11.5pt}.dg{break-inside:avoid}
+body.sheet main>*{display:none}body.sheet main>section.sheet{display:block}body.sheet .cheat{border:none;padding:0;font-size:9.5pt}body.sheet h2{border:none;margin-top:0}}
+@page sheet{size:A4 landscape;margin:8mm}
+@media print{body.sheet{page:sheet}body.sheet .cheat{columns:3;column-gap:16px;font-size:6.9pt;line-height:1.2}body.sheet .cheat ul{margin:.1em 0 .4em}body.sheet .cheat p{margin:.4em 0 .1em}body.sheet .tw{overflow:visible;margin:.3em 0}body.sheet section.sheet h2{font-size:12pt;margin:0 0 2pt;padding:0}body.sheet .cheat table{font-size:6.3pt;break-inside:avoid}body.sheet .cheat th,body.sheet .cheat td{padding:1px 2px}body.sheet .cheat code{font-size:.95em;padding:0}body.sheet section.sheet>p{display:none}@page{margin:9mm}}
+</style></head>
+<body><header class="top"><button type="button" id="menu" class="mbtn" aria-expanded="false" aria-controls="side">Contents</button><a href="index.html">Ethical Hacking Study Handbook</a>
+<input id="find" type="search" placeholder="Filter sections" aria-label="Filter sections"></header>
+<div class="wrap"><nav class="side" id="side" aria-label="Contents"><div class="toc">
+<ul>
+<li><a href="#what-this-chapter-is-about">What this chapter is about</a><ul>
+<li><a href="#how-the-tags-work">How the tags work</a></li>
+</ul>
+</li>
+<li><a href="#1-information-security-concepts">1. Information security concepts</a><ul>
+<li><a href="#the-five-elements">The five elements</a></li>
+<li><a href="#what-an-attack-is-made-of">What an attack is made of</a></li>
+<li><a href="#five-classes-of-attack">Five classes of attack</a></li>
+<li><a href="#information-warfare">Information warfare</a></li>
+</ul>
+</li>
+<li><a href="#2-hackers-and-ethical-hacking">2. Hackers and ethical hacking</a><ul>
+<li><a href="#hacker-classes">Hacker classes</a></li>
+<li><a href="#what-ethical-hacking-is">What ethical hacking is</a></li>
+<li><a href="#scope-limits-and-rules">Scope, limits and rules</a></li>
+<li><a href="#skills">Skills</a></li>
+</ul>
+</li>
+<li><a href="#3-ai-driven-ethical-hacking">3. AI-driven ethical hacking</a><ul>
+<li><a href="#tools-the-syllabus-names">Tools the syllabus names</a></li>
+</ul>
+</li>
+<li><a href="#4-hacking-methodologies-and-frameworks">4. Hacking methodologies and frameworks</a><ul>
+<li><a href="#the-ceh-ethical-hacking-framework">The CEH ethical hacking framework</a></li>
+<li><a href="#the-cyber-kill-chain">The cyber kill chain</a></li>
+<li><a href="#adversary-behaviours-and-indicators-of-compromise">Adversary behaviours and indicators of compromise</a></li>
+<li><a href="#mitre-attck">MITRE ATT&amp;CK</a></li>
+<li><a href="#the-diamond-model-of-intrusion-analysis">The Diamond Model of Intrusion Analysis</a></li>
+</ul>
+</li>
+<li><a href="#5-information-security-controls">5. Information security controls</a><ul>
+<li><a href="#information-assurance-and-defence-in-depth">Information assurance and defence in depth</a></li>
+<li><a href="#risk">Risk</a></li>
+<li><a href="#cyber-threat-intelligence">Cyber threat intelligence</a></li>
+<li><a href="#threat-modelling">Threat modelling</a></li>
+<li><a href="#incident-management">Incident management</a></li>
+<li><a href="#ai-and-machine-learning-in-defence">AI and machine learning in defence</a></li>
+</ul>
+</li>
+<li><a href="#6-laws-and-standards">6. Laws and standards</a><ul>
+<li><a href="#the-ones-to-know">The ones to know</a></li>
+<li><a href="#details-worth-a-second-look">Details worth a second look</a></li>
+<li><a href="#cyber-law-by-country">Cyber law by country</a></li>
+</ul>
+</li>
+<li><a href="#7-lab-walk-through">7. Lab walk-through</a></li>
+<li><a href="#quiz">Quiz</a></li>
+<li><a href="#exam-cheat-sheet">Exam cheat sheet</a></li>
+<li><a href="#coverage-check-against-the-official-module-1">Coverage check against the official Module 1</a></li>
+</ul>
+</div>
+</nav>
+<main><p class="kicker">Ethical hacking track · Module 1 of 20</p><h1 id="introduction-to-ethical-hacking">Introduction to Ethical Hacking</h1>
+<p class="meta"><span><b>Reading</b> about 40 min</span><span><b>Lab</b> 45 min</span><span><b>Difficulty</b> Beginner</span><span><b>Checked</b> 18 Nov 2026: CEH v13 courseware Module 01, MITRE ATT&amp;CK release notes</span></p>
+<h2 id="what-this-chapter-is-about">What this chapter is about</h2>
+<p>This chapter gives you the vocabulary and the map for everything that follows. It answers four questions. What are we protecting? Who attacks it, and how do they go about it? What is an ethical hacker allowed to do? And which laws and standards apply?</p>
+<div class="admonition story">
+<p class="admonition-title">An everyday picture</p>
+<p>A bank hires a locksmith to try to break into its own vault at night. The locksmith uses the same picks and the same patience as a burglar. Three things make the work honest: a signed letter from the bank, an agreed list of what may be touched, and a report at the end that says exactly how the vault was opened and how to stop it happening again. Take away the letter and the same actions are a crime. That locksmith is an ethical hacker.</p>
+</div>
+<p>There are no commands to learn here. There are a lot of lists. The exam asks about them directly, so this chapter tells you which lists to learn by heart and gives you a way to remember each one.</p>
+<div class="admonition before">
+<p class="admonition-title">Before you start</p>
+<p>This chapter assumes very little.</p>
+<ul>
+<li><strong>Information system.</strong> Computers, networks, software and the data they hold, taken together.</li>
+<li><strong>Vulnerability.</strong> A weakness that can be abused. A door with a broken lock is a vulnerability.</li>
+<li><strong>Threat.</strong> Something that could cause harm. A burglar in the neighbourhood is a threat.</li>
+<li><strong>Malware.</strong> Software written to do harm: viruses, ransomware and the like. Module 7 covers it.</li>
+<li><strong>Log.</strong> The diary a computer keeps of what happened on it and when.</li>
+</ul>
+<p>Everything else is defined where it first appears.</p>
+</div>
+<div class="admonition why">
+<p class="admonition-title">Why this matters to you</p>
+<ul>
+<li><strong>Exam candidate.</strong> This module is almost pure recall. Expect direct questions on the five security elements, attack classes, hacker types, the kill chain phases, threat intelligence types, incident handling steps and which law covers what.</li>
+<li><strong>Defending a network.</strong> The frameworks here (kill chain, MITRE ATT&amp;CK, incident handling) are the language security teams use every day to describe an attack and decide where to stop it.</li>
+<li><strong>Working with sensitive data.</strong> If you handle patient, customer or student records, section 6 tells you which rules bind your organisation, and section 5 explains what "risk" means when someone asks you to assess it.</li>
+</ul>
+</div>
+<h3 id="how-the-tags-work">How the tags work</h3>
+<ul class="legend"><li><span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span> Likely to be asked directly. Know it exactly.</li><li><span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span> Needed to reason through scenario questions. Do not recite it.</li><li><span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span> Know the name and what it does when you see it in an option list.</li><li><span class="tag tag-D" title="A hands-on skill for the practical exams. Run it at a keyboard.">DO</span> A hands-on skill for the practical exams. Run it at a keyboard.</li></ul>
+<p>Facts tagged MEMORISE are collected automatically into the <a href="#exam-cheat-sheet">cheat sheet</a> at the end.</p>
+<p><strong>How to use this chapter.</strong> Read one section at a sitting; there are six. Say each mnemonic aloud. Run the "Try it" boxes in lab L01 where they need one. Finish with the quiz.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>After this chapter you can</th>
+<th>Section</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Name the five elements of security and classify any attack</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Tell the hacker classes apart and state what makes hacking ethical</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Recognise the AI tools the syllabus names</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Walk through the CEH framework, the kill chain, ATT&amp;CK and the Diamond Model</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Explain risk, threat intelligence, threat modelling and incident handling</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Match a law or standard to what it protects</td>
+<td>6</td>
+</tr>
+</tbody>
+</table></div>
+<h2 class="tg-U" id="1-information-security-concepts">1. Information security concepts <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h2>
+<p><strong>Information security</strong> means keeping information, and the systems that store, process and send it, safe from unauthorised access, disclosure, alteration and destruction.</p>
+<h3 class="tg-M" id="the-five-elements">The five elements <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<figure class="dg"><svg viewBox="0 0 690 96" width="690" role="img" aria-label="The five elements of information security"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="t" x="10" y="14" width="134.0" height="50" rx="4"/><text x="77.0" y="36" text-anchor="middle" class="h">Confidentiality</text><text x="77.0" y="54" text-anchor="middle" class="s">only the right eyes</text><rect class="t" x="144.0" y="14" width="134.0" height="50" rx="4"/><text x="211.0" y="36" text-anchor="middle" class="h">Integrity</text><text x="211.0" y="54" text-anchor="middle" class="s">not altered</text><rect class="t" x="278.0" y="14" width="134.0" height="50" rx="4"/><text x="345.0" y="36" text-anchor="middle" class="h">Availability</text><text x="345.0" y="54" text-anchor="middle" class="s">there when needed</text><rect class="d" x="412.0" y="14" width="134.0" height="50" rx="4"/><text x="479.0" y="36" text-anchor="middle" class="h">Authenticity</text><text x="479.0" y="54" text-anchor="middle" class="s">genuinely from them</text><rect class="d" x="546.0" y="14" width="134.0" height="50" rx="4"/><text x="613.0" y="36" text-anchor="middle" class="h">Non-repudiation</text><text x="613.0" y="54" text-anchor="middle" class="s">cannot deny it later</text><text x="345.0" y="84" text-anchor="middle" class="s">The first three are the classic CIA triad. The exam counts all five.</text></svg><figcaption>The five elements. Every attack damages at least one of them.</figcaption></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Meaning</th>
+<th>Typical control</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Confidentiality</td>
+<td>Only authorised people can see the information</td>
+<td>Data classification, encryption, proper disposal of equipment</td>
+</tr>
+<tr>
+<td>Integrity</td>
+<td>The information has not been improperly changed</td>
+<td>Checksums, access control</td>
+</tr>
+<tr>
+<td>Availability</td>
+<td>Systems and data are there when authorised users need them</td>
+<td>Redundant disks and clustered machines, antivirus, DDoS protection</td>
+</tr>
+<tr>
+<td>Authenticity</td>
+<td>A message, document or user is genuine</td>
+<td>Biometrics, smart cards, digital certificates</td>
+</tr>
+<tr>
+<td>Non-repudiation</td>
+<td>The sender cannot deny sending; the receiver cannot deny receiving</td>
+<td>Digital signatures</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> information security has <strong>five</strong> elements.</p>
+<p><strong>In practice:</strong> most textbooks and standards teach the three-part "CIA triad" and treat authenticity and non-repudiation as extensions. If a question says "elements of information security", count five.</p>
+</div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p><strong>CIA + AN</strong>: Confidentiality, Integrity, Availability, then Authenticity and Non-repudiation. "The CIA wants <strong>A</strong>nswers <strong>N</strong>ow."</p>
+</div>
+<h3 class="tg-M" id="what-an-attack-is-made-of">What an attack is made of <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<figure class="dg"><svg viewBox="0 0 650 136" width="650" role="img" aria-label="Attack equals motive plus method plus vulnerability"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="b" x="20" y="14" width="170" height="50" rx="6"/><text x="105" y="36" text-anchor="middle" class="h">Motive</text><text x="105" y="54" text-anchor="middle" class="s">why: the goal</text><rect class="b" x="240" y="14" width="170" height="50" rx="6"/><text x="325" y="36" text-anchor="middle" class="h">Method</text><text x="325" y="54" text-anchor="middle" class="s">how: the TTPs</text><rect class="b" x="460" y="14" width="170" height="50" rx="6"/><text x="545" y="36" text-anchor="middle" class="h">Vulnerability</text><text x="545" y="54" text-anchor="middle" class="s">where: the weakness</text><text x="215" y="46" text-anchor="middle" class="h">+</text><text x="435" y="46" text-anchor="middle" class="h">+</text><line class="ln" x1="325" y1="64" x2="325" y2="92" marker-end="url(#a)"/><rect class="d" x="240" y="94" width="170" height="34" rx="6"/><text x="325" y="116" text-anchor="middle" class="h">Attack</text></svg><figcaption>The attack equation. Remove any one of the three and there is no attack.</figcaption></figure>
+<p><strong>Motives</strong> include disrupting business, stealing or manipulating data, creating fear by hitting critical infrastructure, causing financial loss, spreading political or religious beliefs, serving a state's military aims, damaging reputation, revenge and ransom.</p>
+<p><strong>TTPs</strong> describe how an attacker works.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+<th>Analogy: a burglar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tactics</td>
+<td>The strategy for the whole attack, beginning to end</td>
+<td>"Hit empty houses during the school run"</td>
+</tr>
+<tr>
+<td>Techniques</td>
+<td>The technical methods used to get intermediate results</td>
+<td>Slipping a latch with a card</td>
+</tr>
+<tr>
+<td>Procedures</td>
+<td>The systematic, step-by-step sequence the actor follows</td>
+<td>Watch for a week, enter by the back, leave in four minutes</td>
+</tr>
+</tbody>
+</table></div>
+<p>A <strong>vulnerability</strong> is a weakness in design or implementation that can be exploited. The courseware gives five reasons they exist: hardware or software misconfiguration; insecure or poor design of the network or application; inherent technology weaknesses; end-user carelessness; and intentional end-user acts, such as an ex-employee abusing access that was never removed. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<h3 class="tg-M" id="five-classes-of-attack">Five classes of attack <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>The classification comes from the Information Assurance Technical Framework (IATF).</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Class</th>
+<th>What defines it</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Passive</td>
+<td>Watches traffic; changes nothing. Very hard to detect</td>
+<td>Footprinting, sniffing and eavesdropping, traffic analysis, decrypting weak encryption</td>
+</tr>
+<tr>
+<td>Active</td>
+<td>Tampers with data or disrupts service; detectable</td>
+<td>Denial of service, malware, spoofing, replay, man-in-the-middle, session hijacking, SQL injection, privilege escalation</td>
+</tr>
+<tr>
+<td>Close-in</td>
+<td>Attacker is physically near the target</td>
+<td>Social engineering: eavesdropping, shoulder surfing, dumpster diving</td>
+</tr>
+<tr>
+<td>Insider</td>
+<td>A trusted person with access misuses it</td>
+<td>Theft of devices, data theft, pod slurping, planting keyloggers or backdoors</td>
+</tr>
+<tr>
+<td>Distribution</td>
+<td>Hardware or software is tampered with before installation</td>
+<td>Changes at the factory or in transit; vendor backdoors</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p><strong>P-A-C-I-D</strong>: Passive, Active, Close-in, Insider, Distribution. "A hacker's <strong>PACID</strong> test."</p>
+</div>
+<div class="admonition trap">
+<p class="admonition-title">Exam traps</p>
+<ul>
+<li>Footprinting is listed as a <strong>passive</strong> attack, even though some footprinting touches the target.</li>
+<li>Shoulder surfing and dumpster diving are <strong>close-in</strong>. The same eavesdropping by an employee is <strong>insider</strong>.</li>
+<li>A backdoor fitted at the factory is a <strong>distribution</strong> attack, not an insider attack.</li>
+</ul>
+</div>
+<h3 class="tg-R" id="information-warfare">Information warfare <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h3>
+<p><strong>Information warfare</strong> is the use of information and communication technology to gain an advantage over an opponent. Martin Libicki's seven categories:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Category</th>
+<th>In one line</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td R="R">Command and control (C2) warfare</td>
+<td>Control over a compromised system or network</td>
+</tr>
+<tr>
+<td R="R">Intelligence-based warfare</td>
+<td>Designing, protecting and denying systems that gather knowledge of the battlespace</td>
+</tr>
+<tr>
+<td R="R">Electronic warfare</td>
+<td>Radio-electronic and cryptographic techniques that degrade communication</td>
+</tr>
+<tr>
+<td R="R">Psychological warfare</td>
+<td>Propaganda and terror to demoralise the adversary</td>
+</tr>
+<tr>
+<td R="R">Hacker warfare</td>
+<td>Shutting systems down, stealing data, false messaging</td>
+</tr>
+<tr>
+<td R="R">Economic warfare</td>
+<td>Blocking the flow of information to damage a business or nation</td>
+</tr>
+<tr>
+<td R="R">Cyberwarfare</td>
+<td>The broadest: information terrorism, semantic attacks, simulated warfare</td>
+</tr>
+</tbody>
+</table></div>
+<p>Each has a <strong>defensive</strong> side (protecting your own assets) and an <strong>offensive</strong> side (attacking the opponent's). <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>See integrity protection work. In the L01 attacker container, or any terminal:</p>
+<p><code>bash
+echo "pay 100 to Asha" &gt; m.txt; sha256sum m.txt; echo "pay 900 to Asha" &gt; m.txt; sha256sum m.txt</code></p>
+<p>One changed character gives a completely different checksum. That is how tampering is detected.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 1</p>
+<ul>
+<li>Five elements: confidentiality, integrity, availability, authenticity, non-repudiation.</li>
+<li>Attack = motive + method + vulnerability. TTP = tactics, techniques, procedures.</li>
+<li>Five attack classes: passive, active, close-in, insider, distribution.</li>
+<li>Vulnerabilities exist because of misconfiguration, poor design, weak technology, careless users and deliberate users.</li>
+<li>Information warfare has seven Libicki categories and is defensive or offensive.</li>
+</ul>
+</div>
+<h2 class="tg-U" id="2-hackers-and-ethical-hacking">2. Hackers and ethical hacking <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h2>
+<p><strong>Hacking</strong> means exploiting system vulnerabilities and compromising security controls to gain unauthorised or inappropriate access to system resources. A <strong>hacker</strong>, in the exam's sense, is someone who breaks in without authorisation.</p>
+<h3 class="tg-M" id="hacker-classes">Hacker classes <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Who they are</th>
+<th>Driven by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Script kiddies</td>
+<td>Unskilled; run tools written by others; quantity over quality</td>
+<td>Thrill, recognition</td>
+</tr>
+<tr>
+<td>White hats</td>
+<td>Use hacking skills defensively, <strong>with the owner's permission</strong></td>
+<td>Improving security</td>
+</tr>
+<tr>
+<td>Black hats</td>
+<td>Highly skilled; illegal or malicious purposes. Also called <strong>crackers</strong></td>
+<td>Money, data, harm</td>
+</tr>
+<tr>
+<td>Gray hats</td>
+<td>Work offensively and defensively at different times</td>
+<td>Curiosity, recognition</td>
+</tr>
+<tr>
+<td>Hacktivists</td>
+<td>Break in as an act of protest; deface or disable websites</td>
+<td>A political or social cause</td>
+</tr>
+<tr>
+<td>State-sponsored hackers</td>
+<td>Employed by a government to penetrate other nations' systems</td>
+<td>Espionage, national aims</td>
+</tr>
+<tr>
+<td>Cyber terrorists</td>
+<td>Create fear through large-scale disruption</td>
+<td>Religious or political beliefs</td>
+</tr>
+<tr>
+<td>Corporate (industrial) spies</td>
+<td>Steal trade secrets from competitors</td>
+<td>Competitive advantage</td>
+</tr>
+<tr>
+<td>Blue hats</td>
+<td>Contract security professionals who test a system before release</td>
+<td>Product security</td>
+</tr>
+<tr>
+<td>Red hats</td>
+<td>Attack black hats with aggressive methods; do not follow ethical rules</td>
+<td>"Cyber justice"</td>
+</tr>
+<tr>
+<td>Green hats</td>
+<td>Newcomers keen to learn</td>
+<td>Learning</td>
+</tr>
+<tr>
+<td>Suicide hackers</td>
+<td>Attack critical infrastructure and do not care about being caught</td>
+<td>A "cause"</td>
+</tr>
+<tr>
+<td>Hacker teams</td>
+<td>Skilled groups with their own funding who research the latest technology</td>
+<td>Research, capability</td>
+</tr>
+<tr>
+<td>Insiders</td>
+<td>Trusted employees with access: disgruntled, dismissed or undertrained</td>
+<td>Grievance, gain</td>
+</tr>
+<tr>
+<td>Criminal syndicates</td>
+<td>Groups in organised, prolonged crime across jurisdictions</td>
+<td>Money</td>
+</tr>
+<tr>
+<td>Organized hackers</td>
+<td>Hierarchical criminal groups that rent botnets and crimeware</td>
+<td>Money, selling data</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition trap">
+<p class="admonition-title">Exam traps</p>
+<ul>
+<li>The one word that separates a white hat from everyone else is <strong>permission</strong>.</li>
+<li>A gray hat who reports a flaw found without permission has still accessed the system without authorisation.</li>
+<li>A <strong>suicide hacker</strong> is defined by not fearing punishment, not by skill or cause.</li>
+</ul>
+</div>
+<h3 class="tg-U" id="what-ethical-hacking-is">What ethical hacking is <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h3>
+<p><strong>Ethical hacking</strong> is using hacking tools, tricks and techniques to find exploitable weaknesses in a system, with the owner's permission, in order to fix them. Ethical hackers report everything they find to the owner.</p>
+<p>An ethical hacker's assessment answers three questions. Each belongs to particular phases of an attack: <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<ol>
+<li><strong>What can an attacker see on the target?</strong> Reconnaissance and scanning.</li>
+<li><strong>What can an intruder do with that information?</strong> Gaining access and maintaining access.</li>
+<li><strong>Are the attacker's attempts being noticed?</strong> Reconnaissance and covering tracks.</li>
+</ol>
+<p>Organisations hire ethical hackers to prevent break-ins, uncover vulnerabilities, strengthen their security posture, protect customer data and raise security awareness.</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> the difference between an ethical hacker and a cracker is <strong>consent</strong>, and "ethical hacking is always legal".</p>
+<p><strong>In practice:</strong> it is legal only while you stay inside a signed authorisation. Step outside the agreed scope, by one address or one hour, and you may have committed an offence. The paperwork is the protection.</p>
+</div>
+<h3 class="tg-M" id="scope-limits-and-rules">Scope, limits and rules <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>An ethical hacker must:</p>
+<ul>
+<li><strong>Gain authorisation</strong>: a signed contract giving permission to test, before any work begins.</li>
+<li><strong>Maintain confidentiality</strong>: follow a non-disclosure agreement (NDA); disclose nothing to third parties.</li>
+<li><strong>Stay within the agreed limits</strong>: for example, attempt denial of service only if the client agreed to it beforehand.</li>
+</ul>
+<p>The framework for a security audit has six steps:</p>
+<ol>
+<li>Talk to the client and discuss what the test must address.</li>
+<li>Prepare and sign NDA documents.</li>
+<li>Organise the team and prepare a schedule.</li>
+<li>Conduct the test.</li>
+<li>Analyse the results and prepare a report.</li>
+<li>Present the findings to the client.</li>
+</ol>
+<p>A group that performs a full-scale test covering network, physical and system intrusion is called a <strong>tiger team</strong>. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<p>The limitation: an ethical hacker can only help an organisation understand its security. It is up to the organisation to put the safeguards in place.</p>
+<h3 class="tg-R" id="skills">Skills <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Technical</th>
+<th>Non-technical</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>In-depth knowledge of the major operating environments: Windows, Unix, Linux, Macintosh</td>
+<td>Learns and adapts to new technology quickly</td>
+</tr>
+<tr>
+<td>In-depth knowledge of networking concepts, hardware and software</td>
+<td>Strong work ethic, problem solving and communication</td>
+</tr>
+<tr>
+<td>Knowledge of security areas and how sophisticated attacks are launched</td>
+<td>Committed to the organisation's security policies; aware of local standards and laws</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition cpent">
+<p class="admonition-title">CPENT depth: the paperwork professionals actually sign</p>
+<p>The "signed contract" is usually three documents. A <strong>statement of work</strong> says what is being bought. <strong>Rules of engagement</strong> list in-scope addresses, forbidden actions, testing hours, emergency contacts and what to do if you find evidence of a real attacker. A <strong>letter of authorisation</strong> is what you show if someone calls the police. In L01 the student brief plays the role of the rules of engagement; read it as one.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Open <code>labs/L01-recon-enumeration/student/brief-generic.md</code>. Find three things: what is in scope, what is forbidden, and what you must deliver. Those are rules of engagement.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 2</p>
+<ul>
+<li>Black hats attack, white hats defend with permission, gray hats do both.</li>
+<li>Know the rarer hats: blue (contract tester), red (vigilante), green (learner), and suicide hackers.</li>
+<li>Three questions: what can they see, what can they do, is anyone noticing.</li>
+<li>Three rules: signed authorisation, NDA, stay in scope.</li>
+<li>Six audit steps, from talking to the client to presenting the report.</li>
+</ul>
+</div>
+<h2 class="tg-R" id="3-ai-driven-ethical-hacking">3. AI-driven ethical hacking <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h2>
+<p><strong>AI-driven ethical hacking</strong> uses AI algorithms, machine-learning models and automation to speed up and extend an ethical hacker's work. The v13 syllabus adds it to every module.</p>
+<p><strong>Four benefits</strong>: efficiency, accuracy, scalability and cost-effectiveness. <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<p><strong>Five application areas</strong>: network security, application security, cloud security, IoT security and threat intelligence. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<p><strong>How it helps</strong>: automating repetitive tasks; predictive analysis; advanced threat detection, including zero-days; better decision making; adaptive learning; better reporting; simulation and testing; scalability; continuous monitoring; adaptive defence. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<p><strong>The myth.</strong> "AI will replace ethical hackers." It will not. AI needs humans to oversee it, check it and interpret results. Creativity, context and judgement stay with the human. <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></p>
+<h3 class="tg-R" id="tools-the-syllabus-names">Tools the syllabus names <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What the courseware says it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td R="R">ShellGPT</td>
+<td>Generates and completes shell commands, writes code snippets and documentation, answers questions in the terminal</td>
+</tr>
+<tr>
+<td R="R">AutoGPT</td>
+<td>Automates task execution and data processing</td>
+</tr>
+<tr>
+<td R="R">WormGPT</td>
+<td>Generates worm-like scripts and payloads</td>
+</tr>
+<tr>
+<td R="R">ChatGPT with DAN prompt</td>
+<td>Uses a "Do Anything Now" prompt to widen what the model will do</td>
+</tr>
+<tr>
+<td R="R">FreedomGPT</td>
+<td>Unrestricted access to AI; bypasses content filters</td>
+</tr>
+<tr>
+<td R="R">FraudGPT</td>
+<td>Described as detecting and preventing fraud</td>
+</tr>
+<tr>
+<td R="R">ChaosGPT</td>
+<td>Simulates chaotic and unpredictable behaviour</td>
+</tr>
+<tr>
+<td R="R">PoisonGPT</td>
+<td>Introduces a malicious model into a trusted AI system, to study model poisoning</td>
+</tr>
+</tbody>
+</table></div>
+<p>Others to recognise by name: HackerGPT, BurpGPT (adds AI to the Burp Suite web scanner), BugBountyGPT, PentestGPT, GPT White Hack, CybGPT, BugHunterGPT, Hacking APIs GPT, h4ckGPT, HackerNewsGPT, Ethical Hacker GPT and GP(en)T(ester).</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> the courseware presents every tool above as an aid for ethical hackers. Match the name to its description.</p>
+<p><strong>In practice:</strong> WormGPT and FraudGPT were sold on criminal forums to write phishing emails and malware, and "DAN" is a jailbreak that breaks a provider's rules. Do not use them at work. Use an ordinary assistant, inside your authorisation, and verify what it produces.</p>
+</div>
+<div class="admonition coasp">
+<p class="admonition-title">COASP link: when the AI is the target</p>
+<p>This section treats AI as the hacker's tool. COASP turns it round. PoisonGPT in the table above is a preview: a tampered model placed where people trust it is a <strong>distribution attack</strong> from section 1, applied to AI. The kill chain and the ATT&amp;CK matrix in section 4 also have an AI counterpart, <strong>MITRE ATLAS</strong>, which lists tactics such as poisoning training data and extracting a model. Learn the classic frameworks well here and ATLAS will read as a familiar map with new place names.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Ask any AI assistant: "List the phases of the cyber kill chain with one defensive control for each." Check its answer against section 4. Note anything it got wrong; that habit is the skill.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 3</p>
+<ul>
+<li>AI-driven ethical hacking automates and scales the work; four benefits: efficiency, accuracy, scalability, cost.</li>
+<li>It applies to network, application, cloud and IoT security and to threat intelligence.</li>
+<li>AI complements human ethical hackers and does not replace them.</li>
+<li>Recognise ShellGPT, AutoGPT, WormGPT, DAN, FreedomGPT, FraudGPT, ChaosGPT, PoisonGPT.</li>
+<li>In practice several of those are criminal tools or jailbreaks.</li>
+</ul>
+</div>
+<h2 class="tg-M" id="4-hacking-methodologies-and-frameworks">4. Hacking methodologies and frameworks <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h2>
+<p>Four models describe how attacks unfold. Each was built for a different job, and the exam asks you to tell them apart.</p>
+<h3 class="tg-M" id="the-ceh-ethical-hacking-framework">The CEH ethical hacking framework <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<figure class="dg"><svg viewBox="0 0 660 248" width="660" role="img" aria-label="The CEH ethical hacking framework"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="b" x="14" y="8" width="230" height="32" rx="6"/><text x="129.0" y="29" text-anchor="middle" class="h">1. Reconnaissance</text><text x="260" y="29" text-anchor="start" class="s">Footprinting, scanning, enumeration. Passive or active.</text><line class="ln" x1="129.0" y1="40" x2="129.0" y2="58" marker-end="url(#a)"/><rect class="b" x="14" y="58" width="230" height="32" rx="6"/><text x="129.0" y="79" text-anchor="middle" class="h">2. Vulnerability scanning</text><text x="260" y="79" text-anchor="start" class="s">Find and classify the weaknesses.</text><line class="ln" x1="129.0" y1="90" x2="129.0" y2="108" marker-end="url(#a)"/><rect class="b" x="14" y="108" width="230" height="32" rx="6"/><text x="129.0" y="129" text-anchor="middle" class="h">3. Gaining access</text><text x="260" y="129" text-anchor="start" class="s">Exploit, crack passwords, then escalate privileges.</text><line class="ln" x1="129.0" y1="140" x2="129.0" y2="158" marker-end="url(#a)"/><rect class="b" x="14" y="158" width="230" height="32" rx="6"/><text x="129.0" y="179" text-anchor="middle" class="h">4. Maintaining access</text><text x="260" y="179" text-anchor="start" class="s">Keep control: backdoors, use the host as a launchpad.</text><line class="ln" x1="129.0" y1="190" x2="129.0" y2="208" marker-end="url(#a)"/><rect class="b" x="14" y="208" width="230" height="32" rx="6"/><text x="129.0" y="229" text-anchor="middle" class="h">5. Clearing tracks</text><text x="260" y="229" text-anchor="start" class="s">Erase logs and evidence to stay undetected.</text></svg><figcaption>EC-Council&#x27;s own framework. An ethical hacker follows the same phases as an attacker; only the goal differs.</figcaption></figure>
+<ul>
+<li><strong>Reconnaissance</strong> is the preparation. <strong>Passive</strong> reconnaissance never touches the target directly: public information, news, search engines. <strong>Active</strong> reconnaissance interacts with it: finding open ports, hosts and operating systems.</li>
+<li><strong>Scanning</strong> probes the network using what reconnaissance found. <strong>Enumeration</strong> makes active connections and direct queries to list users, shares, routing tables and banners.</li>
+<li><strong>Vulnerability scanning</strong> identifies, measures and classifies weaknesses.</li>
+<li><strong>Gaining access</strong> is where the actual hacking happens: password cracking, exploiting flaws such as buffer overflows. Then <strong>escalating privileges</strong> from an ordinary account to administrator.</li>
+<li><strong>Maintaining access</strong> keeps ownership: the attacker may even patch the hole to keep other hackers out.</li>
+<li><strong>Clearing tracks</strong> removes the evidence, for example by wiping logs.</li>
+</ul>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer (v13):</strong> the framework above, with scanning and enumeration inside reconnaissance and vulnerability scanning as its own phase.</p>
+<p><strong>In practice:</strong> older CEH editions, and most study guides, list five phases as reconnaissance, <strong>scanning</strong>, gaining access, maintaining access, clearing tracks. If a question offers that older list and not the new one, it is the intended answer.</p>
+</div>
+<h3 class="tg-M" id="the-cyber-kill-chain">The cyber kill chain <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>Developed by <strong>Lockheed Martin</strong> from the military idea of a kill chain. It is part of <strong>intelligence-driven defence</strong>: break any link and the attack fails.</p>
+<figure class="dg"><svg viewBox="0 0 660 324" width="660" role="img" aria-label="The seven phases of the cyber kill chain"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="b" x="14" y="8" width="230" height="32" rx="6"/><text x="129.0" y="29" text-anchor="middle" class="h">1. Reconnaissance</text><text x="260" y="29" text-anchor="start" class="s">Research the target, find weak points.</text><line class="ln" x1="129.0" y1="40" x2="129.0" y2="54" marker-end="url(#a)"/><rect class="b" x="14" y="54" width="230" height="32" rx="6"/><text x="129.0" y="75" text-anchor="middle" class="h">2. Weaponization</text><text x="260" y="75" text-anchor="start" class="s">Build the payload: exploit plus backdoor.</text><line class="ln" x1="129.0" y1="86" x2="129.0" y2="100" marker-end="url(#a)"/><rect class="b" x="14" y="100" width="230" height="32" rx="6"/><text x="129.0" y="121" text-anchor="middle" class="h">3. Delivery</text><text x="260" y="121" text-anchor="start" class="s">Send it: email, link, USB, watering hole.</text><line class="ln" x1="129.0" y1="132" x2="129.0" y2="146" marker-end="url(#a)"/><rect class="b" x="14" y="146" width="230" height="32" rx="6"/><text x="129.0" y="167" text-anchor="middle" class="h">4. Exploitation</text><text x="260" y="167" text-anchor="start" class="s">The code runs by abusing a vulnerability.</text><line class="ln" x1="129.0" y1="178" x2="129.0" y2="192" marker-end="url(#a)"/><rect class="b" x="14" y="192" width="230" height="32" rx="6"/><text x="129.0" y="213" text-anchor="middle" class="h">5. Installation</text><text x="260" y="213" text-anchor="start" class="s">Install malware to stay in.</text><line class="ln" x1="129.0" y1="224" x2="129.0" y2="238" marker-end="url(#a)"/><rect class="b" x="14" y="238" width="230" height="32" rx="6"/><text x="129.0" y="259" text-anchor="middle" class="h">6. Command and control</text><text x="260" y="259" text-anchor="start" class="s">Two-way channel back to the attacker.</text><line class="ln" x1="129.0" y1="270" x2="129.0" y2="284" marker-end="url(#a)"/><rect class="b" x="14" y="284" width="230" height="32" rx="6"/><text x="129.0" y="305" text-anchor="middle" class="h">7. Actions on objectives</text><text x="260" y="305" text-anchor="start" class="s">Steal, disrupt or destroy.</text></svg><figcaption>The seven phases. Defenders ask: at which link could we have stopped this?</figcaption></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>What the adversary does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reconnaissance</td>
+<td>Gathers information: websites, social networks, Whois, DNS, scanning for open ports</td>
+</tr>
+<tr>
+<td>Weaponization</td>
+<td>Chooses or builds a malicious payload from an exploit and a backdoor; prepares a phishing campaign</td>
+</tr>
+<tr>
+<td>Delivery</td>
+<td>Transmits the weapon: email attachment, malicious link, USB drive, watering-hole website</td>
+</tr>
+<tr>
+<td>Exploitation</td>
+<td>Triggers the code, abusing a vulnerability to gain remote access</td>
+</tr>
+<tr>
+<td>Installation</td>
+<td>Installs more malware, such as a backdoor, to stay; hides it</td>
+</tr>
+<tr>
+<td>Command and control</td>
+<td>Opens a two-way channel to its own server, often hidden in web, email or DNS traffic</td>
+</tr>
+<tr>
+<td>Actions on objectives</td>
+<td>Achieves the goal: steals data, disrupts service, destroys capability</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p><strong>R-W-D-E-I-C-A</strong>: "<strong>R</strong>obbers <strong>W</strong>ait, <strong>D</strong>eliver, <strong>E</strong>xploit, <strong>I</strong>nstall, <strong>C</strong>ommand, <strong>A</strong>ct."</p>
+</div>
+<div class="admonition trap">
+<p class="admonition-title">Exam traps</p>
+<ul>
+<li>Building the booby-trapped document is <strong>weaponization</strong>. Emailing it is <strong>delivery</strong>.</li>
+<li>The victim opening it and the code running is <strong>exploitation</strong>. The backdoor being written to disk is <strong>installation</strong>.</li>
+</ul>
+</div>
+<h3 class="tg-M" id="adversary-behaviours-and-indicators-of-compromise">Adversary behaviours and indicators of compromise <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>Adversary behavioural identification</strong> means spotting the common methods attackers use once inside. Recognise these nine: <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Behaviour</th>
+<th>What a defender checks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Internal reconnaissance</td>
+<td>Unusual commands in batch scripts and PowerShell; packet captures</td>
+</tr>
+<tr>
+<td>Use of PowerShell</td>
+<td>PowerShell transcript logs, Windows event logs</td>
+</tr>
+<tr>
+<td>Unspecified proxy activities</td>
+<td>Many domains pointing at one host; domain data feeds</td>
+</tr>
+<tr>
+<td>Use of the command-line interface</td>
+<td>Logs of process IDs, oddly named processes, downloaded files</td>
+</tr>
+<tr>
+<td>HTTP user agent</td>
+<td>A tampered user-agent field</td>
+</tr>
+<tr>
+<td>Command and control server</td>
+<td>Outbound connection attempts, unwanted open ports</td>
+</tr>
+<tr>
+<td>Use of DNS tunneling</td>
+<td>Malicious DNS requests and payloads</td>
+</tr>
+<tr>
+<td>Use of web shell</td>
+<td>Server access and error logs, suspicious encoded strings</td>
+</tr>
+<tr>
+<td>Data staging</td>
+<td>Large file transfers, file integrity monitoring, event logs</td>
+</tr>
+</tbody>
+</table></div>
+<p>An <strong>indicator of compromise (IoC)</strong> is a clue, artefact or piece of forensic data that suggests an intrusion. IoCs are not intelligence by themselves; they are the data points intelligence is built from.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>IoC type</th>
+<th>Meaning</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Atomic</td>
+<td>Cannot be broken into smaller parts</td>
+<td>IP address, email address</td>
+</tr>
+<tr>
+<td>Computed</td>
+<td>Derived from incident data</td>
+<td>Hash value, regular expression</td>
+</tr>
+<tr>
+<td>Behavioural</td>
+<td>Atomic and computed indicators combined by some logic</td>
+<td>"Document launches PowerShell, then connects out"</td>
+</tr>
+</tbody>
+</table></div>
+<p>IoCs fall into four <strong>categories</strong>: email indicators, network indicators, host-based indicators and behavioural indicators.</p>
+<p>Key IoCs worth recognising: unusual outbound traffic; unusual privileged-account activity; geographical anomalies; multiple login failures; increased database read volume; large HTML response sizes; many requests for the same file; mismatched port and application traffic; suspicious registry or system file changes; unusual DNS requests; unexpected patching; signs of DDoS; bundles of data in the wrong places; web traffic with superhuman behaviour. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<h3 class="tg-M" id="mitre-attck">MITRE ATT&amp;CK <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>MITRE ATT&amp;CK</strong> is a globally accessible knowledge base of adversary tactics and techniques, built from real-world observations. Where the kill chain has seven broad links, ATT&amp;CK for Enterprise has <strong>14 tactics</strong>, each with many techniques beneath it:</p>
+<p>Reconnaissance, Resource Development, Initial Access, Execution, Persistence, Privilege Escalation, Defense Evasion, Credential Access, Discovery, Lateral Movement, Collection, Command and Control, Exfiltration, Impact.</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> ATT&amp;CK comprises three collections: <strong>Enterprise, Mobile and PRE-ATT&amp;CK</strong>.</p>
+<p><strong>In practice:</strong> the courseware calls STIX and TAXII "organizations"; they are a format and a protocol for sharing threat data.</p>
+</div>
+<div class="admonition update">
+<p class="admonition-title">Updated: October 2020, April 2026 and October 2026</p>
+<p><strong>What changed.</strong> MITRE retired PRE-ATT&amp;CK in <strong>October 2020</strong> (ATT&amp;CK v8) and replaced it with the first two Enterprise tactics, Reconnaissance and Resource Development. The matrices are now <strong>Enterprise, Mobile and ICS</strong>. In <strong>April 2026</strong> (v19) the Defense Evasion tactic was split into two, <strong>Stealth</strong> and <strong>Defense Impairment</strong>, so Enterprise now has <strong>15 tactics</strong>. The current release is v20, <strong>October 2026</strong>.</p>
+<p><strong>The exam still expects:</strong> three collections named Enterprise, Mobile and PRE-ATT&amp;CK, and <strong>14</strong> Enterprise tactics including Defense Evasion. Give the courseware's answer in the exam and use the current matrix at work.</p>
+</div>
+<h3 class="tg-M" id="the-diamond-model-of-intrusion-analysis">The Diamond Model of Intrusion Analysis <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>The Diamond Model describes a single intrusion <strong>event</strong> by four connected features. Analysts link events into activity threads to see how an attack unfolded.</p>
+<figure class="dg"><svg viewBox="0 0 660 296" width="660" role="img" aria-label="The Diamond Model: adversary, capability, infrastructure, victim"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><polygon class="lf" points="330,46 150,150 330,254 510,150"/><line class="lf" x1="330" y1="46" x2="330" y2="254"/><line class="lf" x1="150" y1="150" x2="510" y2="150"/><rect class="t" x="260" y="14" width="140" height="32" rx="6"/><text x="330" y="35" text-anchor="middle" class="h">Adversary</text><rect class="t" x="50" y="134" width="140" height="32" rx="6"/><text x="120" y="155" text-anchor="middle" class="h">Infrastructure</text><rect class="t" x="470" y="134" width="140" height="32" rx="6"/><text x="540" y="155" text-anchor="middle" class="h">Capability</text><rect class="t" x="260" y="254" width="140" height="32" rx="6"/><text x="330" y="275" text-anchor="middle" class="h">Victim</text><text x="215" y="92" text-anchor="middle" class="s">uses</text><text x="445" y="92" text-anchor="middle" class="s">develops</text><text x="215" y="215" text-anchor="middle" class="s">connects to</text><text x="445" y="215" text-anchor="middle" class="s">exploits</text></svg><figcaption>Every intrusion event has these four corners. Knowing any one helps you find the others.</figcaption></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>The question it answers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Adversary</td>
+<td><strong>Who</strong> was behind the attack?</td>
+</tr>
+<tr>
+<td>Victim</td>
+<td><strong>Where</strong> was the attack performed: which person, organisation or asset?</td>
+</tr>
+<tr>
+<td>Capability</td>
+<td><strong>How</strong> was it done: which malware, tool or technique?</td>
+</tr>
+<tr>
+<td>Infrastructure</td>
+<td><strong>What</strong> did the adversary use to reach the victim: servers, domains, email accounts?</td>
+</tr>
+</tbody>
+</table></div>
+<p>Six <strong>meta-features</strong> add detail to an event: timestamp, phase, result, direction, methodology and resource. The <strong>extended</strong> model adds two more: the <strong>socio-political</strong> meta-feature (the relationship between adversary and victim, which is the motive) and the <strong>technology</strong> meta-feature (the relationship between infrastructure and capability).</p>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>Which framework for which job? <strong>Kill chain</strong>: the order of an attack. <strong>ATT&amp;CK</strong>: a catalogue of techniques. <strong>Diamond</strong>: the four facts about one event. <strong>CEH framework</strong>: the phases you perform as the tester.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Be the defender. In L01, from your own computer's terminal (not the attacker container), start the lab, make one request, and find it in the target's log:</p>
+<p><code>bash
+docker compose exec attacker curl -s http://10.77.0.20/ &gt;/dev/null; docker compose logs --tail 3 h20</code></p>
+<p>The source address <code>10.77.0.100</code> in that log line is an <strong>atomic, network</strong> indicator.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 4</p>
+<ul>
+<li>CEH framework: reconnaissance, vulnerability scanning, gaining access, maintaining access, clearing tracks.</li>
+<li>Kill chain (Lockheed Martin): reconnaissance, weaponization, delivery, exploitation, installation, command and control, actions on objectives.</li>
+<li>IoCs: atomic, computed, behavioural; categories email, network, host-based, behavioural.</li>
+<li>ATT&amp;CK: 14 Enterprise tactics; exam matrices Enterprise, Mobile, PRE-ATT&amp;CK.</li>
+<li>Diamond Model: adversary, capability, infrastructure, victim.</li>
+</ul>
+</div>
+<h2 class="tg-U" id="5-information-security-controls">5. Information security controls <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h2>
+<p>Controls are what an organisation does to keep unwanted events from happening and to reduce the damage when they do.</p>
+<h3 class="tg-M" id="information-assurance-and-defence-in-depth">Information assurance and defence in depth <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>Information assurance (IA)</strong> is the assurance that the integrity, availability, confidentiality and authenticity of information are protected while it is used, processed, stored and transmitted. It is achieved through physical, technical and administrative controls.</p>
+<p><strong>Defence in depth</strong> places several layers of protection around the information, on the military principle that a layered defence is harder to defeat than a single barrier. Breaking one layer only delivers the attacker to the next, and buys the defenders time.</p>
+<figure class="dg"><svg viewBox="0 0 664 262" width="664" role="img" aria-label="Defence in depth: layers of protection around the data"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="b" x="12" y="8" width="640" height="246" rx="8"/><text x="332.0" y="27" text-anchor="middle" class="s">Policies, procedures and awareness</text><rect class="b" x="46" y="36" width="572" height="212" rx="8"/><text x="332.0" y="55" text-anchor="middle" class="s">Physical</text><rect class="b" x="80" y="64" width="504" height="178" rx="8"/><text x="332.0" y="83" text-anchor="middle" class="s">Perimeter</text><rect class="b" x="114" y="92" width="436" height="144" rx="8"/><text x="332.0" y="111" text-anchor="middle" class="s">Internal network</text><rect class="b" x="148" y="120" width="368" height="110" rx="8"/><text x="332.0" y="139" text-anchor="middle" class="s">Host</text><rect class="b" x="182" y="148" width="300" height="76" rx="8"/><text x="332.0" y="167" text-anchor="middle" class="s">Application</text><rect class="d" x="216" y="176" width="232" height="42" rx="8"/><text x="332.0" y="195" text-anchor="middle" class="h">Data</text></svg><figcaption>Defence in depth. An attacker must get through every layer to reach the data.</figcaption></figure>
+<p>The <strong>continual or adaptive security strategy</strong> has four activities that run all the time: <strong>protection</strong> (policies, firewalls, physical security), <strong>detection</strong> (monitoring for abnormal activity), <strong>responding</strong> (investigating, containing, eradicating) and <strong>prediction</strong> (risk assessment, attack-surface analysis, threat intelligence).</p>
+<h3 class="tg-M" id="risk">Risk <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>Risk</strong> is the degree of uncertainty or expectation that an adverse event will damage the system.</p>
+<ul>
+<li><strong>Risk = Threats × Vulnerabilities × Impact</strong></li>
+<li><strong>Level of risk = Consequence × Likelihood</strong></li>
+</ul>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Risk level</th>
+<th>Consequence</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Extreme or high</td>
+<td>Serious or imminent danger</td>
+<td>Immediate measures; impose controls to reduce the risk</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>Moderate danger</td>
+<td>Not immediate, but act quickly</td>
+</tr>
+<tr>
+<td>Low</td>
+<td>Negligible danger</td>
+<td>Take preventive steps</td>
+</tr>
+</tbody>
+</table></div>
+<p>A <strong>risk matrix</strong> plots likelihood against consequence so risks can be compared at a glance. Each organisation builds its own.</p>
+<figure class="dg"><svg viewBox="0 0 640 204" width="640" role="img" aria-label="A simple risk matrix: likelihood against consequence"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><text x="380" y="20" text-anchor="middle" class="h">Consequence</text><text x="54" y="120" text-anchor="middle" class="h">Likelihood</text><text x="230" y="44" text-anchor="middle" class="s">Low</text><text x="380" y="44" text-anchor="middle" class="s">Medium</text><text x="530" y="44" text-anchor="middle" class="s">High</text><text x="128" y="80" text-anchor="middle" class="s">Likely</text><rect class="b" x="160" y="56" width="140" height="38" rx="4"/><text x="230" y="80" text-anchor="middle" class="">Medium</text><rect class="d" x="310" y="56" width="140" height="38" rx="4"/><text x="380" y="80" text-anchor="middle" class="h">High</text><rect class="d" x="460" y="56" width="140" height="38" rx="4"/><text x="530" y="80" text-anchor="middle" class="h">Extreme</text><text x="128" y="126" text-anchor="middle" class="s">Possible</text><rect class="t" x="160" y="102" width="140" height="38" rx="4"/><text x="230" y="126" text-anchor="middle" class="">Low</text><rect class="b" x="310" y="102" width="140" height="38" rx="4"/><text x="380" y="126" text-anchor="middle" class="">Medium</text><rect class="d" x="460" y="102" width="140" height="38" rx="4"/><text x="530" y="126" text-anchor="middle" class="h">High</text><text x="128" y="172" text-anchor="middle" class="s">Unlikely</text><rect class="t" x="160" y="148" width="140" height="38" rx="4"/><text x="230" y="172" text-anchor="middle" class="">Low</text><rect class="t" x="310" y="148" width="140" height="38" rx="4"/><text x="380" y="172" text-anchor="middle" class="">Low</text><rect class="b" x="460" y="148" width="140" height="38" rx="4"/><text x="530" y="172" text-anchor="middle" class="">Medium</text></svg><figcaption>A three-by-three example. Real matrices are often five-by-five.</figcaption></figure>
+<p><strong>Risk management</strong> has four phases:</p>
+<ol>
+<li><strong>Risk identification</strong>: find the sources, causes and consequences of risks.</li>
+<li><strong>Risk assessment</strong>: estimate likelihood and impact; set priorities.</li>
+<li><strong>Risk treatment</strong>: select and apply controls, in order of severity.</li>
+<li><strong>Risk tracking and review</strong>: check that the controls work and stay appropriate.</li>
+</ol>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>Risk management: <strong>I-A-T-T</strong>: Identify, Assess, Treat, Track. "<strong>I</strong> <strong>A</strong>m <strong>T</strong>racking <strong>T</strong>hreats."</p>
+</div>
+<h3 class="tg-M" id="cyber-threat-intelligence">Cyber threat intelligence <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>Cyber threat intelligence (CTI)</strong> is the collection and analysis of information about threats and adversaries, so that an organisation can prepare for, prevent and respond to attacks. It turns unknown threats into known ones.</p>
+<figure class="dg"><svg viewBox="0 0 690 198" width="690" role="img" aria-label="Four types of threat intelligence, by who consumes them"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="b" x="14" y="8" width="150" height="32" rx="6"/><text x="89.0" y="29" text-anchor="middle" class="h">Strategic</text><text x="180" y="29" text-anchor="start" class="s">For executives and the CISO. Business risk, trends, money. Long-term.</text><line class="ln" x1="89.0" y1="40" x2="89.0" y2="58" marker-end="url(#a)"/><rect class="b" x="14" y="58" width="150" height="32" rx="6"/><text x="89.0" y="79" text-anchor="middle" class="h">Tactical</text><text x="180" y="79" text-anchor="start" class="s">For security and SOC managers, architects. Attacker TTPs.</text><line class="ln" x1="89.0" y1="90" x2="89.0" y2="108" marker-end="url(#a)"/><rect class="b" x="14" y="108" width="150" height="32" rx="6"/><text x="89.0" y="129" text-anchor="middle" class="h">Operational</text><text x="180" y="129" text-anchor="start" class="s">For incident response heads, defenders. Specific incoming threats.</text><line class="ln" x1="89.0" y1="140" x2="89.0" y2="158" marker-end="url(#a)"/><rect class="b" x="14" y="158" width="150" height="32" rx="6"/><text x="89.0" y="179" text-anchor="middle" class="h">Technical</text><text x="180" y="179" text-anchor="start" class="s">For SOC staff and IR teams. Individual IoCs. Shortest-lived.</text></svg><figcaption>Four types, defined by who reads them. The arrows run from the boardroom down to the firewall rule.</figcaption></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>What it covers</th>
+<th>Consumed by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Strategic</td>
+<td>High-level: financial impact, attack trends, threat landscape, attribution</td>
+<td>Executives, IT management, the CISO</td>
+</tr>
+<tr>
+<td>Tactical</td>
+<td>The TTPs of threat actors</td>
+<td>IT service and security operations managers, NOC staff, administrators, architects</td>
+</tr>
+<tr>
+<td>Operational</td>
+<td>Specific threats against the organisation; context on incidents</td>
+<td>Security managers, heads of incident response, network defenders, forensics and fraud teams</td>
+</tr>
+<tr>
+<td>Technical</td>
+<td>Specific IoCs: IP addresses, domains, hashes, phishing headers. Shortest-lived</td>
+<td>SOC staff and incident response teams</td>
+</tr>
+</tbody>
+</table></div>
+<p>The <strong>threat intelligence lifecycle</strong> has five phases:</p>
+<ol>
+<li><strong>Planning and direction</strong>: decide what intelligence is needed and form the team.</li>
+<li><strong>Collection</strong>: gather raw data from open sources (OSINT), human sources (HUMINT) and others.</li>
+<li><strong>Processing and exploitation</strong>: turn raw data into a usable format.</li>
+<li><strong>Analysis and production</strong>: turn information into intelligence that is objective, timely, accurate and actionable.</li>
+<li><strong>Dissemination and integration</strong>: deliver it to the consumers and take their feedback.</li>
+</ol>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>Types, top of the organisation to the bottom: <strong>S-T-O-T</strong>: Strategic, Tactical, Operational, Technical. Lifecycle: "<strong>P</strong>lease <strong>C</strong>ollect, <strong>P</strong>rocess, <strong>A</strong>nalyse, <strong>D</strong>eliver."</p>
+</div>
+<div class="admonition trap">
+<p class="admonition-title">Exam traps</p>
+<ul>
+<li><strong>Tactical</strong> intelligence is about TTPs. <strong>Technical</strong> intelligence is about individual indicators. The names are easy to swap.</li>
+<li>A piece of malware used in an attack is tactical; the hash of that malware is technical.</li>
+</ul>
+</div>
+<h3 class="tg-M" id="threat-modelling">Threat modelling <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>Threat modelling</strong> is a risk assessment approach for an application: capture, organise and analyse everything that affects its security. Five steps:</p>
+<ol>
+<li><strong>Identify security objectives</strong>: what must be protected, and which compliance rules apply.</li>
+<li><strong>Application overview</strong>: components, roles, key usage scenarios, technologies, security mechanisms.</li>
+<li><strong>Decompose the application</strong>: trust boundaries, data flows, entry points and exit points.</li>
+<li><strong>Identify threats</strong> relevant to that context.</li>
+<li><strong>Identify vulnerabilities</strong> related to those threats.</li>
+</ol>
+<h3 class="tg-M" id="incident-management">Incident management <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>Incident management</strong> is the set of processes that identify, analyse, prioritise and resolve security incidents, restore normal service and prevent recurrence. Incident <strong>response</strong> is one function of incident <strong>handling</strong>, which is one service within incident <strong>management</strong>.</p>
+<p><strong>Incident handling and response (IH&amp;R)</strong> has nine steps.</p>
+<figure class="dg"><svg viewBox="0 0 660 384" width="660" role="img" aria-label="The nine steps of incident handling and response"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="b" x="14" y="8" width="230" height="32" rx="6"/><text x="129.0" y="29" text-anchor="middle" class="h">1. Preparation</text><text x="260" y="29" text-anchor="start" class="s">Policies, team, tools, training.</text><line class="ln" x1="129.0" y1="40" x2="129.0" y2="50" marker-end="url(#a)"/><rect class="b" x="14" y="50" width="230" height="32" rx="6"/><text x="129.0" y="71" text-anchor="middle" class="h">2. Recording and assignment</text><text x="260" y="71" text-anchor="start" class="s">Report it, log it, raise a ticket.</text><line class="ln" x1="129.0" y1="82" x2="129.0" y2="92" marker-end="url(#a)"/><rect class="b" x="14" y="92" width="230" height="32" rx="6"/><text x="129.0" y="113" text-anchor="middle" class="h">3. Triage</text><text x="260" y="113" text-anchor="start" class="s">Analyse, validate, categorise, prioritise.</text><line class="ln" x1="129.0" y1="124" x2="129.0" y2="134" marker-end="url(#a)"/><rect class="b" x="14" y="134" width="230" height="32" rx="6"/><text x="129.0" y="155" text-anchor="middle" class="h">4. Notification</text><text x="260" y="155" text-anchor="start" class="s">Tell management, vendors, clients.</text><line class="ln" x1="129.0" y1="166" x2="129.0" y2="176" marker-end="url(#a)"/><rect class="b" x="14" y="176" width="230" height="32" rx="6"/><text x="129.0" y="197" text-anchor="middle" class="h">5. Containment</text><text x="260" y="197" text-anchor="start" class="s">Stop it spreading.</text><line class="ln" x1="129.0" y1="208" x2="129.0" y2="218" marker-end="url(#a)"/><rect class="b" x="14" y="218" width="230" height="32" rx="6"/><text x="129.0" y="239" text-anchor="middle" class="h">6. Evidence and forensics</text><text x="260" y="239" text-anchor="start" class="s">Collect evidence, investigate.</text><line class="ln" x1="129.0" y1="250" x2="129.0" y2="260" marker-end="url(#a)"/><rect class="b" x="14" y="260" width="230" height="32" rx="6"/><text x="129.0" y="281" text-anchor="middle" class="h">7. Eradication</text><text x="260" y="281" text-anchor="start" class="s">Remove the root cause.</text><line class="ln" x1="129.0" y1="292" x2="129.0" y2="302" marker-end="url(#a)"/><rect class="b" x="14" y="302" width="230" height="32" rx="6"/><text x="129.0" y="323" text-anchor="middle" class="h">8. Recovery</text><text x="260" y="323" text-anchor="start" class="s">Restore systems and data.</text><line class="ln" x1="129.0" y1="334" x2="129.0" y2="344" marker-end="url(#a)"/><rect class="b" x="14" y="344" width="230" height="32" rx="6"/><text x="129.0" y="365" text-anchor="middle" class="h">9. Post-incident activities</text><text x="260" y="365" text-anchor="start" class="s">Document, assess impact, revise policy, disclose.</text></svg><figcaption>The nine steps. Containment comes before evidence gathering; eradication comes before recovery.</figcaption></figure>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> nine IH&amp;R steps, in the order shown.</p>
+<p><strong>In practice:</strong> many teams learned the shorter four-phase NIST model: preparation; detection and analysis; containment, eradication and recovery; post-incident activity. The nine steps are the same work, sliced more finely.</p>
+</div>
+<div class="admonition update">
+<p class="admonition-title">Updated: April 2025</p>
+<p><strong>What changed.</strong> NIST replaced that four-phase guide. SP 800-61 <strong>Revision 3</strong>, published <strong>April 2025</strong>, supersedes Revision 2 (2012) and organises incident response around the functions of the NIST Cybersecurity Framework 2.0 (Govern, Identify, Protect, Detect, Respond, Recover) instead of a separate life cycle.</p>
+<p><strong>The exam still expects:</strong> EC-Council's own nine IH&amp;R steps. NIST's model is not what the question is asking for.</p>
+</div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>"<strong>P</strong>lease <strong>R</strong>ecord, <strong>T</strong>riage, <strong>N</strong>otify; <strong>C</strong>ontain, gather <strong>E</strong>vidence, <strong>E</strong>radicate, <strong>R</strong>ecover, <strong>P</strong>ost-mortem."</p>
+</div>
+<h3 class="tg-R" id="ai-and-machine-learning-in-defence">AI and machine learning in defence <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h3>
+<p><strong>Machine learning (ML)</strong> is the branch of AI that lets systems learn without being explicitly programmed. Defenders use it to learn what "normal" looks like and report deviations.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Uses</th>
+<th>Subcategories</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td M:="M:" Supervised="Supervised" Unsupervised="Unsupervised" and="and" classification="classification" clustering="clustering" data_="data;" dimensionality="dimensionality" labelled="labelled" learning:="learning:" reduction="reduction" regression.="regression." unlabelled="unlabelled">Supervised learning</td>
+<td><strong>Labelled</strong> training data</td>
+<td>Classification (separate classes), regression (continuous values)</td>
+</tr>
+<tr>
+<td>Unsupervised learning</td>
+<td><strong>Unlabelled</strong> training data</td>
+<td>Clustering, dimensionality reduction</td>
+</tr>
+</tbody>
+</table></div>
+<p>AI and ML help with password protection and authentication, phishing detection, threat detection, vulnerability management, behavioural analytics, network security, AI-based antivirus, fraud detection, botnet detection, and combating AI-driven threats.</p>
+<div class="admonition hospital">
+<p class="admonition-title">Worked example: ransomware in a hospital laboratory</p>
+<p>At 02:10 on a Sunday the laboratory information system of a 300-bed hospital stops accepting samples. Every result screen shows a ransom note. Walk it through this chapter.</p>
+<ol>
+<li><strong>Which elements are hit?</strong> Availability first: results cannot be issued. Then confidentiality, if patient records were copied out before encryption. Then integrity: can the restored results be trusted?</li>
+<li><strong>Where in the kill chain was it stoppable?</strong> Delivery was a phishing email to a technician three weeks earlier. Installation and command and control ran unnoticed. The ransom note is "actions on objectives", the last link.</li>
+<li><strong>Which IH&amp;R step are you in?</strong> Recording and triage, then notification to management. <strong>Containment</strong> means disconnecting the lab network from the wards, while analysers keep running on paper request forms. Evidence is collected before anything is wiped.</li>
+<li><strong>Which risk level?</strong> Extreme: imminent danger to patients. Immediate measures.</li>
+<li><strong>Which rules apply?</strong> In the United States, HIPAA's Security Rule and breach duties. In the European Union, GDPR. In India, the Information Technology Act and the Digital Personal Data Protection Act 2023, whose main duties take effect in stages to May 2027.</li>
+</ol>
+<p>Change "laboratory" to "warehouse dispatch system" and "patients" to "deliveries": the five answers have the same shape. Only the law in step 5 and the cost of downtime change.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Take three findings you would expect in any small office: a default router password, an unpatched web server, a shared admin login. Place each on the risk matrix above by likelihood and consequence. Which one do you fix first, and why?</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 5</p>
+<ul>
+<li>Defence in depth layers controls; the adaptive strategy protects, detects, responds and predicts.</li>
+<li>Risk = threats × vulnerabilities × impact. Risk management: identify, assess, treat, track.</li>
+<li>Threat intelligence: strategic, tactical, operational, technical; five-phase lifecycle.</li>
+<li>Threat modelling: objectives, overview, decompose, threats, vulnerabilities.</li>
+<li>IH&amp;R: nine steps from preparation to post-incident activities.</li>
+</ul>
+</div>
+<h2 class="tg-M" id="6-laws-and-standards">6. Laws and standards <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h2>
+<p>A <strong>law</strong> is enforced by a country. A <strong>standard</strong> is a document agreed by consensus and approved by a recognised body. The exam asks which one protects what.</p>
+<h3 class="tg-M" id="the-ones-to-know">The ones to know <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th M="M">Law or standard</th>
+<th>What it protects or requires</th>
+<th>Key facts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PCI DSS</td>
+<td>Cardholder data, for anyone who stores, processes or transmits it</td>
+<td>A proprietary industry standard, not a law. Failure can mean fines or losing the right to process cards</td>
+</tr>
+<tr>
+<td>ISO/IEC 27001:2022</td>
+<td>Requirements for an information security management system (ISMS)</td>
+<td>The standard organisations are certified against</td>
+</tr>
+<tr>
+<td>HIPAA</td>
+<td>Individually identifiable health information in the United States</td>
+<td>Privacy Rule, Security Rule, Enforcement Rule; National Provider Identifier is a 10-digit number</td>
+</tr>
+<tr>
+<td>Sarbanes-Oxley (SOX), 2002</td>
+<td>Investors: accuracy and reliability of corporate disclosures</td>
+<td>11 titles</td>
+</tr>
+<tr>
+<td>DMCA</td>
+<td>Copyright; bans circumventing technological protection measures</td>
+<td>5 titles; implements two 1996 WIPO treaties</td>
+</tr>
+<tr>
+<td>FISMA, 2002</td>
+<td>Information security of United States federal agencies</td>
+<td>Agency-wide security programmes</td>
+</tr>
+<tr>
+<td>GDPR</td>
+<td>Personal data of people in the European Union, wherever the organisation is</td>
+<td>In effect 25 May 2018; seven principles</td>
+</tr>
+<tr>
+<td>Data Protection Act 2018</td>
+<td>Personal data in the United Kingdom</td>
+<td>Replaced the 1998 Act; sets the Information Commissioner's powers</td>
+</tr>
+</tbody>
+</table></div>
+<h3 class="tg-R" id="details-worth-a-second-look">Details worth a second look <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h3>
+<p><strong>ISO/IEC family.</strong> 27001 is the ISMS requirements. The others the courseware lists: <strong>27701</strong> (privacy information management, extends 27001), <strong>27002</strong> (best-practice controls), <strong>27005</strong> (risk management), <strong>27018</strong> (personal data in public clouds), <strong>27032</strong> (internet security), <strong>27033-7</strong> (network virtualisation security), <strong>27036-3</strong> (supply chain security), <strong>27040</strong> (storage security).</p>
+<p><strong>HIPAA's Administrative Simplification rules.</strong> Electronic transactions and code set standards; Privacy Rule (limits on use and disclosure; patients' rights to their records); Security Rule (administrative, physical and technical safeguards for electronic health information); employer identifier standard; National Provider Identifier standard; Enforcement Rule.</p>
+<p><strong>SOX titles to recognise.</strong> I: Public Company Accounting Oversight Board. II: auditor independence. III: corporate responsibility; senior executives personally certify financial reports. IV: enhanced financial disclosures and internal controls. VIII: corporate and criminal fraud accountability, with whistle-blower protection. IX: white-collar crime penalties.</p>
+<p><strong>DMCA titles.</strong> I: WIPO treaty implementation, including the anti-circumvention rule. II: online copyright infringement liability limitation, the "safe harbour" for service providers. III: computer maintenance or repair. IV: miscellaneous provisions. V: protection of certain original designs (vessel hulls).</p>
+<p><strong>GDPR's seven principles.</strong> Lawfulness, fairness and transparency; purpose limitation; data minimisation; accuracy; storage limitation; integrity and confidentiality; accountability. <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<h3 class="tg-R" id="cyber-law-by-country">Cyber law by country <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Country</th>
+<th>Laws to recognise</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>United States</td>
+<td>Computer Fraud and Abuse Act; Electronic Communications Privacy Act; Foreign Intelligence Surveillance Act; Privacy Act of 1974; Computer Security Act of 1987; Freedom of Information Act; CCPA and the California Privacy Rights Act</td>
+</tr>
+<tr>
+<td>United Kingdom</td>
+<td>Computer Misuse Act 1990; Investigatory Powers Act 2016; Network and Information Systems Regulations 2018</td>
+</tr>
+<tr>
+<td>India</td>
+<td>Information Technology Act; Patents, Trade Marks and Copyright Acts</td>
+</tr>
+<tr>
+<td>Australia</td>
+<td>Cybercrime Act 2001</td>
+</tr>
+<tr>
+<td>Germany</td>
+<td>Criminal code sections 202a (data espionage), 303a (alteration of data), 303b (computer sabotage)</td>
+</tr>
+<tr>
+<td>Canada</td>
+<td>Criminal Code section 342.1; PIPEDA</td>
+</tr>
+<tr>
+<td>Singapore</td>
+<td>Computer Misuse Act</td>
+</tr>
+<tr>
+<td>Brazil</td>
+<td>General Data Protection Law (LGPD)</td>
+</tr>
+<tr>
+<td>Philippines</td>
+<td>Republic Act No. 10175</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> the table above is what the courseware lists.</p>
+<p><strong>In practice:</strong> the official text prints a heading as "27701:2022" where it describes 27001:2022. Learn 27001 as the ISMS standard and 27701 as the privacy standard.</p>
+</div>
+<div class="admonition update">
+<p class="admonition-title">Updated: laws and standards that have moved on</p>
+<p>Each line gives what changed and when. The exam still expects the courseware's version, shown in the tables above.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>What changed</th>
+<th>When</th>
+<th>Exam still expects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PCI DSS</td>
+<td>Version 4.0.1 is the only active version; v3.2.1 and v4.0 are retired</td>
+<td>Published <strong>June 2024</strong>; sole version from <strong>31 December 2024</strong></td>
+<td>"PCI DSS" by purpose: protects cardholder data</td>
+</tr>
+<tr>
+<td>ISO/IEC 27701</td>
+<td>New edition is a stand-alone privacy management standard, no longer an add-on to 27001</td>
+<td><strong>October 2025</strong></td>
+<td>27701:2019, an extension of 27001</td>
+</tr>
+<tr>
+<td>HIPAA Security Rule</td>
+<td>A major strengthening was proposed. It is <strong>not final</strong>; the current rule still applies</td>
+<td>Proposed <strong>January 2025</strong>; final action now targeted for <strong>July 2027</strong></td>
+<td>The existing Privacy, Security and Enforcement Rules</td>
+</tr>
+<tr>
+<td>UK data protection</td>
+<td>The Data (Use and Access) Act 2025 amends, and does not replace, the UK GDPR and the Data Protection Act 2018</td>
+<td>Royal Assent <strong>June 2025</strong>, phased in over the following year</td>
+<td>Data Protection Act 2018</td>
+</tr>
+<tr>
+<td>India</td>
+<td>The Digital Personal Data Protection Act 2023 is now being brought into force through the DPDP Rules 2025</td>
+<td>Rules notified <strong>November 2025</strong>; further stages <strong>November 2026</strong> and <strong>May 2027</strong></td>
+<td>Information Technology Act</td>
+</tr>
+</tbody>
+</table></div>
+<p>Status checked 18 November 2026. Laws change; check the regulator's own site before relying on any row.</p>
+</div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>Match by what is protected. <strong>Cards</strong>: PCI DSS. <strong>Health</strong>: HIPAA. <strong>Investors</strong>: SOX. <strong>Copyright</strong>: DMCA. <strong>US federal agencies</strong>: FISMA. <strong>EU personal data</strong>: GDPR. <strong>Management system</strong>: ISO 27001.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Pick the organisation you work or study in. Write one line for each: which data it holds, which row of the table above applies, and who inside it is accountable. If you cannot name the person, that is your first finding.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 6</p>
+<ul>
+<li>PCI DSS protects cardholder data and is a standard, not a law.</li>
+<li>ISO/IEC 27001 defines the ISMS; 27701 adds privacy; 27005 covers risk.</li>
+<li>HIPAA: health information, Privacy and Security Rules. SOX: 11 titles, corporate disclosures. DMCA: 5 titles, anti-circumvention.</li>
+<li>FISMA covers US federal agencies. GDPR took effect 25 May 2018 and has seven principles.</li>
+<li>Know one headline law per country, such as the UK Computer Misuse Act 1990 and India's IT Act.</li>
+</ul>
+</div>
+<h2 class="tg-D" id="7-lab-walk-through">7. Lab walk-through <span class="tag tag-D" title="A hands-on skill for the practical exams. Run it at a keyboard.">DO</span></h2>
+<p>There is nothing to break in this module. The practical skill is behaving like a professional before any testing starts. Use lab L01 in either skin. Allow 45 minutes.</p>
+<pre><code class="language-bash"># 1. Start the lab and open the attacker shell
+cd labs/L01-recon-enumeration
+docker compose up -d --build
+docker compose exec attacker bash
+
+# 2. Inside the attacker container: confirm where you are and what you may touch
+hostname -I            # your own address
+cat /etc/resolv.conf   # the lab's name server
+
+# 3. Make one harmless, in-scope request
+curl -sI http://10.77.0.20/
+exit
+
+# 4. Back on your own computer: find your request in the target's log
+docker compose logs --tail 5 h20
+
+# 5. Stop the lab
+docker compose down
+</code></pre>
+<p>Then write half a page in your log, answering:</p>
+<ol>
+<li><strong>Authorisation.</strong> From the student brief: what is in scope, what is forbidden, what is the deliverable?</li>
+<li><strong>Framework.</strong> Which phase of the CEH framework was step 3? Which kill-chain phase?</li>
+<li><strong>Elements.</strong> The response headers revealed a software version. Which of the five elements does that weaken, and how?</li>
+<li><strong>Indicators.</strong> Classify the log line from step 4 as an IoC: atomic, computed or behavioural, and which category?</li>
+<li><strong>Risk.</strong> Give "web server announces its exact version" a likelihood, a consequence and a risk level.</li>
+</ol>
+<p>That half page is your first piece of professional documentation. Keep it; later modules add to it.</p>
+<h2 id="quiz">Quiz</h2>
+<p>Twelve questions. The options are shuffled every time you load the page.</p>
+<div class="quiz">
+<div class="q"><p><b>1.</b> Which element of information security does a digital signature mainly provide? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">Availability</button>
+<button type="button">Confidentiality</button>
+<button type="button" data-ok>Non-repudiation</button>
+<button type="button">Data minimisation</button>
+<p class="why" hidden>A digital signature stops the sender denying they sent the message. Encryption gives confidentiality.</p></div>
+<div class="q"><p><b>2.</b> An attacker reads a manager&#x27;s password over her shoulder in a cafe. Under the IATF classification this is which kind of attack? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">Passive</button>
+<button type="button" data-ok>Close-in</button>
+<button type="button">Insider</button>
+<button type="button">Distribution</button>
+<p class="why" hidden>Close-in attacks depend on physical proximity. Shoulder surfing and dumpster diving are the standard examples.</p></div>
+<div class="q"><p><b>3.</b> A hacker with strong skills attacks a power grid for a cause and does not care about going to prison. Which class? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">Script kiddie</button>
+<button type="button">Gray hat</button>
+<button type="button" data-ok>Suicide hacker</button>
+<button type="button">Blue hat</button>
+<p class="why" hidden>Indifference to punishment is what defines a suicide hacker.</p></div>
+<div class="q"><p><b>4.</b> What must an ethical hacker have before starting any test? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">A list of open ports</button>
+<button type="button" data-ok>A signed document from the client giving permission</button>
+<button type="button">An exploit for a known vulnerability</button>
+<button type="button">Verbal approval from the help desk</button>
+<p class="why" hidden>Signed authorisation is the line between ethical hacking and a crime. An NDA and agreed limits follow.</p></div>
+<div class="q"><p><b>5.</b> In the cyber kill chain, an attacker combines an exploit with a backdoor into a malicious document. Which phase is this? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">Delivery</button>
+<button type="button" data-ok>Weaponization</button>
+<button type="button">Installation</button>
+<button type="button">Exploitation</button>
+<p class="why" hidden>Building the payload is weaponization. Sending it is delivery; the code running is exploitation.</p></div>
+<div class="q"><p><b>6.</b> Which of these is a computed indicator of compromise? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">An IP address</button>
+<button type="button">An email address</button>
+<button type="button" data-ok>A file hash</button>
+<button type="button">A domain name</button>
+<p class="why" hidden>Computed indicators are derived from incident data, such as hash values and regular expressions. Addresses are atomic.</p></div>
+<div class="q"><p><b>7.</b> Which is NOT one of the four core features of the Diamond Model? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">Adversary</button>
+<button type="button">Capability</button>
+<button type="button">Infrastructure</button>
+<button type="button" data-ok>Motive</button>
+<p class="why" hidden>The four are adversary, capability, infrastructure and victim. Motive appears in the extended model as the socio-political meta-feature.</p></div>
+<div class="q"><p><b>8.</b> Threat intelligence describing the tactics, techniques and procedures of an attack group is which type? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">Strategic</button>
+<button type="button" data-ok>Tactical</button>
+<button type="button">Operational</button>
+<button type="button">Technical</button>
+<p class="why" hidden>Tactical intelligence covers TTPs. Technical intelligence covers individual indicators such as hashes and IP addresses.</p></div>
+<div class="q"><p><b>9.</b> In incident handling and response, which step comes directly after notification? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">Eradication</button>
+<button type="button">Recovery</button>
+<button type="button" data-ok>Containment</button>
+<button type="button">Triage</button>
+<p class="why" hidden>The order is preparation, recording, triage, notification, containment, evidence gathering, eradication, recovery, post-incident.</p></div>
+<div class="q"><p><b>10.</b> A US clinic emails unencrypted patient records to the wrong recipient. Which regulation is most directly engaged? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">SOX</button>
+<button type="button">PCI DSS</button>
+<button type="button" data-ok>HIPAA</button>
+<button type="button">DMCA</button>
+<p class="why" hidden>HIPAA protects individually identifiable health information. PCI DSS is cards, SOX is corporate disclosures, DMCA is copyright.</p></div>
+<div class="q"><p><b>11.</b> Why does defence in depth use several layers of control? <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></p>
+<button type="button">To reduce the number of logs</button>
+<button type="button" data-ok>So that defeating one layer only brings the attacker to the next</button>
+<button type="button">Because a single control is always illegal</button>
+<button type="button">To remove the need for monitoring</button>
+<p class="why" hidden>Layers slow the attacker and give defenders time to detect and respond.</p></div>
+<div class="q"><p><b>12.</b> The courseware describes WormGPT as a helpful testing aid. What is the sound professional view? <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></p>
+<button type="button">Use it on client systems to save time</button>
+<button type="button" data-ok>Recognise the name for the exam, and do not use criminal-market tools at work</button>
+<button type="button">It replaces the need for authorisation</button>
+<button type="button">It is the same product as ShellGPT</button>
+<p class="why" hidden>Exam answers follow the courseware&#x27;s descriptions. In practice WormGPT was sold to criminals; use ordinary tools inside your authorisation.</p></div>
+<p class="score" aria-live="polite"></p></div>
+<h2 id="exam-cheat-sheet">Exam cheat sheet</h2>
+<p>Only the MEMORISE items from this chapter, collected automatically.</p>
+<div class="cheat">
+<p><strong>Information security concepts</strong></p>
+<ul>
+<li>Five elements of information security: confidentiality, integrity, availability, authenticity, non-repudiation. Controls: encryption (C); checksums and access control (I); redundancy and anti-DDoS (A); biometrics, smart cards, certificates (authenticity); digital signatures (non-repudiation)</li>
+<li>Attack = Motive (goal) + Method (TTP) + Vulnerability. TTP = tactics (overall strategy, start to finish), techniques (technical methods for intermediate results), procedures (the systematic sequence of actions)</li>
+<li>Attack classes (IATF): passive (sniffing, footprinting, traffic analysis: no tampering); active (DoS, malware, spoofing, MITM, SQL injection: tampers or disrupts); close-in (physical proximity: shoulder surfing, dumpster diving); insider (trusted person: pod slurping, planting keyloggers); distribution (tampering with hardware or software at source or in transit)</li>
+<li>Information warfare is either defensive (protect your ICT assets) or offensive (attack the opponent's)</li>
+</ul>
+<p><strong>Hackers and ethical hacking</strong></p>
+<ul>
+<li>Hacker classes: black hat (malicious; "cracker"); white hat (defensive, with permission); gray hat (both, at different times); script kiddie (unskilled, uses others' tools); hacktivist (political or social protest); state-sponsored (government-employed); cyber terrorist (fear, religious or political); suicide hacker (no fear of punishment); blue hat (contract tester before release); red hat (vigilante against black hats); green hat (eager learner); industrial spy; insider; criminal syndicate; organized hackers; hacker team</li>
+<li>Ethical hacker's three questions: What can an attacker see? (reconnaissance, scanning). What can an intruder do with it? (gaining and maintaining access). Are the attempts being noticed? (reconnaissance, covering tracks)</li>
+<li>Ethical hacker's rules: get a signed contract giving permission before starting; sign and honour an NDA; stay within the agreed limits (for example, DoS only if agreed). Six audit steps: talk to the client; sign the NDA; organise the team and schedule; conduct the test; analyse and report; present findings</li>
+</ul>
+<p><strong>AI-driven ethical hacking</strong></p>
+<ul>
+<li>AI-driven ethical hacking benefits: efficiency, accuracy, scalability, cost-effectiveness. AI complements ethical hackers; it does not replace them</li>
+</ul>
+<p><strong>Hacking methodologies and frameworks</strong></p>
+<ul>
+<li>CEH hacking framework: 1 Reconnaissance (footprinting, scanning, enumeration); 2 Vulnerability scanning; 3 Gaining access (then escalating privileges); 4 Maintaining access; 5 Clearing tracks. Passive reconnaissance = no direct interaction; active = direct interaction</li>
+<li>Cyber kill chain (Lockheed Martin), seven phases: reconnaissance, weaponization, delivery, exploitation, installation, command and control, actions on objectives. Weaponization = build the payload; delivery = send it; installation = backdoor for persistence</li>
+<li>IoC types: atomic (IP address, email address), computed (hash, regular expression), behavioral (combination by logic). IoC categories: email, network (URLs, domains, IPs), host-based (filenames, hashes, registry keys, DLLs, mutex), behavioral (document running PowerShell)</li>
+<li>MITRE ATT&amp;CK: knowledge base of adversary tactics and techniques from real-world observations. Exam matrices: Enterprise, Mobile, PRE-ATT&amp;CK. 14 Enterprise tactics: reconnaissance, resource development, initial access, execution, persistence, privilege escalation, defense evasion, credential access, discovery, lateral movement, collection, command and control, exfiltration, impact</li>
+<li>Diamond Model: four core features: adversary, capability, infrastructure, victim. Meta-features: timestamp, phase, result, direction, methodology, resource. Extended model adds socio-political (adversary-victim) and technology (infrastructure-capability) meta-features</li>
+</ul>
+<p><strong>Information security controls</strong></p>
+<ul>
+<li>Information assurance: integrity, availability, confidentiality, authenticity of information in use, processing, storage, transmission. Defense-in-depth: several protection layers, so breaking one only reaches the next. Adaptive security strategy: protection, detection, responding, prediction</li>
+<li>Risk = Threats x Vulnerabilities x Impact (also Threat x Vulnerability x Asset Value). Level of risk = Consequence x Likelihood. Risk levels: extreme or high (immediate measures), medium (act soon), low (preventive steps). Risk management phases: identification, assessment, treatment, tracking and review</li>
+<li>Threat intelligence types: strategic (executives, CISO; business risk, trends), tactical (SOC and security managers, architects; attacker TTPs), operational (IR heads, network defenders; specific threats), technical (SOC staff, IR teams; specific IoCs, shortest lifespan). Lifecycle: planning and direction; collection; processing and exploitation; analysis and production; dissemination and integration</li>
+<li>Threat modeling, five steps: identify security objectives; application overview; decompose the application; identify threats; identify vulnerabilities</li>
+<li>IH&amp;R nine steps: preparation; incident recording and assignment; incident triage; notification; containment; evidence gathering and forensic analysis; eradication; recovery; post-incident activities. Incident response is part of incident handling, which is part of incident management</li>
+<li>Supervised learning: labelled data; classification and regression. Unsupervised learning: unlabelled data; clustering and dimensionality reduction</li>
+</ul>
+<p><strong>Laws and standards</strong></p>
+<ul>
+<li>GDPR seven principles: lawfulness, fairness and transparency; purpose limitation; data minimisation; accuracy; storage limitation; integrity and confidentiality; accountability</li>
+</ul>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Law or standard</th>
+<th>What it protects or requires</th>
+<th>Key facts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PCI DSS</td>
+<td>Cardholder data, for anyone who stores, processes or transmits it</td>
+<td>A proprietary industry standard, not a law. Failure can mean fines or losing the right to process cards</td>
+</tr>
+<tr>
+<td>ISO/IEC 27001:2022</td>
+<td>Requirements for an information security management system (ISMS)</td>
+<td>The standard organisations are certified against</td>
+</tr>
+<tr>
+<td>HIPAA</td>
+<td>Individually identifiable health information in the United States</td>
+<td>Privacy Rule, Security Rule, Enforcement Rule; National Provider Identifier is a 10-digit number</td>
+</tr>
+<tr>
+<td>Sarbanes-Oxley (SOX), 2002</td>
+<td>Investors: accuracy and reliability of corporate disclosures</td>
+<td>11 titles</td>
+</tr>
+<tr>
+<td>DMCA</td>
+<td>Copyright; bans circumventing technological protection measures</td>
+<td>5 titles; implements two 1996 WIPO treaties</td>
+</tr>
+<tr>
+<td>FISMA, 2002</td>
+<td>Information security of United States federal agencies</td>
+<td>Agency-wide security programmes</td>
+</tr>
+<tr>
+<td>GDPR</td>
+<td>Personal data of people in the European Union, wherever the organisation is</td>
+<td>In effect 25 May 2018; seven principles</td>
+</tr>
+<tr>
+<td>Data Protection Act 2018</td>
+<td>Personal data in the United Kingdom</td>
+<td>Replaced the 1998 Act; sets the Information Commissioner's powers</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<h2 id="coverage-check-against-the-official-module-1">Coverage check against the official Module 1</h2>
+<p>Each sub-topic of the official module and where this chapter covers it. The section-by-section verification report is kept with the handbook source as <code>verification/ceh/m01-introduction-to-ethical-hacking.md</code>. No official text is reproduced.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Official sub-topic</th>
+<th>Covered in</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Elements of information security</td>
+<td>1</td>
+<td>OK, exam/practice note on five vs three</td>
+</tr>
+<tr>
+<td>Attacks: motives, goals, objectives; TTPs; vulnerability and its causes</td>
+<td>1</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Classification of attacks</td>
+<td>1</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Information warfare</td>
+<td>1</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>What is hacking; who is a hacker; hacker classes</td>
+<td>2</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>What is ethical hacking; why it is necessary; scope and limitations; skills</td>
+<td>2</td>
+<td>OK, exam/practice note on "always legal"</td>
+</tr>
+<tr>
+<td>AI-driven ethical hacking: benefits, applications, how it helps, the myth</td>
+<td>3</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>ChatGPT-powered AI tools</td>
+<td>3</td>
+<td>OK, exam/practice note on criminal tools</td>
+</tr>
+<tr>
+<td>CEH ethical hacking framework</td>
+<td>4</td>
+<td>OK, exam/practice note on older phase list</td>
+</tr>
+<tr>
+<td>Cyber kill chain methodology</td>
+<td>4</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>TTPs; adversary behavioural identification; indicators of compromise and their categories</td>
+<td>1, 4</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>MITRE ATT&amp;CK framework</td>
+<td>4</td>
+<td>OK, exam/practice note on PRE-ATT&amp;CK</td>
+</tr>
+<tr>
+<td>Diamond Model of Intrusion Analysis, including the extended model</td>
+<td>4</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Information assurance; continual/adaptive security strategy; defence in depth</td>
+<td>5</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Risk, risk level, risk matrix, risk management</td>
+<td>5</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Cyber threat intelligence: types and lifecycle</td>
+<td>5</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Threat modelling</td>
+<td>5</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Incident management; incident handling and response</td>
+<td>5</td>
+<td>OK, exam/practice note on NIST model</td>
+</tr>
+<tr>
+<td>Role of AI and ML in cyber security</td>
+<td>5</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>PCI DSS, ISO/IEC standards, HIPAA, SOX, DMCA, FISMA, GDPR, DPA 2018</td>
+<td>6</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Cyber law in different countries</td>
+<td>6</td>
+<td>OK, reduced to headline laws</td>
+</tr>
+<tr>
+<td>Module summary</td>
+<td>Recaps and cheat sheet</td>
+<td>OK</td>
+</tr>
+</tbody>
+</table></div><nav class="pn" aria-label="Chapters"><span></span><a href="m03-scanning-networks.html">Module 3 →</a></nav>
+<footer><p>Written and maintained by <b>Dr. Atul Tiwari</b>. &copy; 2026 Dr. Atul Tiwari. All rights reserved.</p><p>Unofficial, independent study material. Not affiliated with or endorsed by EC-Council. CEH, CPENT and COASP are trademarks of EC-Council. Written in our own words from public standards and frameworks. Use these techniques only on systems you own or are authorised in writing to test.</p></footer></main></div>
+<script>(function(){
+var key='hb:'+location.pathname,done={};try{done=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}
+function save(){try{localStorage.setItem(key,JSON.stringify(done))}catch(e){}}
+// wrap each h2 block in a section so it can be filtered and marked
+var main=document.querySelector('main'),kids=[].slice.call(main.children),sec=null;
+kids.forEach(function(el){if(el.tagName==='H2'){sec=document.createElement('section');main.insertBefore(sec,el)}if(sec&&el.tagName!=='FOOTER'&&el.className!=='pn')sec.appendChild(el)});
+function paint(h){var on=!!done[h.id];h.classList.toggle('done',on);h.querySelector('.mark').textContent=on?'Done ✓':'Mark done';
+var a=document.querySelector('.side a[href="#'+h.id+'"]');if(a)a.parentNode.classList.toggle('done',on)}
+[].forEach.call(document.querySelectorAll('main h2'),function(h){var b=document.createElement('span');b.className='mark';b.setAttribute('role','button');b.tabIndex=0;h.appendChild(b);
+function t(){done[h.id]=!done[h.id];save();paint(h)}b.onclick=t;b.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}};paint(h)});
+document.getElementById('find').addEventListener('input',function(){var q=this.value.trim().toLowerCase();
+[].forEach.call(document.querySelectorAll('main section'),function(s){s.classList.toggle('hide',!!q&&s.textContent.toLowerCase().indexOf(q)<0)})});
+// quiz: options are shuffled on every load so the position of the answer cannot be learned
+[].forEach.call(document.querySelectorAll('.quiz'),function(z){var n=0,ok=0,tot=z.querySelectorAll('.q').length;
+[].forEach.call(z.querySelectorAll('.q'),function(q){var bs=[].slice.call(q.querySelectorAll('button')),why=q.querySelector('.why');
+for(var i=bs.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=bs[i];bs[i]=bs[j];bs[j]=t}bs.forEach(function(b){q.insertBefore(b,why)})});
+z.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var q=b.parentNode;if(q.dataset.done)return;q.dataset.done=1;n++;
+if(b.hasAttribute('data-ok'))ok++;else b.classList.add('wrong');q.querySelector('button[data-ok]').classList.add('right');q.querySelector('.why').hidden=false;
+z.querySelector('.score').textContent='Score: '+ok+' of '+n+' answered ('+tot+' questions)'})});
+// cheat sheet: print only that section
+var cheat=document.querySelector('.cheat');
+if(cheat){var s=cheat.closest('section');if(s)s.classList.add('sheet');var pb=document.createElement('button');pb.type='button';pb.className='pbtn';pb.textContent='Print the cheat sheet only';
+pb.onclick=function(){document.body.classList.add('sheet');window.print();setTimeout(function(){document.body.classList.remove('sheet')},500)};cheat.parentNode.insertBefore(pb,cheat)}
+// mobile contents menu
+var mb=document.getElementById('menu');if(mb){mb.onclick=function(){var on=document.body.classList.toggle('nav');mb.setAttribute('aria-expanded',on);mb.textContent=on?'Close':'Contents'};
+document.getElementById('side').addEventListener('click',function(e){if(e.target.tagName==='A'){document.body.classList.remove('nav');mb.setAttribute('aria-expanded',false);mb.textContent='Contents'}})}
+var links=[].slice.call(document.querySelectorAll('.side a'));
+if('IntersectionObserver'in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
+[].forEach.call(document.querySelectorAll('main h2,main h3'),function(h){io.observe(h)})}
+})();
+</script></body></html>

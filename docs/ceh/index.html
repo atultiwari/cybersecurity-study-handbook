@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="author" content="Dr. Atul Tiwari"><title>Ethical Hacking Study Handbook</title><style>:root{--bg:#fbfaf7;--fg:#1d2127;--mut:#5d6570;--line:#d9d5cc;--card:#fff;--acc:#0b6e69;--acc2:#b4530f;--ok:#1d7a3e;--bad:#b3261e;--code:#f1eee7;--cp:#5b3fa8;--ai:#0b5cab;--mem:#a3123a;--und:#0b5cab;--rec:#6a5a12;--do:#1d7a3e;--gold:#8a6500}
+@media(prefers-color-scheme:dark){:root{--bg:#14171b;--fg:#e6e3dc;--mut:#9aa3ad;--line:#333a42;--card:#1b1f24;--acc:#4fc3bb;--acc2:#f0a25e;--ok:#6fcf8e;--bad:#ff8a80;--code:#22272e;--cp:#b9a3ff;--ai:#7fb8ff;--mem:#ff8fab;--und:#7fb8ff;--rec:#d9c46a;--do:#6fcf8e;--gold:#e0bd55}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.65 Georgia,"Iowan Old Style",serif}
+.top{position:sticky;top:0;z-index:5;display:flex;gap:16px;align-items:center;justify-content:space-between;padding:10px 20px;background:var(--bg);border-bottom:1px solid var(--line);font-family:system-ui,sans-serif;font-size:14px}
+.top a{color:var(--fg);text-decoration:none;font-weight:600}.top input{width:220px;max-width:45vw;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg)}
+.wrap{display:grid;grid-template-columns:270px minmax(0,1fr);max-width:1240px;margin:0 auto}
+.side{position:sticky;top:50px;align-self:start;max-height:calc(100vh - 50px);overflow:auto;padding:20px 12px 40px 20px;font:13.5px/1.4 system-ui,sans-serif}
+.side ul{list-style:none;margin:0;padding-left:0}.side ul ul{padding-left:12px;border-left:1px solid var(--line);margin:2px 0 8px}
+.side a{display:block;padding:3px 6px;color:var(--mut);text-decoration:none;border-radius:4px}.side a:hover,.side a.on{color:var(--acc);background:var(--card)}
+.side li.done>a::after{content:" \2713";color:var(--ok)}
+main{padding:28px 36px 80px;max-width:860px;min-width:0}
+.kicker{font:600 12.5px system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--acc2);margin:0}
+h1{font-size:2.1em;line-height:1.15;margin:.2em 0 .5em;text-wrap:balance}h2{font-size:1.5em;margin:2.2em 0 .5em;padding-top:.6em;border-top:2px solid var(--fg)}
+h3{font-size:1.15em;margin:1.8em 0 .4em}h4{font:600 .95em system-ui,sans-serif;margin:1.4em 0 .3em}
+h2 .mark{float:right;font:500 12px system-ui,sans-serif;color:var(--mut);cursor:pointer;border:1px solid var(--line);border-radius:12px;padding:2px 10px;background:var(--card)}
+h2.done .mark{color:var(--ok);border-color:var(--ok)}
+a{color:var(--acc)}code{font:.86em ui-monospace,Menlo,monospace;background:var(--code);padding:1px 5px;border-radius:4px}
+pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow:auto;line-height:1.45;border:1px solid var(--line)}pre code{background:none;padding:0;font-size:.82em}
+.tw{overflow-x:auto;margin:1em 0}table{border-collapse:collapse;width:100%;font:14.5px/1.45 system-ui,sans-serif}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}th{font-weight:600;border-bottom:2px solid var(--fg)}
+.dg{margin:1.4em 0;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow-x:auto}
+.dg svg{display:block;margin:0 auto;max-width:100%;height:auto;font-family:system-ui,sans-serif}
+.dg figcaption{font:13.5px system-ui,sans-serif;color:var(--mut);margin-top:8px;text-align:center}
+svg .b{fill:var(--card);stroke:var(--fg);stroke-width:1.3}svg .d{fill:var(--code);stroke:var(--acc2);stroke-width:1.5}svg .t{fill:var(--code);stroke:var(--acc);stroke-width:1.5}
+svg .g{fill:none;stroke:var(--ok);stroke-width:1.6}svg .r{fill:none;stroke:var(--bad);stroke-width:1.6}
+svg text{fill:var(--fg);font-size:13px}svg .s{font-size:11.5px;fill:var(--mut)}svg .h{font-weight:600}
+svg .ln{stroke:var(--fg);stroke-width:1.4;fill:none}svg .lf{stroke:var(--mut);stroke-width:1;stroke-dasharray:4 4;fill:none}svg .da{stroke-dasharray:6 4}
+svg .ar{fill:var(--fg)}svg .ok{fill:var(--ok)}svg .bad{fill:var(--bad)}svg .acc{fill:var(--acc)}
+/* memorise / understand / recognise / do tags */
+.tag{display:inline-block;font:700 10.5px/1 system-ui,sans-serif;letter-spacing:.07em;padding:3px 6px;border-radius:4px;border:1px solid currentColor;vertical-align:middle;white-space:nowrap;cursor:help}
+.tag-M{color:var(--mem)}.tag-U{color:var(--und)}.tag-R{color:var(--rec)}.tag-D{color:var(--do)}
+h2 .tag,h3 .tag{margin-left:6px}
+.legend{list-style:none;padding:10px 14px;margin:1em 0;background:var(--card);border:1px solid var(--line);border-radius:8px;font:14px/1.9 system-ui,sans-serif}
+.legend .tag{min-width:92px;text-align:center;margin-right:8px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;font:13.5px system-ui,sans-serif;color:var(--mut);margin:0 0 1.4em}.meta b{color:var(--fg);font-weight:600}
+/* boxes */
+.admonition{margin:1.3em 0;padding:10px 16px 6px;border-left:4px solid var(--acc);background:var(--card);border-radius:0 8px 8px 0;font-size:.96em}
+.admonition-title{font:600 12.5px system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;margin:0 0 4px;color:var(--acc)}
+.admonition.cpent{border-color:var(--cp)}.cpent .admonition-title{color:var(--cp)}.admonition.coasp{border-color:var(--ai)}.coasp .admonition-title{color:var(--ai)}
+.admonition.trap{border-color:var(--bad)}.trap .admonition-title{color:var(--bad)}.admonition.hospital{border-color:var(--acc2)}.hospital .admonition-title{color:var(--acc2)}
+.admonition.try{border-color:var(--do)}.try .admonition-title{color:var(--do)}.try .admonition-title::before{content:"\25B6  "}
+.admonition.remember{border-color:var(--gold);border-style:dashed;border-width:1px 1px 1px 4px}.remember .admonition-title{color:var(--gold)}
+.admonition.recap{border:1px solid var(--line);border-top:3px solid var(--fg);border-radius:0 0 8px 8px}.recap .admonition-title{color:var(--fg)}
+.admonition.exam{border-color:var(--mem);background:linear-gradient(90deg,color-mix(in srgb,var(--mem) 7%,var(--card)),var(--card))}.exam .admonition-title{color:var(--mem)}
+.admonition.story{border-color:var(--mut);font-style:italic}.story .admonition-title{color:var(--mut);font-style:normal}
+.admonition.before,.admonition.why{border:1px solid var(--line);border-left:4px solid var(--acc);}
+.cheat{border:2px solid var(--mem);border-radius:10px;padding:6px 18px 10px;background:var(--card);font-size:.93em}
+.cheat ul{margin:.3em 0 .8em;padding-left:1.2em}.cheat table{font-size:13.5px}.cheat p{margin:.7em 0 .2em}
+.pbtn{font:600 13px system-ui,sans-serif;padding:6px 12px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
+.pn{display:flex;justify-content:space-between;margin-top:50px;font:600 14px system-ui,sans-serif}
+.quiz .q{border:1px solid var(--line);border-radius:8px;padding:8px 14px 12px;margin:10px 0;background:var(--card)}
+.quiz button{display:block;width:100%;text-align:left;margin:5px 0;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);font:14.5px system-ui,sans-serif;cursor:pointer}
+.quiz button.right{border-color:var(--ok);color:var(--ok);font-weight:600}.quiz button.wrong{border-color:var(--bad);color:var(--bad)}
+.quiz .why{font:14px system-ui,sans-serif;color:var(--mut);margin:6px 0 0}.score{font:600 15px system-ui,sans-serif}
+footer{margin-top:60px;padding-top:14px;border-top:1px solid var(--line);font:13px system-ui,sans-serif;color:var(--mut)}
+section.hide{display:none}
+.admonition.update{border-color:var(--ai);border-width:1px 1px 1px 4px;border-style:solid}.update .admonition-title{color:var(--ai)}.update .admonition-title::before{content:"\21BB  "}
+.mbtn{display:none;font:600 13px system-ui,sans-serif;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
+.byline{font:14.5px system-ui,sans-serif;color:var(--mut);margin:-.3em 0 1.2em}
+@media(max-width:860px){.wrap{display:block}.mbtn{display:inline-block}.top{padding:8px 12px;gap:10px;justify-content:flex-start}.top a{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.top input{width:120px}
+.side{display:none;position:fixed;top:46px;left:0;right:0;bottom:0;max-height:none;z-index:4;background:var(--bg);padding:14px 18px 60px;font-size:15px}.side a{padding:7px 6px}body.nav .side{display:block}body.nav{overflow:hidden}
+main{padding:18px 15px 60px}body{font-size:16.5px}h1{font-size:1.75em}h2{font-size:1.32em}h2 .mark{float:none;display:inline-block;margin-left:8px}
+.dg{padding:10px}.dg svg{max-width:none}.dg figcaption{text-align:left}table{font-size:14px}th,td{padding:6px 8px}pre{font-size:.92em}.admonition{padding:9px 12px 5px}.legend .tag{min-width:86px}}
+@media print{.top,.side,.mark,.pbtn,.pn{display:none}.wrap{display:block}body{font-size:11.5pt}.dg{break-inside:avoid}
+body.sheet main>*{display:none}body.sheet main>section.sheet{display:block}body.sheet .cheat{border:none;padding:0;font-size:9.5pt}body.sheet h2{border:none;margin-top:0}}
+@page sheet{size:A4 landscape;margin:8mm}
+@media print{body.sheet{page:sheet}body.sheet .cheat{columns:3;column-gap:16px;font-size:6.9pt;line-height:1.2}body.sheet .cheat ul{margin:.1em 0 .4em}body.sheet .cheat p{margin:.4em 0 .1em}body.sheet .tw{overflow:visible;margin:.3em 0}body.sheet section.sheet h2{font-size:12pt;margin:0 0 2pt;padding:0}body.sheet .cheat table{font-size:6.3pt;break-inside:avoid}body.sheet .cheat th,body.sheet .cheat td{padding:1px 2px}body.sheet .cheat code{font-size:.95em;padding:0}body.sheet section.sheet>p{display:none}@page{margin:9mm}}
+</style></head>
+<body><header class="top"><button type="button" id="menu" class="mbtn" aria-expanded="false" aria-controls="side">Contents</button><a href="../index.html">Study Handbook</a>
+<input id="find" type="search" placeholder="Filter sections" aria-label="Filter sections"></header>
+<div class="wrap"><nav class="side" id="side" aria-label="Contents"><div class="toc">
+<ul>
+<li><a href="#how-every-chapter-is-built">How every chapter is built</a></li>
+<li><a href="#chapters">Chapters</a></li>
+</ul>
+</div>
+</nav>
+<main><p class="kicker">Ethical hacking track</p><h1 id="ethical-hacking-study-handbook">Ethical Hacking Study Handbook</h1>
+<p class="byline">By Dr. Atul Tiwari</p>
+<p>Twenty chapters, one for each module of the CEH v13 syllabus. Read them in order, or jump to the one you are studying this week.</p>
+<h2 id="how-every-chapter-is-built">How every chapter is built</h2>
+<ul>
+<li>An opening anyone can follow: what the chapter is about, what it assumes, and why it matters.</li>
+<li>Tags on every section and key fact, so you know how to study it.</li>
+<li>"Try it" commands for the lab, "Remember" mnemonics, and a five-line recap per section.</li>
+<li>"Exam answer / In practice" boxes where the exam and the real world differ.</li>
+<li>"Updated" boxes, with the month and year, where the official courseware has fallen behind the standard, law or tool it describes. Each one also says what the exam still expects.</li>
+<li>A quiz and an automatically generated exam cheat sheet.</li>
+</ul>
+<ul class="legend"><li><span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span> Likely to be asked directly. Know it exactly.</li><li><span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span> Needed to reason through scenario questions. Do not recite it.</li><li><span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span> Know the name and what it does when you see it in an option list.</li><li><span class="tag tag-D" title="A hands-on skill for the practical exams. Run it at a keyboard.">DO</span> A hands-on skill for the practical exams. Run it at a keyboard.</li></ul>
+<h2 id="chapters">Chapters</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Chapter</th>
+<th>Status</th>
+<th>Checked against</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><a href="m01-introduction-to-ethical-hacking.html">Module 1 - Introduction to Ethical Hacking</a></td>
+<td>Review draft</td>
+<td>18 Nov 2026: CEH v13 courseware Module 01, MITRE ATT&amp;CK release notes</td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="m03-scanning-networks.html">Module 3 - Scanning Networks</a></td>
+<td>Review draft</td>
+<td>17 Nov 2026: CEH v13 courseware Module 03, RFC 9293, Nmap reference guide</td>
+</tr>
+</tbody>
+</table></div>
+<footer><p>Written and maintained by <b>Dr. Atul Tiwari</b>. &copy; 2026 Dr. Atul Tiwari. All rights reserved.</p><p>Unofficial, independent study material. Not affiliated with or endorsed by EC-Council. CEH is a trademark of EC-Council. Written in our own words from public standards and tool documentation.</p></footer></main></div>
+<script>(function(){
+var key='hb:'+location.pathname,done={};try{done=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}
+function save(){try{localStorage.setItem(key,JSON.stringify(done))}catch(e){}}
+// wrap each h2 block in a section so it can be filtered and marked
+var main=document.querySelector('main'),kids=[].slice.call(main.children),sec=null;
+kids.forEach(function(el){if(el.tagName==='H2'){sec=document.createElement('section');main.insertBefore(sec,el)}if(sec&&el.tagName!=='FOOTER'&&el.className!=='pn')sec.appendChild(el)});
+function paint(h){var on=!!done[h.id];h.classList.toggle('done',on);h.querySelector('.mark').textContent=on?'Done ✓':'Mark done';
+var a=document.querySelector('.side a[href="#'+h.id+'"]');if(a)a.parentNode.classList.toggle('done',on)}
+[].forEach.call(document.querySelectorAll('main h2'),function(h){var b=document.createElement('span');b.className='mark';b.setAttribute('role','button');b.tabIndex=0;h.appendChild(b);
+function t(){done[h.id]=!done[h.id];save();paint(h)}b.onclick=t;b.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}};paint(h)});
+document.getElementById('find').addEventListener('input',function(){var q=this.value.trim().toLowerCase();
+[].forEach.call(document.querySelectorAll('main section'),function(s){s.classList.toggle('hide',!!q&&s.textContent.toLowerCase().indexOf(q)<0)})});
+// quiz: options are shuffled on every load so the position of the answer cannot be learned
+[].forEach.call(document.querySelectorAll('.quiz'),function(z){var n=0,ok=0,tot=z.querySelectorAll('.q').length;
+[].forEach.call(z.querySelectorAll('.q'),function(q){var bs=[].slice.call(q.querySelectorAll('button')),why=q.querySelector('.why');
+for(var i=bs.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=bs[i];bs[i]=bs[j];bs[j]=t}bs.forEach(function(b){q.insertBefore(b,why)})});
+z.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var q=b.parentNode;if(q.dataset.done)return;q.dataset.done=1;n++;
+if(b.hasAttribute('data-ok'))ok++;else b.classList.add('wrong');q.querySelector('button[data-ok]').classList.add('right');q.querySelector('.why').hidden=false;
+z.querySelector('.score').textContent='Score: '+ok+' of '+n+' answered ('+tot+' questions)'})});
+// cheat sheet: print only that section
+var cheat=document.querySelector('.cheat');
+if(cheat){var s=cheat.closest('section');if(s)s.classList.add('sheet');var pb=document.createElement('button');pb.type='button';pb.className='pbtn';pb.textContent='Print the cheat sheet only';
+pb.onclick=function(){document.body.classList.add('sheet');window.print();setTimeout(function(){document.body.classList.remove('sheet')},500)};cheat.parentNode.insertBefore(pb,cheat)}
+// mobile contents menu
+var mb=document.getElementById('menu');if(mb){mb.onclick=function(){var on=document.body.classList.toggle('nav');mb.setAttribute('aria-expanded',on);mb.textContent=on?'Close':'Contents'};
+document.getElementById('side').addEventListener('click',function(e){if(e.target.tagName==='A'){document.body.classList.remove('nav');mb.setAttribute('aria-expanded',false);mb.textContent='Contents'}})}
+var links=[].slice.call(document.querySelectorAll('.side a'));
+if('IntersectionObserver'in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
+[].forEach.call(document.querySelectorAll('main h2,main h3'),function(h){io.observe(h)})}
+})();
+</script></body></html>

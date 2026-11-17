@@ -1,0 +1,2366 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="author" content="Dr. Atul Tiwari"><title>Module 3 - Scanning Networks</title><style>:root{--bg:#fbfaf7;--fg:#1d2127;--mut:#5d6570;--line:#d9d5cc;--card:#fff;--acc:#0b6e69;--acc2:#b4530f;--ok:#1d7a3e;--bad:#b3261e;--code:#f1eee7;--cp:#5b3fa8;--ai:#0b5cab;--mem:#a3123a;--und:#0b5cab;--rec:#6a5a12;--do:#1d7a3e;--gold:#8a6500}
+@media(prefers-color-scheme:dark){:root{--bg:#14171b;--fg:#e6e3dc;--mut:#9aa3ad;--line:#333a42;--card:#1b1f24;--acc:#4fc3bb;--acc2:#f0a25e;--ok:#6fcf8e;--bad:#ff8a80;--code:#22272e;--cp:#b9a3ff;--ai:#7fb8ff;--mem:#ff8fab;--und:#7fb8ff;--rec:#d9c46a;--do:#6fcf8e;--gold:#e0bd55}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.65 Georgia,"Iowan Old Style",serif}
+.top{position:sticky;top:0;z-index:5;display:flex;gap:16px;align-items:center;justify-content:space-between;padding:10px 20px;background:var(--bg);border-bottom:1px solid var(--line);font-family:system-ui,sans-serif;font-size:14px}
+.top a{color:var(--fg);text-decoration:none;font-weight:600}.top input{width:220px;max-width:45vw;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg)}
+.wrap{display:grid;grid-template-columns:270px minmax(0,1fr);max-width:1240px;margin:0 auto}
+.side{position:sticky;top:50px;align-self:start;max-height:calc(100vh - 50px);overflow:auto;padding:20px 12px 40px 20px;font:13.5px/1.4 system-ui,sans-serif}
+.side ul{list-style:none;margin:0;padding-left:0}.side ul ul{padding-left:12px;border-left:1px solid var(--line);margin:2px 0 8px}
+.side a{display:block;padding:3px 6px;color:var(--mut);text-decoration:none;border-radius:4px}.side a:hover,.side a.on{color:var(--acc);background:var(--card)}
+.side li.done>a::after{content:" \2713";color:var(--ok)}
+main{padding:28px 36px 80px;max-width:860px;min-width:0}
+.kicker{font:600 12.5px system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--acc2);margin:0}
+h1{font-size:2.1em;line-height:1.15;margin:.2em 0 .5em;text-wrap:balance}h2{font-size:1.5em;margin:2.2em 0 .5em;padding-top:.6em;border-top:2px solid var(--fg)}
+h3{font-size:1.15em;margin:1.8em 0 .4em}h4{font:600 .95em system-ui,sans-serif;margin:1.4em 0 .3em}
+h2 .mark{float:right;font:500 12px system-ui,sans-serif;color:var(--mut);cursor:pointer;border:1px solid var(--line);border-radius:12px;padding:2px 10px;background:var(--card)}
+h2.done .mark{color:var(--ok);border-color:var(--ok)}
+a{color:var(--acc)}code{font:.86em ui-monospace,Menlo,monospace;background:var(--code);padding:1px 5px;border-radius:4px}
+pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow:auto;line-height:1.45;border:1px solid var(--line)}pre code{background:none;padding:0;font-size:.82em}
+.tw{overflow-x:auto;margin:1em 0}table{border-collapse:collapse;width:100%;font:14.5px/1.45 system-ui,sans-serif}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}th{font-weight:600;border-bottom:2px solid var(--fg)}
+.dg{margin:1.4em 0;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow-x:auto}
+.dg svg{display:block;margin:0 auto;max-width:100%;height:auto;font-family:system-ui,sans-serif}
+.dg figcaption{font:13.5px system-ui,sans-serif;color:var(--mut);margin-top:8px;text-align:center}
+svg .b{fill:var(--card);stroke:var(--fg);stroke-width:1.3}svg .d{fill:var(--code);stroke:var(--acc2);stroke-width:1.5}svg .t{fill:var(--code);stroke:var(--acc);stroke-width:1.5}
+svg .g{fill:none;stroke:var(--ok);stroke-width:1.6}svg .r{fill:none;stroke:var(--bad);stroke-width:1.6}
+svg text{fill:var(--fg);font-size:13px}svg .s{font-size:11.5px;fill:var(--mut)}svg .h{font-weight:600}
+svg .ln{stroke:var(--fg);stroke-width:1.4;fill:none}svg .lf{stroke:var(--mut);stroke-width:1;stroke-dasharray:4 4;fill:none}svg .da{stroke-dasharray:6 4}
+svg .ar{fill:var(--fg)}svg .ok{fill:var(--ok)}svg .bad{fill:var(--bad)}svg .acc{fill:var(--acc)}
+/* memorise / understand / recognise / do tags */
+.tag{display:inline-block;font:700 10.5px/1 system-ui,sans-serif;letter-spacing:.07em;padding:3px 6px;border-radius:4px;border:1px solid currentColor;vertical-align:middle;white-space:nowrap;cursor:help}
+.tag-M{color:var(--mem)}.tag-U{color:var(--und)}.tag-R{color:var(--rec)}.tag-D{color:var(--do)}
+h2 .tag,h3 .tag{margin-left:6px}
+.legend{list-style:none;padding:10px 14px;margin:1em 0;background:var(--card);border:1px solid var(--line);border-radius:8px;font:14px/1.9 system-ui,sans-serif}
+.legend .tag{min-width:92px;text-align:center;margin-right:8px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;font:13.5px system-ui,sans-serif;color:var(--mut);margin:0 0 1.4em}.meta b{color:var(--fg);font-weight:600}
+/* boxes */
+.admonition{margin:1.3em 0;padding:10px 16px 6px;border-left:4px solid var(--acc);background:var(--card);border-radius:0 8px 8px 0;font-size:.96em}
+.admonition-title{font:600 12.5px system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;margin:0 0 4px;color:var(--acc)}
+.admonition.cpent{border-color:var(--cp)}.cpent .admonition-title{color:var(--cp)}.admonition.coasp{border-color:var(--ai)}.coasp .admonition-title{color:var(--ai)}
+.admonition.trap{border-color:var(--bad)}.trap .admonition-title{color:var(--bad)}.admonition.hospital{border-color:var(--acc2)}.hospital .admonition-title{color:var(--acc2)}
+.admonition.try{border-color:var(--do)}.try .admonition-title{color:var(--do)}.try .admonition-title::before{content:"\25B6  "}
+.admonition.remember{border-color:var(--gold);border-style:dashed;border-width:1px 1px 1px 4px}.remember .admonition-title{color:var(--gold)}
+.admonition.recap{border:1px solid var(--line);border-top:3px solid var(--fg);border-radius:0 0 8px 8px}.recap .admonition-title{color:var(--fg)}
+.admonition.exam{border-color:var(--mem);background:linear-gradient(90deg,color-mix(in srgb,var(--mem) 7%,var(--card)),var(--card))}.exam .admonition-title{color:var(--mem)}
+.admonition.story{border-color:var(--mut);font-style:italic}.story .admonition-title{color:var(--mut);font-style:normal}
+.admonition.before,.admonition.why{border:1px solid var(--line);border-left:4px solid var(--acc);}
+.cheat{border:2px solid var(--mem);border-radius:10px;padding:6px 18px 10px;background:var(--card);font-size:.93em}
+.cheat ul{margin:.3em 0 .8em;padding-left:1.2em}.cheat table{font-size:13.5px}.cheat p{margin:.7em 0 .2em}
+.pbtn{font:600 13px system-ui,sans-serif;padding:6px 12px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
+.pn{display:flex;justify-content:space-between;margin-top:50px;font:600 14px system-ui,sans-serif}
+.quiz .q{border:1px solid var(--line);border-radius:8px;padding:8px 14px 12px;margin:10px 0;background:var(--card)}
+.quiz button{display:block;width:100%;text-align:left;margin:5px 0;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);font:14.5px system-ui,sans-serif;cursor:pointer}
+.quiz button.right{border-color:var(--ok);color:var(--ok);font-weight:600}.quiz button.wrong{border-color:var(--bad);color:var(--bad)}
+.quiz .why{font:14px system-ui,sans-serif;color:var(--mut);margin:6px 0 0}.score{font:600 15px system-ui,sans-serif}
+footer{margin-top:60px;padding-top:14px;border-top:1px solid var(--line);font:13px system-ui,sans-serif;color:var(--mut)}
+section.hide{display:none}
+.admonition.update{border-color:var(--ai);border-width:1px 1px 1px 4px;border-style:solid}.update .admonition-title{color:var(--ai)}.update .admonition-title::before{content:"\21BB  "}
+.mbtn{display:none;font:600 13px system-ui,sans-serif;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
+.byline{font:14.5px system-ui,sans-serif;color:var(--mut);margin:-.3em 0 1.2em}
+@media(max-width:860px){.wrap{display:block}.mbtn{display:inline-block}.top{padding:8px 12px;gap:10px;justify-content:flex-start}.top a{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.top input{width:120px}
+.side{display:none;position:fixed;top:46px;left:0;right:0;bottom:0;max-height:none;z-index:4;background:var(--bg);padding:14px 18px 60px;font-size:15px}.side a{padding:7px 6px}body.nav .side{display:block}body.nav{overflow:hidden}
+main{padding:18px 15px 60px}body{font-size:16.5px}h1{font-size:1.75em}h2{font-size:1.32em}h2 .mark{float:none;display:inline-block;margin-left:8px}
+.dg{padding:10px}.dg svg{max-width:none}.dg figcaption{text-align:left}table{font-size:14px}th,td{padding:6px 8px}pre{font-size:.92em}.admonition{padding:9px 12px 5px}.legend .tag{min-width:86px}}
+@media print{.top,.side,.mark,.pbtn,.pn{display:none}.wrap{display:block}body{font-size:11.5pt}.dg{break-inside:avoid}
+body.sheet main>*{display:none}body.sheet main>section.sheet{display:block}body.sheet .cheat{border:none;padding:0;font-size:9.5pt}body.sheet h2{border:none;margin-top:0}}
+@page sheet{size:A4 landscape;margin:8mm}
+@media print{body.sheet{page:sheet}body.sheet .cheat{columns:3;column-gap:16px;font-size:6.9pt;line-height:1.2}body.sheet .cheat ul{margin:.1em 0 .4em}body.sheet .cheat p{margin:.4em 0 .1em}body.sheet .tw{overflow:visible;margin:.3em 0}body.sheet section.sheet h2{font-size:12pt;margin:0 0 2pt;padding:0}body.sheet .cheat table{font-size:6.3pt;break-inside:avoid}body.sheet .cheat th,body.sheet .cheat td{padding:1px 2px}body.sheet .cheat code{font-size:.95em;padding:0}body.sheet section.sheet>p{display:none}@page{margin:9mm}}
+</style></head>
+<body><header class="top"><button type="button" id="menu" class="mbtn" aria-expanded="false" aria-controls="side">Contents</button><a href="index.html">Ethical Hacking Study Handbook</a>
+<input id="find" type="search" placeholder="Filter sections" aria-label="Filter sections"></header>
+<div class="wrap"><nav class="side" id="side" aria-label="Contents"><div class="toc">
+<ul>
+<li><a href="#what-this-chapter-is-about">What this chapter is about</a><ul>
+<li><a href="#how-the-tags-work">How the tags work</a></li>
+</ul>
+</li>
+<li><a href="#1-scanning-concepts">1. Scanning concepts</a><ul>
+<li><a href="#three-kinds-of-scanning">Three kinds of scanning</a></li>
+<li><a href="#what-scanning-is-for">What scanning is for</a></li>
+<li><a href="#ports">Ports</a></li>
+<li><a href="#tcp-and-its-flags">TCP and its flags</a></li>
+<li><a href="#the-three-way-handshake">The three-way handshake</a></li>
+<li><a href="#five-rules-that-explain-every-scan">Five rules that explain every scan</a></li>
+<li><a href="#udp-and-icmp">UDP and ICMP</a></li>
+<li><a href="#the-six-port-states">The six port states</a></li>
+</ul>
+</li>
+<li><a href="#2-the-scanning-toolbox">2. The scanning toolbox</a><ul>
+<li><a href="#hping3-commands">hping3 commands</a></li>
+</ul>
+</li>
+<li><a href="#3-host-discovery">3. Host discovery</a><ul>
+<li><a href="#the-techniques">The techniques</a></li>
+<li><a href="#commands">Commands</a></li>
+<li><a href="#ping-sweep-tools">Ping sweep tools</a></li>
+</ul>
+</li>
+<li><a href="#4-tcp-port-scans">4. TCP port scans</a><ul>
+<li><a href="#the-family-tree">The family tree</a></li>
+<li><a href="#tcp-connect-scan-full-open">TCP connect scan (full-open)</a></li>
+<li><a href="#stealth-scan-half-open-syn-scan">Stealth scan (half-open, SYN scan)</a></li>
+<li><a href="#inverse-tcp-flag-scans-fin-null-and-xmas">Inverse TCP flag scans: FIN, NULL and Xmas</a></li>
+<li><a href="#tcp-maimon-scan">TCP Maimon scan</a></li>
+<li><a href="#ack-flag-probe-scan">ACK flag probe scan</a></li>
+<li><a href="#idle-ipid-header-scan">IDLE / IPID header scan</a></li>
+<li><a href="#the-whole-section-on-one-screen">The whole section on one screen</a></li>
+</ul>
+</li>
+<li><a href="#5-udp-sctp-ssdp-list-and-ipv6-scans">5. UDP, SCTP, SSDP, list and IPv6 scans</a><ul>
+<li><a href="#udp-scan">UDP scan</a></li>
+<li><a href="#sctp-init-and-cookie-echo-scans">SCTP INIT and COOKIE ECHO scans</a></li>
+<li><a href="#ssdp-scan-and-list-scan">SSDP scan and list scan</a></li>
+<li><a href="#ipv6-scan">IPv6 scan</a></li>
+</ul>
+</li>
+<li><a href="#6-service-versions-and-faster-scans">6. Service versions and faster scans</a><ul>
+<li><a href="#service-version-discovery">Service version discovery</a></li>
+<li><a href="#nmap-scan-time-reduction">Nmap scan time reduction</a></li>
+<li><a href="#port-and-output-options">Port and output options</a></li>
+</ul>
+</li>
+<li><a href="#7-os-discovery">7. OS discovery</a><ul>
+<li><a href="#active-and-passive">Active and passive</a></li>
+<li><a href="#ttl-and-window-size">TTL and window size</a></li>
+<li><a href="#the-tools">The tools</a></li>
+</ul>
+</li>
+<li><a href="#8-scanning-beyond-ids-and-firewall">8. Scanning beyond IDS and firewall</a><ul>
+<li><a href="#the-techniques_1">The techniques</a></li>
+<li><a href="#the-details-the-exam-asks-about">The details the exam asks about</a></li>
+</ul>
+</li>
+<li><a href="#9-countermeasures">9. Countermeasures</a><ul>
+<li><a href="#against-ping-sweeps">Against ping sweeps</a></li>
+<li><a href="#against-port-scanning">Against port scanning</a></li>
+<li><a href="#against-banner-grabbing">Against banner grabbing</a></li>
+<li><a href="#ip-spoofing-detection">IP spoofing detection</a></li>
+<li><a href="#ip-spoofing-countermeasures">IP spoofing countermeasures</a></li>
+<li><a href="#scanning-detection-and-prevention-tools">Scanning detection and prevention tools</a></li>
+</ul>
+</li>
+<li><a href="#10-scanning-with-an-ai-assistant">10. Scanning with an AI assistant</a></li>
+<li><a href="#11-lab-walk-through">11. Lab walk-through</a></li>
+<li><a href="#quiz">Quiz</a></li>
+<li><a href="#exam-cheat-sheet">Exam cheat sheet</a></li>
+<li><a href="#coverage-check-against-the-official-module-3">Coverage check against the official Module 3</a></li>
+</ul>
+</div>
+</nav>
+<main><p class="kicker">Ethical hacking track · Module 3 of 20</p><h1 id="scanning-networks">Scanning Networks</h1>
+<p class="meta"><span><b>Reading</b> about 60 min</span><span><b>Lab</b> 90 min</span><span><b>Difficulty</b> Beginner to intermediate</span><span><b>Checked</b> 17 Nov 2026: CEH v13 courseware Module 03, RFC 9293, Nmap reference guide</span></p>
+<h2 id="what-this-chapter-is-about">What this chapter is about</h2>
+<p>Scanning is how you find out what is actually there on a network. You start with a list of addresses. You finish with a map: which machines are switched on, which services each one offers, what software provides them, and what operating system sits underneath.</p>
+<div class="admonition story">
+<p class="admonition-title">An everyday picture</p>
+<p>Imagine walking down a street at night with a notebook. First you note which buildings have lights on (<strong>host discovery</strong>). Then you try every door and window of the lit ones to see which open (<strong>port scanning</strong>). You read the nameplate beside each open door (<strong>service and version detection</strong>). Last, you look at the brickwork to guess who built the place (<strong>OS discovery</strong>). You have not gone inside. You have only looked, knocked and written things down. That is scanning.</p>
+</div>
+<p>Everything later in an attack, or in a penetration test, is aimed using this map. Defenders use the very same techniques to find out what they are exposing before someone else does.</p>
+<div class="admonition before">
+<p class="admonition-title">Before you start</p>
+<p>This chapter assumes six ideas. If one is new, the one-line version here is enough to carry on.</p>
+<ul>
+<li><strong>IP address.</strong> The number that identifies a machine on a network, such as <code>10.77.0.20</code>. <code>10.77.0.0/24</code> means the 256 addresses from <code>10.77.0.0</code> to <code>10.77.0.255</code>.</li>
+<li><strong>Packet.</strong> A small envelope of data with a "from" address and a "to" address. Everything on a network travels as packets.</li>
+<li><strong>Port.</strong> A number from 0 to 65535 that says which program on the machine a packet is for. Section 1 teaches this.</li>
+<li><strong>Client and server.</strong> The client starts the conversation; the server waits for it. A web browser is a client. A website is a server.</li>
+<li><strong>Firewall.</strong> A device or program that decides which packets may pass. Module 12 covers firewalls in depth.</li>
+<li><strong>Root or administrator.</strong> The all-powerful account on a computer. Some scans need it because they build packets by hand.</li>
+</ul>
+<p>You do not need to have read Modules 1 and 2. Where this chapter leans on them, it says so.</p>
+</div>
+<div class="admonition why">
+<p class="admonition-title">Why this matters to you</p>
+<ul>
+<li><strong>Exam candidate.</strong> This is one of the most heavily tested modules. Questions give you a flag combination, a reply or an Nmap switch and ask what it means. The practical exams (CEH Practical, CPENT) start every task with a scan.</li>
+<li><strong>Defending a network.</strong> You cannot protect a service you do not know is running. Scanning your own network is how you find the forgotten test server before an attacker does. Section 9 is written for you.</li>
+<li><strong>Working with sensitive data.</strong> If you work in a hospital, a bank or a school, your organisation is scanned from the internet every day. This chapter shows what those scans can see, and why "nobody knows that system exists" is not a defence.</li>
+</ul>
+</div>
+<h3 id="how-the-tags-work">How the tags work</h3>
+<p>Every section, table and key fact carries one of four tags. They tell you how to study it.</p>
+<ul class="legend"><li><span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span> Likely to be asked directly. Know it exactly.</li><li><span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span> Needed to reason through scenario questions. Do not recite it.</li><li><span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span> Know the name and what it does when you see it in an option list.</li><li><span class="tag tag-D" title="A hands-on skill for the practical exams. Run it at a keyboard.">DO</span> A hands-on skill for the practical exams. Run it at a keyboard.</li></ul>
+<p>Facts tagged MEMORISE are collected automatically into the <a href="#exam-cheat-sheet">cheat sheet</a> at the end.</p>
+<p><strong>How to use this chapter.</strong> Read sections 1 to 4 in order; each builds on the last. Run every "Try it" box in lab L01 as you reach it. Tick "Mark done" on each heading. Finish with the lab walk-through and the quiz.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>After this chapter you can</th>
+<th>Section</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Name the TCP flags and predict the reply to any probe</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Recognise the scanning tools and read an hping3 command</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Find live hosts even when ping is blocked</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Choose a port scan for a situation and read its result</td>
+<td>4, 5</td>
+</tr>
+<tr>
+<td>Identify services, versions and operating systems</td>
+<td>6, 7</td>
+</tr>
+<tr>
+<td>Explain how scans evade detection and how defenders respond</td>
+<td>8, 9</td>
+</tr>
+<tr>
+<td>Use an AI assistant to draft scan commands safely</td>
+<td>10</td>
+</tr>
+</tbody>
+</table></div>
+<h2 class="tg-U" id="1-scanning-concepts">1. Scanning concepts <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h2>
+<h3 class="tg-M" id="three-kinds-of-scanning">Three kinds of scanning <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>Footprinting (Module 2) collected information <em>about</em> a target, mostly without touching it. Scanning is where you send packets <em>to</em> the target and study what comes back. It is active and it leaves traces. Without permission it is illegal in most countries.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Kind of scan</th>
+<th>What it lists</th>
+<th>Typical tool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Port scanning</td>
+<td>Open ports and the services on them</td>
+<td>Nmap, hping3</td>
+</tr>
+<tr>
+<td>Network scanning</td>
+<td>Live hosts and their IP addresses</td>
+<td>Nmap <code>-sn</code>, Angry IP Scanner</td>
+</tr>
+<tr>
+<td>Vulnerability scanning</td>
+<td>Known weaknesses in those hosts</td>
+<td>Nessus, OpenVAS (Module 5)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 class="tg-U" id="what-scanning-is-for">What scanning is for <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h3>
+<p>The objectives, in the order you usually reach them:</p>
+<ol>
+<li>Live hosts, their IP addresses and open ports.</li>
+<li>The operating system and system architecture. Finding this is called <strong>fingerprinting</strong>.</li>
+<li>The services listening on each host, and their exact versions.</li>
+<li>Vulnerabilities in any of those systems.</li>
+<li>The layout of the network: routers, switches, firewalls and how they connect.</li>
+</ol>
+<figure class="dg"><svg viewBox="0 0 730 525" width="730" role="img" aria-label="Scanning workflow"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><line class="ln" x1="110" y1="62.0" x2="110" y2="108.0" marker-end="url(#a)"/><line class="ln" x1="110" y1="152.0" x2="110" y2="198.0" marker-end="url(#a)"/><line class="ln" x1="110" y1="242.0" x2="110" y2="288.0" marker-end="url(#a)"/><line class="ln" x1="110" y1="332.0" x2="110" y2="378.0" marker-end="url(#a)"/><line class="ln" x1="110" y1="422.0" x2="110" y2="468.0" marker-end="url(#a)"/><line class="ln" x1="200.0" y1="220" x2="305.0" y2="220" marker-end="url(#a)"/><line class="ln" x1="400" y1="255.0" x2="400" y2="327.0" marker-end="url(#a)"/><text x="408" y="295.0" text-anchor="start" class="s h">yes</text><path class="ln" d="M305 355H250V242" marker-end="url(#a)"/><line class="ln" x1="200.0" y1="130" x2="565.0" y2="130" marker-end="url(#a)"/><text x="382.5" y="124" text-anchor="middle" class="s h">at every step</text><rect class="t" x="20.0" y="18.0" width="180" height="44" rx="18"/><text x="110" y="37" text-anchor="middle" class="">Scope and rules</text><text x="110" y="53" text-anchor="middle" class="">of engagement</text><rect class="b" x="20.0" y="108.0" width="180" height="44" rx="6"/><text x="110" y="127" text-anchor="middle" class="">1. Host discovery</text><text x="110" y="143" text-anchor="middle" class="">Who is alive?</text><rect class="b" x="20.0" y="198.0" width="180" height="44" rx="6"/><text x="110" y="217" text-anchor="middle" class="">2. Port scan</text><text x="110" y="233" text-anchor="middle" class="">Which doors are open?</text><rect class="b" x="20.0" y="288.0" width="180" height="44" rx="6"/><text x="110" y="307" text-anchor="middle" class="">3. Service and version</text><text x="110" y="323" text-anchor="middle" class="">What is behind each door?</text><rect class="b" x="20.0" y="378.0" width="180" height="44" rx="6"/><text x="110" y="397" text-anchor="middle" class="">4. OS discovery</text><text x="110" y="413" text-anchor="middle" class="">What is the host?</text><rect class="t" x="20.0" y="468.0" width="180" height="44" rx="18"/><text x="110" y="487" text-anchor="middle" class="">Next: enumeration and</text><text x="110" y="503" text-anchor="middle" class="">vulnerability analysis</text><polygon class="d" points="400,185.0 495.0,220 400,255.0 305.0,220"/><text x="400" y="209" text-anchor="middle" class="">Many ports</text><text x="400" y="225" text-anchor="middle" class="">filtered or no</text><text x="400" y="241" text-anchor="middle" class="">replies?</text><rect class="b" x="305.0" y="327.0" width="190" height="56" rx="6"/><text x="400" y="344" text-anchor="middle" class="">Adjust: evasion and</text><text x="400" y="360" text-anchor="middle" class="">timing techniques,</text><text x="400" y="376" text-anchor="middle" class="">then rescan</text><rect class="b" x="565.0" y="102.0" width="150" height="56" rx="6"/><text x="640" y="119" text-anchor="middle" class="">Log every command</text><text x="640" y="135" text-anchor="middle" class="">and save output</text><text x="640" y="151" text-anchor="middle" class="">(-oA)</text></svg><figcaption>The scanning workflow. Each step narrows the target list for the next. When a firewall hides the answers, you loop through the evasion techniques in section 8.</figcaption></figure>
+<h3 class="tg-M" id="ports">Ports <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>An IP address gets a packet to the right machine. A <strong>port</strong> number gets it to the right program on that machine. Think of the IP address as a building's street address and the port as the flat number.</p>
+<figure class="dg"><svg viewBox="0 0 660 96" width="660" role="img" aria-label="The three port ranges"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="t" x="10" y="14" width="160.0" height="50" rx="4"/><text x="90.0" y="36" text-anchor="middle" class="h">0 to 1023</text><text x="90.0" y="54" text-anchor="middle" class="s">Well-known</text><rect class="b" x="170.0" y="14" width="266.6666666666667" height="50" rx="4"/><text x="303.33333333333337" y="36" text-anchor="middle" class="h">1024 to 49151</text><text x="303.33333333333337" y="54" text-anchor="middle" class="s">Registered</text><rect class="d" x="436.6666666666667" y="14" width="213.33333333333334" height="50" rx="4"/><text x="543.3333333333334" y="36" text-anchor="middle" class="h">49152 to 65535</text><text x="543.3333333333334" y="54" text-anchor="middle" class="s">Dynamic / private</text><text x="330.0" y="84" text-anchor="middle" class="s">Widths are not to scale. TCP and UDP each have their own set of 65,536 ports.</text></svg><figcaption>The three port ranges. Memorise the boundaries.</figcaption></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Range</th>
+<th>Name</th>
+<th>Used for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 to 1023</td>
+<td>Well-known ports</td>
+<td>Standard services such as web, mail and DNS</td>
+</tr>
+<tr>
+<td>1024 to 49151</td>
+<td>Registered ports</td>
+<td>Assigned to particular products</td>
+</tr>
+<tr>
+<td>49152 to 65535</td>
+<td>Dynamic or private ports</td>
+<td>Temporary ports chosen by clients</td>
+</tr>
+</tbody>
+</table></div>
+<p>Nothing forces a service to use its usual port. A web server can listen on 8081. A forgotten system can hide on 48620. That is why a default scan, which checks only the 1,000 most common ports, misses things.</p>
+<p><strong>The must-know ports.</strong> The official courseware prints a table of about a hundred. These are the ones worth knowing by heart.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Port</th>
+<th M="M">Service</th>
+<th>Port</th>
+<th>Service</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>20, 21 TCP</td>
+<td>FTP data, FTP control</td>
+<td>137, 138, 139</td>
+<td>NetBIOS name, datagram, session</td>
+</tr>
+<tr>
+<td>22 TCP</td>
+<td>SSH</td>
+<td>143 TCP</td>
+<td>IMAP</td>
+</tr>
+<tr>
+<td>23 TCP</td>
+<td>Telnet</td>
+<td>161, 162 UDP</td>
+<td>SNMP, SNMP trap</td>
+</tr>
+<tr>
+<td>25 TCP</td>
+<td>SMTP (mail)</td>
+<td>389</td>
+<td>LDAP</td>
+</tr>
+<tr>
+<td>53 TCP and UDP</td>
+<td>DNS</td>
+<td>443 TCP</td>
+<td>HTTPS</td>
+</tr>
+<tr>
+<td>67, 68 UDP</td>
+<td>DHCP server, client</td>
+<td>445 TCP</td>
+<td>SMB (Microsoft-DS)</td>
+</tr>
+<tr>
+<td>69 UDP</td>
+<td>TFTP</td>
+<td>500 UDP</td>
+<td>ISAKMP / IKE (VPN)</td>
+</tr>
+<tr>
+<td>80 TCP</td>
+<td>HTTP</td>
+<td>514 UDP</td>
+<td>Syslog</td>
+</tr>
+<tr>
+<td>88</td>
+<td>Kerberos</td>
+<td>1433, 1434</td>
+<td>Microsoft SQL Server, monitor</td>
+</tr>
+<tr>
+<td>110 TCP</td>
+<td>POP3</td>
+<td>2049</td>
+<td>NFS</td>
+</tr>
+<tr>
+<td>111</td>
+<td>RPC portmapper</td>
+<td>3306 TCP</td>
+<td>MySQL</td>
+</tr>
+<tr>
+<td>123 UDP</td>
+<td>NTP</td>
+<td>3389 TCP</td>
+<td>Remote Desktop (RDP)</td>
+</tr>
+<tr>
+<td>135 TCP</td>
+<td>Microsoft RPC</td>
+<td>5060, 5061</td>
+<td>SIP (voice calls)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>Three mail ports in rising order of age of the idea: <strong>25</strong> sends (SMTP), <strong>110</strong> collects (POP3), <strong>143</strong> syncs (IMAP). The NetBIOS trio is consecutive: <strong>137, 138, 139</strong>, then SMB at <strong>445</strong>.</p>
+</div>
+<h3 class="tg-M" id="tcp-and-its-flags">TCP and its flags <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>TCP</strong> is the reliable transport protocol. It sets up a connection, numbers every byte and confirms delivery. Each TCP segment starts with a header.</p>
+<figure class="dg"><svg viewBox="0 0 680 278" width="680" role="img" aria-label="TCP header layout"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><text x="30.0" y="28" text-anchor="middle" class="s">bit 0</text><text x="100" y="28" text-anchor="middle" class="s">bit 4</text><text x="180" y="28" text-anchor="middle" class="s">bit 8</text><text x="340" y="28" text-anchor="middle" class="s">bit 16</text><text x="500" y="28" text-anchor="middle" class="s">bit 24</text><text x="650.0" y="28" text-anchor="middle" class="s">bit 31</text><rect class="b" x="20" y="40" width="320" height="34"/><text x="180.0" y="62" text-anchor="middle" class="">Source port</text><rect class="b" x="340" y="40" width="320" height="34"/><text x="500.0" y="62" text-anchor="middle" class="">Destination port</text><rect class="b" x="20" y="74" width="640" height="34"/><text x="340.0" y="96" text-anchor="middle" class="">Sequence number</text><rect class="b" x="20" y="108" width="640" height="34"/><text x="340.0" y="130" text-anchor="middle" class="">Acknowledgement number</text><rect class="b" x="20" y="142" width="80" height="34"/><text x="60.0" y="164" text-anchor="middle" class="">Offset</text><rect class="b" x="100" y="142" width="80" height="34"/><text x="140.0" y="164" text-anchor="middle" class="">Rsvd</text><rect class="t" x="180" y="142" width="20" height="34"/><text x="190.0" y="164" text-anchor="middle" class="h">C</text><rect class="t" x="200" y="142" width="20" height="34"/><text x="210.0" y="164" text-anchor="middle" class="h">E</text><rect class="t" x="220" y="142" width="20" height="34"/><text x="230.0" y="164" text-anchor="middle" class="h">U</text><rect class="t" x="240" y="142" width="20" height="34"/><text x="250.0" y="164" text-anchor="middle" class="h">A</text><rect class="t" x="260" y="142" width="20" height="34"/><text x="270.0" y="164" text-anchor="middle" class="h">P</text><rect class="t" x="280" y="142" width="20" height="34"/><text x="290.0" y="164" text-anchor="middle" class="h">R</text><rect class="t" x="300" y="142" width="20" height="34"/><text x="310.0" y="164" text-anchor="middle" class="h">S</text><rect class="t" x="320" y="142" width="20" height="34"/><text x="330.0" y="164" text-anchor="middle" class="h">F</text><rect class="b" x="340" y="142" width="320" height="34"/><text x="500.0" y="164" text-anchor="middle" class="">Window size</text><rect class="b" x="20" y="176" width="320" height="34"/><text x="180.0" y="198" text-anchor="middle" class="">Checksum</text><rect class="b" x="340" y="176" width="320" height="34"/><text x="500.0" y="198" text-anchor="middle" class="">Urgent pointer</text><rect class="b" x="20" y="210" width="640" height="34"/><text x="340.0" y="232" text-anchor="middle" class="">Options (if any) and padding</text><text x="340" y="266" text-anchor="middle" class="s">Flag bits, left to right: CWR, ECE, then the classic six URG, ACK, PSH, RST, SYN, FIN</text></svg><figcaption>The TCP header. The single-bit flags in the fourth row control the life of a connection. Scan types differ mainly in which flags they set.</figcaption></figure>
+<p>A <strong>flag</strong> is one bit that is either on (1) or off (0).</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Name</th>
+<th>What it tells the receiver</th>
+<th>Everyday analogy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SYN</td>
+<td>Synchronise</td>
+<td>"I want to open a connection; here is my starting sequence number"</td>
+<td>Dialling a number</td>
+</tr>
+<tr>
+<td>ACK</td>
+<td>Acknowledge</td>
+<td>"I received everything up to this byte"</td>
+<td>"Yes, I hear you"</td>
+</tr>
+<tr>
+<td>FIN</td>
+<td>Finish</td>
+<td>"I have no more data; let us close politely"</td>
+<td>"Goodbye"</td>
+</tr>
+<tr>
+<td>RST</td>
+<td>Reset</td>
+<td>"Stop. This connection does not exist or must end now"</td>
+<td>Slamming the phone down</td>
+</tr>
+<tr>
+<td>PSH</td>
+<td>Push</td>
+<td>"Hand this data to the application now, do not buffer it"</td>
+<td>"Read this immediately"</td>
+</tr>
+<tr>
+<td>URG</td>
+<td>Urgent</td>
+<td>"Process this data ahead of everything else"</td>
+<td>Jumping the queue</td>
+</tr>
+</tbody>
+</table></div>
+<p>SYN, ACK, FIN and RST manage the connection itself. PSH and URG give instructions about the data.</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> TCP has <strong>six</strong> flags, each 1 bit, so the flags field is <strong>6 bits</strong>.</p>
+<p><strong>In practice:</strong> the current TCP standard defines <strong>eight</strong> control bits. CWR and ECE were added in 2001 for congestion signalling. No classic scan type uses them, which is why the courseware still counts six. Answer six in the exam.</p>
+</div>
+<div class="admonition update">
+<p class="admonition-title">Updated: August 2022</p>
+<p><strong>What changed.</strong> RFC 793, the 1981 TCP specification the courseware cites throughout, was replaced by <strong>RFC 9293</strong> in <strong>August 2022</strong>. The behaviour scans rely on (how open and closed ports answer stray segments) is the same in both.</p>
+<p><strong>The exam still expects:</strong> "RFC 793". When a question says a scan works only on "RFC 793-compliant" systems, that wording is the answer.</p>
+</div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>The six flags in header order: <strong>U</strong>nskilled <strong>A</strong>ttackers <strong>P</strong>ester <strong>R</strong>eal <strong>S</strong>ecurity <strong>F</strong>olk: URG, ACK, PSH, RST, SYN, FIN.</p>
+</div>
+<h3 class="tg-M" id="the-three-way-handshake">The three-way handshake <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>Every TCP connection opens with the same three segments: <strong>SYN</strong>, then <strong>SYN/ACK</strong>, then <strong>ACK</strong>.</p>
+<figure class="dg"><svg viewBox="0 0 460 492" width="460" role="img" aria-label="TCP three-way handshake, data transfer and close"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="b" x="18" y="22" width="124" height="28" rx="6"/><text x="80" y="41" text-anchor="middle" class="h">Client</text><rect class="b" x="318" y="22" width="124" height="28" rx="6"/><text x="380" y="41" text-anchor="middle" class="h">Server</text><line class="lf" x1="80" y1="50" x2="80" y2="478"/><line class="lf" x1="380" y1="50" x2="380" y2="478"/><line class="ln" x1="83" y1="80" x2="377" y2="80" marker-end="url(#a)"/><text x="230.0" y="73" text-anchor="middle" class="s">1. SYN  seq=x</text><line class="ln" x1="377" y1="120" x2="83" y2="120" marker-end="url(#a)"/><text x="230.0" y="113" text-anchor="middle" class="s">2. SYN/ACK  seq=y, ack=x+1</text><line class="ln" x1="83" y1="160" x2="377" y2="160" marker-end="url(#a)"/><text x="230.0" y="153" text-anchor="middle" class="s">3. ACK  ack=y+1</text><text x="230.0" y="200" text-anchor="middle" class="s">Connection established: data flows both ways</text><line class="ln" x1="83" y1="226" x2="377" y2="226" marker-end="url(#a)"/><text x="230.0" y="219" text-anchor="middle" class="s">PSH/ACK  data</text><line class="ln" x1="377" y1="266" x2="83" y2="266" marker-end="url(#a)"/><text x="230.0" y="259" text-anchor="middle" class="s">ACK</text><text x="230.0" y="306" text-anchor="middle" class="s">Orderly close: each side sends FIN and gets an ACK</text><line class="ln" x1="83" y1="332" x2="377" y2="332" marker-end="url(#a)"/><text x="230.0" y="325" text-anchor="middle" class="s">FIN/ACK</text><line class="ln" x1="377" y1="372" x2="83" y2="372" marker-end="url(#a)"/><text x="230.0" y="365" text-anchor="middle" class="s">ACK</text><line class="ln" x1="377" y1="412" x2="83" y2="412" marker-end="url(#a)"/><text x="230.0" y="405" text-anchor="middle" class="s">FIN/ACK</text><line class="ln" x1="83" y1="452" x2="377" y2="452" marker-end="url(#a)"/><text x="230.0" y="445" text-anchor="middle" class="s">ACK</text></svg><figcaption>A full TCP conversation: three-way handshake, data, and an orderly close.</figcaption></figure>
+<p>A connection ends in one of two ways. The polite way is a <strong>FIN</strong> from one side, an ACK back, then a FIN from the other side. The abrupt way is a single <strong>RST</strong>.</p>
+<h3 class="tg-U" id="five-rules-that-explain-every-scan">Five rules that explain every scan <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h3>
+<p>These follow from the TCP standard. If you understand them, you can work out the big table in section 4 instead of memorising it.</p>
+<ol>
+<li>A <strong>SYN</strong> to an <strong>open</strong> port is answered with <strong>SYN/ACK</strong>.</li>
+<li>A <strong>SYN</strong> to a <strong>closed</strong> port is answered with <strong>RST</strong> (strictly, RST/ACK).</li>
+<li>Any other stray segment arriving at a <strong>closed</strong> port is answered with <strong>RST</strong>.</li>
+<li>A stray segment with no SYN, RST or ACK that arrives at an <strong>open</strong> port is silently <strong>dropped</strong>.</li>
+<li>A stray <strong>ACK</strong> is answered with <strong>RST</strong>, whether the port is open or closed.</li>
+</ol>
+<p>Rules 1 and 2 power the connect and SYN scans. Rules 3 and 4 power the FIN, Xmas and NULL scans. Rule 5 powers the ACK scan.</p>
+<h3 class="tg-M" id="udp-and-icmp">UDP and ICMP <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>UDP</strong> is the other main transport protocol. It has no handshake, no flags and no acknowledgements. A program either answers a UDP datagram or it does not. That makes UDP scanning slow and ambiguous.</p>
+<p><strong>ICMP</strong> is the network's error and diagnostics channel. Ping uses it. It has message <em>types</em>, not ports.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>ICMP type</th>
+<th>Message</th>
+<th>Why a scanner cares</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8 and 0</td>
+<td>Echo request and echo reply</td>
+<td>Ordinary ping</td>
+</tr>
+<tr>
+<td>13 and 14</td>
+<td>Timestamp request and reply</td>
+<td>A ping that works when echo is blocked</td>
+</tr>
+<tr>
+<td>17 and 18</td>
+<td>Address mask request and reply</td>
+<td>Another alternative ping</td>
+</tr>
+<tr>
+<td>3, code 3</td>
+<td>Destination unreachable: port unreachable</td>
+<td>A closed UDP port</td>
+</tr>
+<tr>
+<td>3, codes 1, 2, 3, 9, 10, 13</td>
+<td>Other "unreachable" errors</td>
+<td>A filter is blocking the probe</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Time exceeded</td>
+<td>Used by traceroute</td>
+</tr>
+</tbody>
+</table></div>
+<p>A standard ping packet carries <strong>64 bytes</strong>: 56 bytes of data plus an 8-byte ICMP header.</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> the "filtered" ICMP error list is <strong>type 3, codes 1, 2, 3, 9, 10 or 13</strong>.</p>
+<p><strong>In practice:</strong> Nmap's documentation also includes code 0 (network unreachable). For a UDP scan, code 3 is not in the filtered list, because there it means "closed".</p>
+</div>
+<h3 class="tg-M" id="the-six-port-states">The six port states <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>Nmap reports one of six states for every port.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>State</th>
+<th>Meaning</th>
+<th>Typical cause</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>open</td>
+<td>A program accepted the probe</td>
+<td>A service is listening</td>
+</tr>
+<tr>
+<td>closed</td>
+<td>The host answered, but nothing is listening</td>
+<td>RST received</td>
+</tr>
+<tr>
+<td>filtered</td>
+<td>No usable answer; something is dropping probes</td>
+<td>Firewall: silence or an ICMP error</td>
+</tr>
+<tr>
+<td>unfiltered</td>
+<td>The port is reachable, but open or closed is unknown</td>
+<td>ACK scan got a RST</td>
+</tr>
+<tr>
+<td>open|filtered</td>
+<td>Cannot tell open from filtered</td>
+<td>No reply to a UDP, FIN, Xmas, NULL or Maimon probe</td>
+</tr>
+<tr>
+<td>closed|filtered</td>
+<td>Cannot tell closed from filtered</td>
+<td>Seen only in the idle scan</td>
+</tr>
+</tbody>
+</table></div>
+<figure class="dg"><svg viewBox="0 0 670 290" width="670" role="img" aria-label="Reading the reply to a SYN probe"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><line class="ln" x1="330" y1="56.0" x2="330" y2="95.0" marker-end="url(#a)"/><path class="ln" d="M220.0 130H90V225.0" marker-end="url(#a)"/><path class="ln" d="M300 158L258 225" marker-end="url(#a)"/><path class="ln" d="M360 158L402 225" marker-end="url(#a)"/><path class="ln" d="M440.0 130H575V225.0" marker-end="url(#a)"/><rect class="t" x="230.0" y="16.0" width="200" height="40" rx="18"/><text x="330" y="41" text-anchor="middle" class="">SYN probe sent to a port</text><polygon class="d" points="330,95.0 440.0,130 330,165.0 220.0,130"/><text x="330" y="135" text-anchor="middle" class="">What came back?</text><rect class="b" x="15.0" y="225.0" width="150" height="50" rx="6"/><text x="90" y="247" text-anchor="middle" class="">SYN/ACK</text><text x="90" y="263" text-anchor="middle" class="">open</text><rect class="b" x="175.0" y="225.0" width="150" height="50" rx="6"/><text x="250" y="247" text-anchor="middle" class="">RST</text><text x="250" y="263" text-anchor="middle" class="">closed</text><rect class="b" x="335.0" y="225.0" width="150" height="50" rx="6"/><text x="410" y="247" text-anchor="middle" class="">Nothing after retries</text><text x="410" y="263" text-anchor="middle" class="">filtered</text><rect class="b" x="495.0" y="225.0" width="160" height="50" rx="6"/><text x="575" y="247" text-anchor="middle" class="">ICMP unreachable</text><text x="575" y="263" text-anchor="middle" class="">filtered</text></svg><figcaption>How a SYN scan decides a port&#x27;s state from the reply.</figcaption></figure>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>In lab L01, from the attacker container, watch the handshake rules happen. <code>--reason</code> prints why Nmap chose each state.</p>
+<p><code>bash
+nmap -sS -p 80,81 --reason 10.77.0.20</code></p>
+<p>Port 80 should show <code>syn-ack</code> (rule 1) and port 81 <code>reset</code> (rule 2).</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 1</p>
+<ul>
+<li>Three kinds of scan: port (open ports), network (live hosts), vulnerability (known weaknesses).</li>
+<li>Port ranges: 0-1023 well-known, 1024-49151 registered, 49152-65535 dynamic.</li>
+<li>Six flags for the exam: SYN, ACK, FIN, RST, PSH, URG. Handshake: SYN, SYN/ACK, ACK.</li>
+<li>Open ports answer SYN with SYN/ACK; closed ports answer with RST; open ports ignore flag-less strays.</li>
+<li>Six port states: open, closed, filtered, unfiltered, open|filtered, closed|filtered.</li>
+</ul>
+</div>
+<h2 class="tg-R" id="2-the-scanning-toolbox">2. The scanning toolbox <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h2>
+<p>You need to recognise these names and know what each is for. Only Nmap and hping3 need command-level knowledge.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td R="R"><strong>Nmap</strong></td>
+<td>The standard scanner: host discovery, every scan type, version and OS detection, and a scripting engine (NSE). <strong>Zenmap</strong> is its graphical front end; the courseware's screenshots use it</td>
+</tr>
+<tr>
+<td R="R"><strong>hping3</strong></td>
+<td>Command-line packet crafter. Builds one packet at a time with any flags, spoofed sources or fragments. Used for firewall testing, idle scans and denial-of-service demonstrations</td>
+</tr>
+<tr>
+<td R="R"><strong>Metasploit</strong></td>
+<td>Exploitation framework. Its auxiliary modules include port scanners, for example <code>auxiliary/scanner/portscan/tcp</code></td>
+</tr>
+<tr>
+<td R="R"><strong>NetScanTools Pro</strong></td>
+<td>Windows investigation toolkit: lists addresses, hostnames and ports, and crafts packets</td>
+</tr>
+<tr>
+<td R="R">sx, RustScan, MegaPing, SolarWinds Engineer's Toolset, PRTG Network Monitor</td>
+<td>Additional scanners named in the courseware</td>
+</tr>
+<tr>
+<td>masscan, Unicornscan, arp-scan, netdiscover</td>
+<td>Not in the official tool list but common in practice: very fast scanning, TTL display, local ARP discovery</td>
+</tr>
+</tbody>
+</table></div>
+<p>Nmap's basic shape is always the same: <code>nmap [options] [target]</code>.</p>
+<div class="admonition update">
+<p class="admonition-title">Updated: March 2026</p>
+<p><strong>What changed.</strong> The courseware's screenshots show older Nmap builds in the Zenmap window, and its text still uses retired switches such as <code>-sP</code>, <code>-P0</code> and the old ICMP options <code>-P</code>, <code>-L</code> and <code>-T</code>. The newest release listed in Nmap's own changelog is <strong>7.99</strong>, <strong>March 2026</strong>. Current builds use <code>-sn</code> and <code>-Pn</code>; the scan types and their results are unchanged.</p>
+<p><strong>The exam still expects:</strong> you to recognise the old switches as well as the new. <code>-sP</code> means the same as <code>-sn</code>; <code>-P0</code> and <code>-PN</code> mean the same as <code>-Pn</code>.</p>
+</div>
+<h3 class="tg-M" id="hping3-commands">hping3 commands <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>hping3 sends TCP by default. A number switch changes the mode; a capital letter sets a flag.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hping3 -1 10.0.0.25</code></td>
+<td>ICMP ping (<code>-1</code> or <code>--icmp</code>)</td>
+</tr>
+<tr>
+<td><code>hping3 -A 10.0.0.25 -p 80</code></td>
+<td>ACK scan on port 80: tests for a firewall</td>
+</tr>
+<tr>
+<td><code>hping3 -2 10.0.0.25 -p 80</code></td>
+<td>UDP mode (<code>-2</code> or <code>--udp</code>)</td>
+</tr>
+<tr>
+<td><code>hping3 -8 50-60 -S 10.0.0.25 -V</code></td>
+<td>Scan mode (<code>-8</code> or <code>--scan</code>): SYN scan of ports 50 to 60</td>
+</tr>
+<tr>
+<td><code>hping3 -F -P -U 10.0.0.25 -p 80</code></td>
+<td>FIN, PSH and URG set: an Xmas probe</td>
+</tr>
+<tr>
+<td><code>hping3 -1 10.0.1.x --rand-dest -I eth0</code></td>
+<td>Ping sweep of a whole subnet in random order</td>
+</tr>
+<tr>
+<td><code>hping3 192.168.1.103 -Q -p 139</code></td>
+<td>Collect the target's TCP sequence numbers (<code>-Q</code>)</td>
+</tr>
+<tr>
+<td><code>hping3 -S 72.14.207.99 -p 80 --tcp-timestamp</code></td>
+<td>Read the TCP timestamp to guess uptime</td>
+</tr>
+<tr>
+<td><code>hping3 -9 HTTP -I eth0</code></td>
+<td>Listen mode (<code>-9</code>): capture packets containing "HTTP"</td>
+</tr>
+<tr>
+<td><code>hping3 -S 192.168.1.1 -a 192.168.1.254 -p 22 --flood</code></td>
+<td>SYN flood with a spoofed source (<code>-a</code>): a DoS attack</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>hping3 number modes: <strong>-1</strong> ICMP, <strong>-2</strong> UDP, <strong>-8</strong> scan, <strong>-9</strong> listen. "One ping, two UDP, eight scans, nine listens." Capital letters are the flags themselves: <code>-S -A -F -P -U -R</code>.</p>
+</div>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> an hping3 ACK probe (<code>-A</code>) that gets a <strong>RST</strong> back means the host is alive and the port is not filtered. An Xmas probe (<code>-F -P -U</code>) gets <strong>no reply from an open port</strong> and <strong>RST from a closed port</strong>.</p>
+<p><strong>In practice:</strong> the RST to an ACK probe says nothing about whether the port is open (rule 5). And a ping sweep finds live <em>hosts</em>; ICMP has no ports, whatever a carelessly worded option says.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>hping3 is not installed in the L01 attacker container, so do the same Xmas probe with Nmap and watch the packets:</p>
+<p><code>bash
+nmap -sX -p 80 --packet-trace 10.77.0.20</code></p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 2</p>
+<ul>
+<li>Nmap is the standard; Zenmap is its GUI. Syntax: <code>nmap [options] [target]</code>.</li>
+<li>hping3 crafts single packets. Modes: -1 ICMP, -2 UDP, -8 scan, -9 listen.</li>
+<li>hping3 flags are capital letters: -S, -A, -F, -P, -U. <code>-a</code> spoofs the source, <code>--flood</code> floods.</li>
+<li>Metasploit and NetScanTools Pro also scan; recognise sx, RustScan, MegaPing, PRTG, SolarWinds.</li>
+<li>An ACK probe answered by RST means "reachable, not filtered", not "open".</li>
+</ul>
+</div>
+<h2 class="tg-U" id="3-host-discovery">3. Host discovery <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h2>
+<p>Scanning 65,536 ports on an address nobody is using wastes hours. <strong>Host discovery</strong> finds the live addresses first. A sweep across a whole range is called a <strong>ping sweep</strong>.</p>
+<p>The difficulty is that the classic ping is blocked on most modern networks. So you need several ways to make a host reveal itself.</p>
+<div class="admonition story">
+<p class="admonition-title">The idea</p>
+<p>A teacher taking the register calls each name. A pupil who shouts "here" is present. So is a pupil who shouts "leave me alone". Only silence is ambiguous. In host discovery, <strong>any reply at all, even a refusal, proves a machine is there.</strong></p>
+</div>
+<h3 class="tg-M" id="the-techniques">The techniques <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>Nmap option</th>
+<th>Probe sent</th>
+<th>A live host replies with</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ARP ping</td>
+<td><code>-PR</code></td>
+<td>ARP request: "who has this IP?"</td>
+<td>ARP reply with its MAC address</td>
+</tr>
+<tr>
+<td>UDP ping</td>
+<td><code>-PU</code></td>
+<td>UDP datagram to port <strong>40125</strong> by default</td>
+<td>ICMP port unreachable</td>
+</tr>
+<tr>
+<td>ICMP echo ping</td>
+<td><code>-PE</code></td>
+<td>ICMP type 8</td>
+<td>ICMP type 0</td>
+</tr>
+<tr>
+<td>ICMP echo ping sweep</td>
+<td><code>-sn -PE</code> with a range</td>
+<td>Type 8 to every address</td>
+<td>Type 0 from each live host</td>
+</tr>
+<tr>
+<td>ICMP timestamp ping</td>
+<td><code>-PP</code></td>
+<td>ICMP type 13</td>
+<td>ICMP type 14</td>
+</tr>
+<tr>
+<td>ICMP address mask ping</td>
+<td><code>-PM</code></td>
+<td>ICMP type 17</td>
+<td>ICMP type 18</td>
+</tr>
+<tr>
+<td>TCP SYN ping</td>
+<td><code>-PS</code></td>
+<td>SYN to port <strong>80</strong> by default</td>
+<td>SYN/ACK or RST</td>
+</tr>
+<tr>
+<td>TCP ACK ping</td>
+<td><code>-PA</code></td>
+<td>ACK to port <strong>80</strong> by default</td>
+<td>RST</td>
+</tr>
+<tr>
+<td>IP protocol ping</td>
+<td><code>-PO</code></td>
+<td>Bare packets for protocols <strong>1</strong> (ICMP), <strong>2</strong> (IGMP) and <strong>4</strong> (IP-in-IP)</td>
+<td>Any reply</td>
+</tr>
+</tbody>
+</table></div>
+<p>What each is good for:</p>
+<ul>
+<li><strong>ARP ping</strong> works only on your own network segment, because ARP does not cross routers. There it is the most accurate method, and a host firewall cannot hide from it. Nmap uses it automatically on a local network; <code>--disable-arp-ping</code> turns that off.</li>
+<li><strong>UDP ping</strong> finds hosts behind firewalls that filter TCP strictly and forgot UDP.</li>
+<li><strong>Timestamp and address-mask pings</strong> work when an administrator blocked echo requests and nothing else.</li>
+<li><strong>TCP SYN ping</strong> gets through firewalls that allow web traffic. Port lists go straight after the switch with no space: <code>-PS22,80,443</code>.</li>
+<li><strong>TCP ACK ping</strong> gets past simple filters that block only SYN.</li>
+</ul>
+<p>When you give no discovery options, a privileged Nmap sends four probes at once to a remote network: ICMP echo, SYN to 443, ACK to 80 and ICMP timestamp. <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></p>
+<figure class="dg"><svg viewBox="0 0 610 515" width="610" role="img" aria-label="Choosing a host discovery method"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><line class="ln" x1="265.0" y1="50" x2="375.0" y2="50" marker-end="url(#a)"/><text x="320.0" y="44" text-anchor="middle" class="s h">yes</text><line class="ln" x1="150" y1="85.0" x2="150" y2="125.0" marker-end="url(#a)"/><text x="158" y="109.0" text-anchor="start" class="s h">no</text><line class="ln" x1="265.0" y1="160" x2="375.0" y2="160" marker-end="url(#a)"/><text x="320.0" y="154" text-anchor="middle" class="s h">yes</text><line class="ln" x1="150" y1="195.0" x2="150" y2="235.0" marker-end="url(#a)"/><text x="158" y="219.0" text-anchor="start" class="s h">no</text><line class="ln" x1="265.0" y1="270" x2="375.0" y2="270" marker-end="url(#a)"/><text x="320.0" y="264" text-anchor="middle" class="s h">yes</text><line class="ln" x1="150" y1="305.0" x2="150" y2="345.0" marker-end="url(#a)"/><text x="158" y="329.0" text-anchor="start" class="s h">no</text><line class="ln" x1="265.0" y1="380" x2="375.0" y2="380" marker-end="url(#a)"/><text x="320.0" y="374" text-anchor="middle" class="s h">yes</text><line class="ln" x1="150" y1="415.0" x2="150" y2="458.0" marker-end="url(#a)"/><text x="158" y="440.5" text-anchor="start" class="s h">no</text><polygon class="d" points="150,15.0 265.0,50 150,85.0 35.0,50"/><text x="150" y="47" text-anchor="middle" class="">Target on your own</text><text x="150" y="63" text-anchor="middle" class="">network segment?</text><rect class="t" x="375.0" y="28.0" width="210" height="44" rx="18"/><text x="480" y="55" text-anchor="middle" class="">ARP ping:  nmap -sn -PR</text><polygon class="d" points="150,125.0 265.0,160 150,195.0 35.0,160"/><text x="150" y="157" text-anchor="middle" class="">Does ICMP echo</text><text x="150" y="173" text-anchor="middle" class="">get replies?</text><rect class="t" x="375.0" y="138.0" width="210" height="44" rx="18"/><text x="480" y="165" text-anchor="middle" class="">ICMP sweep:  nmap -sn -PE</text><polygon class="d" points="150,235.0 265.0,270 150,305.0 35.0,270"/><text x="150" y="259" text-anchor="middle" class="">Other ICMP types</text><text x="150" y="275" text-anchor="middle" class="">or TCP probes</text><text x="150" y="291" text-anchor="middle" class="">answered?</text><rect class="t" x="375.0" y="242.0" width="210" height="56" rx="18"/><text x="480" y="267" text-anchor="middle" class="">nmap -sn -PP -PM</text><text x="480" y="283" text-anchor="middle" class="">-PS22,80,443 -PA80</text><polygon class="d" points="150,345.0 265.0,380 150,415.0 35.0,380"/><text x="150" y="369" text-anchor="middle" class="">UDP or other</text><text x="150" y="385" text-anchor="middle" class="">IP protocols</text><text x="150" y="401" text-anchor="middle" class="">answered?</text><rect class="t" x="375.0" y="358.0" width="210" height="44" rx="18"/><text x="480" y="385" text-anchor="middle" class="">nmap -sn -PU53,161 -PO</text><rect class="t" x="35.0" y="458.0" width="230" height="44" rx="18"/><text x="150" y="485" text-anchor="middle" class="">Skip discovery:  nmap -Pn</text></svg><figcaption>Picking a discovery method. Start with the cheapest, most reliable probe and fall back only when it fails.</figcaption></figure>
+<h3 class="tg-M" id="commands">Commands <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<pre><code class="language-bash">nmap -sn 10.77.0.0/24                      # discovery only, no port scan
+nmap -sn -PR 192.168.1.0/24                # ARP on the local segment
+nmap -sn -PE -PP -PM 10.77.0.0/24          # all three ICMP types
+nmap -sn -PS22,80,443 -PA80 10.77.0.0/24   # TCP pings
+nmap -sn -PU53,161 10.77.0.0/24            # UDP ping
+nmap -Pn -p 80,443 10.77.0.20              # skip discovery, assume the host is up
+</code></pre>
+<p><code>-Pn</code> matters more than it looks. If a host ignores every discovery probe, Nmap marks it down and never scans its ports. <code>-Pn</code> treats every address as alive, at the cost of time.</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> <code>-sn</code> disables the <strong>port scan</strong> (older name <code>-sP</code>). <code>-Pn</code> disables the <strong>ping</strong> (older names <code>-P0</code>, <code>-PN</code>).</p>
+<p><strong>Exam answer:</strong> for a UDP ping, "a response means the host is active; errors such as host or network unreachable, or TTL exceeded, mean it is offline or unreachable."</p>
+<p><strong>In practice:</strong> the usual "response" to a UDP ping is an ICMP port unreachable, because port 40125 is almost never open. The courseware's AI-generated script still uses <code>-sP</code>; current Nmap accepts it, but write <code>-sn</code>.</p>
+</div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>Read the letters. <strong>-sn</strong> = <strong>s</strong>can: <strong>n</strong>o. <strong>-Pn</strong> = <strong>P</strong>ing: <strong>n</strong>o. And the ICMP trio pairs up with its numbers: <strong>E</strong>cho 8/0, <strong>P</strong> timestamp 13/14, <strong>M</strong>ask 17/18.</p>
+</div>
+<div class="admonition trap">
+<p class="admonition-title">Exam traps</p>
+<ul>
+<li><code>-sn</code> does not mean "no ping". It means discovery only.</li>
+<li>ARP ping cannot discover hosts on another subnet.</li>
+<li>A RST in reply to a TCP ping means the host is <strong>up</strong>. The port is closed, but that is not the question.</li>
+<li>Pinging a broadcast address to sweep a subnet is unreliable. The courseware notes Windows hosts do not answer it; in practice almost nothing modern does.</li>
+</ul>
+</div>
+<h3 class="tg-R" id="ping-sweep-tools">Ping sweep tools <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h3>
+<p>Recognise the names: <strong>Angry IP Scanner</strong> (the featured one: multi-threaded, pings each address, then optionally resolves the hostname and MAC and scans ports), SolarWinds Engineer's Toolset, NetScanTools Pro, Colasoft Ping Tool, Advanced IP Scanner and OpUtils. They differ in interface, not technique.</p>
+<div class="admonition cpent">
+<p class="admonition-title">CPENT depth: discovery on a real engagement</p>
+<ul>
+<li><strong>Large ranges.</strong> Sweep first with <code>nmap -sn --min-rate</code> or masscan, write live hosts to a file, and feed it to detailed scans with <code>-iL</code>.</li>
+<li><strong>Through a pivot.</strong> ARP and ICMP usually cannot pass a SOCKS proxy. Discovery becomes a TCP connect sweep (<code>-sT -Pn</code>) of a few common ports through proxychains, or a one-liner run on the pivot itself.</li>
+<li><strong>Quiet discovery.</strong> The pivot's ARP cache, routing table and DNS records reveal neighbours without sending a single probe.</li>
+</ul>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p><code>bash
+nmap -sn -oG - 10.77.0.0/24 | awk '/Up$/{print $2}' &gt; live.txt</code></p>
+<p>This writes only the live IP addresses to <code>live.txt</code>. You should see five lab hosts plus your own.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 3</p>
+<ul>
+<li>Discover hosts before scanning ports. Any reply, even a RST, means "up".</li>
+<li>ARP (<code>-PR</code>) is the most accurate, but local segment only.</li>
+<li>ICMP pings: <code>-PE</code> 8/0, <code>-PP</code> 13/14, <code>-PM</code> 17/18. TCP pings: <code>-PS</code> and <code>-PA</code>, default port 80.</li>
+<li><code>-PU</code> default port 40125. <code>-PO</code> default protocols 1, 2 and 4.</li>
+<li><code>-sn</code> = no port scan. <code>-Pn</code> = no ping.</li>
+</ul>
+</div>
+<h2 class="tg-U" id="4-tcp-port-scans">4. TCP port scans <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h2>
+<p>This is the heart of the module. Each technique sends a slightly different probe and reads the reply using the five rules from section 1.</p>
+<h3 class="tg-M" id="the-family-tree">The family tree <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>The exam asks which family a scan belongs to. Learn the three TCP groups.</p>
+<figure class="dg"><svg viewBox="0 0 660 440" width="660" role="img" aria-label="Family tree of port scanning techniques"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="t" x="14" y="8" width="203" height="26" rx="6"/><text x="26" y="26" text-anchor="start" class="h">Port scanning techniques</text><path class="lf" d="M26 34V57H44"/><rect class="b" x="44" y="44" width="114" height="26" rx="6"/><text x="56" y="62" text-anchor="start" class="h">TCP scanning</text><path class="lf" d="M56 70V93H74"/><rect class="b" x="74" y="80" width="299" height="26" rx="6"/><text x="86" y="98" text-anchor="start" class="">Open:  TCP connect / full-open  (-sT)</text><path class="lf" d="M56 70V129H74"/><rect class="b" x="74" y="116" width="110" height="26" rx="6"/><text x="86" y="134" text-anchor="start" class="">Stealth</text><path class="lf" d="M86 142V165H104"/><rect class="b" x="104" y="152" width="188" height="26" rx="6"/><text x="116" y="170" text-anchor="start" class="">Half-open / SYN  (-sS)</text><path class="lf" d="M86 142V201H104"/><rect class="b" x="104" y="188" width="536" height="26" rx="6"/><text x="116" y="206" text-anchor="start" class="">Inverse TCP flag:  FIN (-sF),  NULL (-sN),  Xmas (-sX),  Maimon (-sM)</text><path class="lf" d="M86 142V237H104"/><rect class="b" x="104" y="224" width="418" height="26" rx="6"/><text x="116" y="242" text-anchor="start" class="">ACK flag probe (-sA):  TTL-based,  Window-based (-sW)</text><path class="lf" d="M56 70V273H74"/><rect class="b" x="74" y="260" width="410" height="26" rx="6"/><text x="86" y="278" text-anchor="start" class="">Third-party and spoofed:  IDLE / IP ID header  (-sI)</text><path class="lf" d="M26 34V309H44"/><rect class="b" x="44" y="296" width="166" height="26" rx="6"/><text x="56" y="314" text-anchor="start" class="h">UDP scanning  (-sU)</text><path class="lf" d="M26 34V345H44"/><rect class="b" x="44" y="332" width="366" height="26" rx="6"/><text x="56" y="350" text-anchor="start" class="h">SCTP scanning:  INIT (-sY),  COOKIE ECHO (-sZ)</text><path class="lf" d="M26 34V381H44"/><rect class="b" x="44" y="368" width="285" height="26" rx="6"/><text x="56" y="386" text-anchor="start" class="h">SSDP scanning  and  list scan (-sL)</text><path class="lf" d="M26 34V417H44"/><rect class="b" x="44" y="404" width="166" height="26" rx="6"/><text x="56" y="422" text-anchor="start" class="h">IPv6 scanning  (-6)</text></svg><figcaption>How the courseware classifies port scans. &quot;Stealth&quot; covers half-open, inverse-flag and ACK-probe scans.</figcaption></figure>
+<ul>
+<li><strong>Open TCP scanning</strong>: TCP connect, also called full-open.</li>
+<li><strong>Stealth TCP scanning</strong>: half-open (SYN); inverse TCP flag (FIN, NULL, Xmas, Maimon); ACK flag probe (TTL-based, window-based).</li>
+<li><strong>Third-party and spoofed TCP scanning</strong>: IDLE / IP ID header scan.</li>
+</ul>
+<figure class="dg"><svg viewBox="0 0 620 625" width="620" role="img" aria-label="Choosing a port scan type"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><line class="ln" x1="265.0" y1="50" x2="370.0" y2="50" marker-end="url(#a)"/><text x="317.5" y="44" text-anchor="middle" class="s h">no</text><line class="ln" x1="150" y1="85.0" x2="150" y2="125.0" marker-end="url(#a)"/><text x="158" y="109.0" text-anchor="start" class="s h">yes</text><line class="ln" x1="265.0" y1="160" x2="370.0" y2="160" marker-end="url(#a)"/><text x="317.5" y="154" text-anchor="middle" class="s h">yes</text><line class="ln" x1="150" y1="195.0" x2="150" y2="235.0" marker-end="url(#a)"/><text x="158" y="219.0" text-anchor="start" class="s h">no</text><line class="ln" x1="265.0" y1="270" x2="370.0" y2="270" marker-end="url(#a)"/><text x="317.5" y="264" text-anchor="middle" class="s h">yes</text><line class="ln" x1="150" y1="305.0" x2="150" y2="345.0" marker-end="url(#a)"/><text x="158" y="329.0" text-anchor="start" class="s h">no</text><line class="ln" x1="265.0" y1="380" x2="370.0" y2="380" marker-end="url(#a)"/><text x="317.5" y="374" text-anchor="middle" class="s h">yes</text><line class="ln" x1="150" y1="415.0" x2="150" y2="455.0" marker-end="url(#a)"/><text x="158" y="439.0" text-anchor="start" class="s h">no</text><line class="ln" x1="265.0" y1="490" x2="370.0" y2="490" marker-end="url(#a)"/><text x="317.5" y="484" text-anchor="middle" class="s h">yes</text><line class="ln" x1="150" y1="525.0" x2="150" y2="568.0" marker-end="url(#a)"/><text x="158" y="550.5" text-anchor="start" class="s h">no</text><polygon class="d" points="150,15.0 265.0,50 150,85.0 35.0,50"/><text x="150" y="39" text-anchor="middle" class="">Root or admin</text><text x="150" y="55" text-anchor="middle" class="">rights on the</text><text x="150" y="71" text-anchor="middle" class="">scanning host?</text><rect class="t" x="370.0" y="28.0" width="220" height="44" rx="18"/><text x="480" y="55" text-anchor="middle" class="">TCP connect:  -sT</text><polygon class="d" points="150,125.0 265.0,160 150,195.0 35.0,160"/><text x="150" y="157" text-anchor="middle" class="">Goal is to map</text><text x="150" y="173" text-anchor="middle" class="">firewall rules?</text><rect class="t" x="370.0" y="138.0" width="220" height="44" rx="18"/><text x="480" y="165" text-anchor="middle" class="">ACK or Window:  -sA, -sW</text><polygon class="d" points="150,235.0 265.0,270 150,305.0 35.0,270"/><text x="150" y="267" text-anchor="middle" class="">Looking for UDP</text><text x="150" y="283" text-anchor="middle" class="">or SCTP services?</text><rect class="t" x="370.0" y="248.0" width="220" height="44" rx="18"/><text x="480" y="275" text-anchor="middle" class="">-sU,  -sY,  -sZ</text><polygon class="d" points="150,345.0 265.0,380 150,415.0 35.0,380"/><text x="150" y="377" text-anchor="middle" class="">Must hide your</text><text x="150" y="393" text-anchor="middle" class="">own address?</text><rect class="t" x="370.0" y="358.0" width="220" height="44" rx="18"/><text x="480" y="385" text-anchor="middle" class="">Idle scan:  -sI zombie</text><polygon class="d" points="150,455.0 265.0,490 150,525.0 35.0,490"/><text x="150" y="479" text-anchor="middle" class="">Stateless filter</text><text x="150" y="495" text-anchor="middle" class="">and a non-Windows</text><text x="150" y="511" text-anchor="middle" class="">target?</text><rect class="t" x="370.0" y="468.0" width="220" height="44" rx="18"/><text x="480" y="495" text-anchor="middle" class="">FIN, Xmas, NULL, Maimon</text><rect class="t" x="35.0" y="568.0" width="230" height="44" rx="18"/><text x="150" y="595" text-anchor="middle" class="">Default choice: SYN scan  -sS</text></svg><figcaption>Picking a scan type. In practice the SYN scan is the default and the others are tools for special situations.</figcaption></figure>
+<h3 class="tg-U" id="tcp-connect-scan-full-open">TCP connect scan (full-open) <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h3>
+<p>The scanner asks its own operating system to open a normal connection with the <code>connect()</code> call. If the three-way handshake completes, the port is open. The scanner then sends RST to hang up.</p>
+<figure class="dg"><svg viewBox="0 0 810 262" width="810" role="img" aria-label="connect scan: open versus closed port"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><text x="195.0" y="22" text-anchor="middle" class="h">Port open</text><rect class="b" x="18" y="44" width="124" height="28" rx="6"/><text x="80" y="63" text-anchor="middle" class="h">Scanner</text><rect class="b" x="248" y="44" width="124" height="28" rx="6"/><text x="310" y="63" text-anchor="middle" class="h">Target</text><line class="lf" x1="80" y1="72" x2="80" y2="248"/><line class="lf" x1="310" y1="72" x2="310" y2="248"/><line class="ln" x1="83" y1="102" x2="307" y2="102" marker-end="url(#a)"/><text x="195.0" y="95" text-anchor="middle" class="s">SYN</text><line class="ln" x1="307" y1="142" x2="83" y2="142" marker-end="url(#a)"/><text x="195.0" y="135" text-anchor="middle" class="s">SYN/ACK</text><line class="ln" x1="83" y1="182" x2="307" y2="182" marker-end="url(#a)"/><text x="195.0" y="175" text-anchor="middle" class="s">ACK</text><line class="ln" x1="83" y1="222" x2="307" y2="222" marker-end="url(#a)"/><text x="195.0" y="215" text-anchor="middle" class="s">RST (scanner hangs up)</text><line class="lf" x1="405" y1="6" x2="405" y2="256"/><text x="615.0" y="22" text-anchor="middle" class="h">Port closed</text><rect class="b" x="438" y="44" width="124" height="28" rx="6"/><text x="500" y="63" text-anchor="middle" class="h">Scanner</text><rect class="b" x="668" y="44" width="124" height="28" rx="6"/><text x="730" y="63" text-anchor="middle" class="h">Target</text><line class="lf" x1="500" y1="72" x2="500" y2="168"/><line class="lf" x1="730" y1="72" x2="730" y2="168"/><line class="ln" x1="503" y1="102" x2="727" y2="102" marker-end="url(#a)"/><text x="615.0" y="95" text-anchor="middle" class="s">SYN</text><line class="ln" x1="727" y1="142" x2="503" y2="142" marker-end="url(#a)"/><text x="615.0" y="135" text-anchor="middle" class="s">RST/ACK</text></svg><figcaption>TCP connect scan. The handshake completes, so the target application sees and usually logs the connection.</figcaption></figure>
+<ul>
+<li><strong>Needs:</strong> no special privileges. Nmap uses it when you are not root.</li>
+<li><strong>Cost:</strong> the most reliable TCP scan, and the easiest to detect and log.</li>
+<li><strong>Command:</strong> <code>nmap -sT 10.77.0.20</code></li>
+</ul>
+<h3 class="tg-U" id="stealth-scan-half-open-syn-scan">Stealth scan (half-open, SYN scan) <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h3>
+<p>The scanner crafts a raw SYN. On SYN/ACK it knows the port is open and sends <strong>RST instead of the final ACK</strong>, so the connection never completes.</p>
+<figure class="dg"><svg viewBox="0 0 810 222" width="810" role="img" aria-label="syn scan: open versus closed port"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><text x="195.0" y="22" text-anchor="middle" class="h">Port open</text><rect class="b" x="18" y="44" width="124" height="28" rx="6"/><text x="80" y="63" text-anchor="middle" class="h">Scanner</text><rect class="b" x="248" y="44" width="124" height="28" rx="6"/><text x="310" y="63" text-anchor="middle" class="h">Target</text><line class="lf" x1="80" y1="72" x2="80" y2="208"/><line class="lf" x1="310" y1="72" x2="310" y2="208"/><line class="ln" x1="83" y1="102" x2="307" y2="102" marker-end="url(#a)"/><text x="195.0" y="95" text-anchor="middle" class="s">SYN</text><line class="ln" x1="307" y1="142" x2="83" y2="142" marker-end="url(#a)"/><text x="195.0" y="135" text-anchor="middle" class="s">SYN/ACK</text><line class="ln" x1="83" y1="182" x2="307" y2="182" marker-end="url(#a)"/><text x="195.0" y="175" text-anchor="middle" class="s">RST (never completes)</text><line class="lf" x1="405" y1="6" x2="405" y2="216"/><text x="615.0" y="22" text-anchor="middle" class="h">Port closed</text><rect class="b" x="438" y="44" width="124" height="28" rx="6"/><text x="500" y="63" text-anchor="middle" class="h">Scanner</text><rect class="b" x="668" y="44" width="124" height="28" rx="6"/><text x="730" y="63" text-anchor="middle" class="h">Target</text><line class="lf" x1="500" y1="72" x2="500" y2="168"/><line class="lf" x1="730" y1="72" x2="730" y2="168"/><line class="ln" x1="503" y1="102" x2="727" y2="102" marker-end="url(#a)"/><text x="615.0" y="95" text-anchor="middle" class="s">SYN</text><line class="ln" x1="727" y1="142" x2="503" y2="142" marker-end="url(#a)"/><text x="615.0" y="135" text-anchor="middle" class="s">RST/ACK</text></svg><figcaption>SYN scan. The handshake is abandoned after the second step.</figcaption></figure>
+<ul>
+<li><strong>Needs:</strong> root or administrator rights, to craft raw packets.</li>
+<li><strong>Command:</strong> <code>nmap -sS 10.77.0.20</code>. This is Nmap's default when run as root.</li>
+</ul>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> the half-open scan is "stealthy": it avoids the logging that a completed connection triggers and helps bypass firewall rules.</p>
+<p><strong>In practice:</strong> that was true of application logs in the 1990s. Every modern firewall and intrusion detection system spots a SYN scan. The name is historical.</p>
+</div>
+<h3 class="tg-M" id="inverse-tcp-flag-scans-fin-null-and-xmas">Inverse TCP flag scans: FIN, NULL and Xmas <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>These send a segment that should never start a conversation. A closed port answers RST (rule 3). An open port stays silent (rule 4). You learn "open" from <em>silence</em>, which is why they are called <strong>inverse</strong> scans.</p>
+<figure class="dg"><svg viewBox="0 0 810 182" width="810" role="img" aria-label="inverse scan: open versus closed port"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><text x="195.0" y="22" text-anchor="middle" class="h">Port open</text><rect class="b" x="18" y="44" width="124" height="28" rx="6"/><text x="80" y="63" text-anchor="middle" class="h">Scanner</text><rect class="b" x="248" y="44" width="124" height="28" rx="6"/><text x="310" y="63" text-anchor="middle" class="h">Target</text><line class="lf" x1="80" y1="72" x2="80" y2="168"/><line class="lf" x1="310" y1="72" x2="310" y2="168"/><line class="ln" x1="83" y1="102" x2="307" y2="102" marker-end="url(#a)"/><text x="195.0" y="95" text-anchor="middle" class="s">FIN, or FIN+PSH+URG, or no flags</text><line class="ln da" x1="310" y1="142" x2="167.4" y2="142"/><text x="159.4" y="147" text-anchor="middle" class="bad h">✕</text><text x="195.0" y="135" text-anchor="middle" class="s">no reply</text><line class="lf" x1="405" y1="6" x2="405" y2="176"/><text x="615.0" y="22" text-anchor="middle" class="h">Port closed</text><rect class="b" x="438" y="44" width="124" height="28" rx="6"/><text x="500" y="63" text-anchor="middle" class="h">Scanner</text><rect class="b" x="668" y="44" width="124" height="28" rx="6"/><text x="730" y="63" text-anchor="middle" class="h">Target</text><line class="lf" x1="500" y1="72" x2="500" y2="168"/><line class="lf" x1="730" y1="72" x2="730" y2="168"/><line class="ln" x1="503" y1="102" x2="727" y2="102" marker-end="url(#a)"/><text x="615.0" y="95" text-anchor="middle" class="s">FIN, or FIN+PSH+URG, or no flags</text><line class="ln" x1="727" y1="142" x2="503" y2="142" marker-end="url(#a)"/><text x="615.0" y="135" text-anchor="middle" class="s">RST/ACK</text></svg><figcaption>FIN, NULL and Xmas scans. An open port says nothing; a closed port resets.</figcaption></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Scan</th>
+<th>Flags set</th>
+<th>Nmap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FIN</td>
+<td>FIN only</td>
+<td><code>-sF</code></td>
+</tr>
+<tr>
+<td>NULL</td>
+<td>none</td>
+<td><code>-sN</code></td>
+</tr>
+<tr>
+<td>Xmas</td>
+<td>FIN, URG and PSH</td>
+<td><code>-sX</code></td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>Result:</strong> silence could also be a firewall, so Nmap reports <code>open|filtered</code>.</li>
+<li><strong>Advantage:</strong> probes with no SYN can pass simple filters that only watch for SYN.</li>
+<li><strong>Disadvantages:</strong> needs raw-socket (root) privileges, and does not work against Microsoft Windows.</li>
+</ul>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> inverse scans work only against systems that follow RFC 793, mainly UNIX and BSD-derived stacks. They are <strong>not effective against Windows</strong>.</p>
+<p><strong>In practice:</strong> Windows answers RST from every port, open or closed, so Nmap shows every port as <strong>closed</strong>. One line of the courseware says such a scan shows all ports as open; if an option list forces a choice, the safe reading is "the scan cannot tell you anything about a Windows host". RFC 793 was replaced by RFC 9293 in 2022, with the same behaviour.</p>
+</div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>Xmas = <strong>F</strong>IN + <strong>U</strong>RG + <strong>P</strong>SH: "<strong>F</strong>airy lights <strong>U</strong>p, <strong>P</strong>lease". NULL = nothing lit. FIN = one bulb.</p>
+</div>
+<h3 class="tg-U" id="tcp-maimon-scan">TCP Maimon scan <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h3>
+<p>The probe is <strong>FIN/ACK</strong>. By the standard a RST should come back either way. Many BSD-derived systems instead drop the probe when the port is open. So: no reply means <code>open|filtered</code>, RST means closed, an ICMP unreachable error means filtered. Command: <code>nmap -sM</code>.</p>
+<h3 class="tg-M" id="ack-flag-probe-scan">ACK flag probe scan <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>An ACK probe does not find open ports in the normal way. Its main job answers a different question: <em>is a stateful firewall in the way?</em></p>
+<figure class="dg"><svg viewBox="0 0 810 182" width="810" role="img" aria-label="ack scan: open versus closed port"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><text x="195.0" y="22" text-anchor="middle" class="h">No firewall in the way</text><rect class="b" x="18" y="44" width="124" height="28" rx="6"/><text x="80" y="63" text-anchor="middle" class="h">Scanner</text><rect class="b" x="248" y="44" width="124" height="28" rx="6"/><text x="310" y="63" text-anchor="middle" class="h">Target</text><line class="lf" x1="80" y1="72" x2="80" y2="168"/><line class="lf" x1="310" y1="72" x2="310" y2="168"/><line class="ln" x1="83" y1="102" x2="307" y2="102" marker-end="url(#a)"/><text x="195.0" y="95" text-anchor="middle" class="s">ACK</text><line class="ln" x1="307" y1="142" x2="83" y2="142" marker-end="url(#a)"/><text x="195.0" y="135" text-anchor="middle" class="s">RST  (port is unfiltered)</text><line class="lf" x1="405" y1="6" x2="405" y2="176"/><text x="615.0" y="22" text-anchor="middle" class="h">Stateful firewall</text><rect class="b" x="438" y="44" width="124" height="28" rx="6"/><text x="500" y="63" text-anchor="middle" class="h">Scanner</text><rect class="b" x="668" y="44" width="124" height="28" rx="6"/><text x="730" y="63" text-anchor="middle" class="h">Target</text><line class="lf" x1="500" y1="72" x2="500" y2="154"/><line class="lf" x1="730" y1="72" x2="730" y2="154"/><line class="ln da" x1="500" y1="102" x2="642.6" y2="102"/><text x="650.6" y="107" text-anchor="middle" class="bad h">✕</text><text x="615.0" y="95" text-anchor="middle" class="s">ACK</text><text x="615.0" y="142" text-anchor="middle" class="s">No reply, or ICMP unreachable: filtered</text></svg><figcaption>ACK scan. A reset proves the probe reached the host, so no stateful filter is in the way.</figcaption></figure>
+<p>Any host that receives a stray ACK replies RST (rule 5). A <strong>stateful</strong> firewall, which remembers connections, knows this ACK belongs to nothing and drops it.</p>
+<ul>
+<li><strong>RST received:</strong> the port is <strong>not filtered</strong>; no stateful firewall.</li>
+<li><strong>No reply:</strong> the port is <strong>filtered</strong>; a stateful firewall is present.</li>
+<li><strong>Command:</strong> <code>nmap -sA 10.77.0.20</code></li>
+</ul>
+<p>Two older variants read open or closed from the RST itself, on BSD-derived stacks:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Look at</th>
+<th>The port is open if</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TTL-based</td>
+<td>TTL field of the RST</td>
+<td>TTL is <strong>less than 64</strong></td>
+</tr>
+<tr>
+<td>Window-based (<code>-sW</code>)</td>
+<td>Window field of the RST</td>
+<td>Window is <strong>non-zero</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Use the window version when every RST carries the same TTL.</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> TTL below the boundary value 64 means open; a non-zero window means open. The courseware gives <code>nmap --ttl</code> as the TTL-based command and <code>-sW</code> for the window scan.</p>
+<p><strong>In practice:</strong> both rely on quirks of old BSD stacks and are unreliable today; Nmap's own guide warns the window scan cannot always be trusted. In current Nmap <code>--ttl</code> only sets the TTL of the packets you <em>send</em>. There is no automatic TTL-based scan.</p>
+</div>
+<h3 class="tg-M" id="idle-ipid-header-scan">IDLE / IPID header scan <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>The idle scan finds open ports on a target <strong>without sending it a single packet from your own address</strong>. It bounces the scan off a third machine, the <strong>zombie</strong>.</p>
+<p>It relies on one fact. Every IP packet carries an identification number, the <strong>IP ID</strong>. Some systems increase it by exactly one for each packet they send. If the zombie is otherwise idle, any jump in its IP ID was caused by you.</p>
+<figure class="dg"><svg viewBox="0 0 660 360" width="660" role="img" aria-label="Idle scan, open port"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="b" x="18" y="22" width="124" height="28" rx="6"/><text x="80" y="41" text-anchor="middle" class="h">Scanner</text><rect class="b" x="268" y="22" width="124" height="28" rx="6"/><text x="330" y="41" text-anchor="middle" class="h">Zombie</text><rect class="b" x="518" y="22" width="124" height="28" rx="6"/><text x="580" y="41" text-anchor="middle" class="h">Target</text><line class="lf" x1="80" y1="50" x2="80" y2="346"/><line class="lf" x1="330" y1="50" x2="330" y2="346"/><line class="lf" x1="580" y1="50" x2="580" y2="346"/><line class="ln" x1="83" y1="80" x2="327" y2="80" marker-end="url(#a)"/><text x="205.0" y="73" text-anchor="middle" class="s">1. SYN/ACK probe</text><line class="ln" x1="327" y1="120" x2="83" y2="120" marker-end="url(#a)"/><text x="205.0" y="113" text-anchor="middle" class="s">RST, IP ID = 1000</text><line class="ln" x1="83" y1="160" x2="577" y2="160" marker-end="url(#a)"/><text x="330.0" y="153" text-anchor="middle" class="s">2. SYN, source address forged as Zombie</text><line class="ln" x1="577" y1="200" x2="333" y2="200" marker-end="url(#a)"/><text x="455.0" y="193" text-anchor="middle" class="s">3. SYN/ACK (port is open)</text><line class="ln" x1="333" y1="240" x2="577" y2="240" marker-end="url(#a)"/><text x="455.0" y="233" text-anchor="middle" class="s">RST, IP ID = 1001</text><line class="ln" x1="83" y1="280" x2="327" y2="280" marker-end="url(#a)"/><text x="205.0" y="273" text-anchor="middle" class="s">4. SYN/ACK probe</text><line class="ln" x1="327" y1="320" x2="83" y2="320" marker-end="url(#a)"/><text x="205.0" y="313" text-anchor="middle" class="s">RST, IP ID = 1002: rose by 2, so OPEN</text></svg><figcaption>Idle scan when the target port is open. The zombie sends one extra packet, so its IP ID rises by 2 between your two probes.</figcaption></figure>
+<figure class="dg"><svg viewBox="0 0 660 346" width="660" role="img" aria-label="Idle scan, closed port"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="b" x="18" y="22" width="124" height="28" rx="6"/><text x="80" y="41" text-anchor="middle" class="h">Scanner</text><rect class="b" x="268" y="22" width="124" height="28" rx="6"/><text x="330" y="41" text-anchor="middle" class="h">Zombie</text><rect class="b" x="518" y="22" width="124" height="28" rx="6"/><text x="580" y="41" text-anchor="middle" class="h">Target</text><line class="lf" x1="80" y1="50" x2="80" y2="332"/><line class="lf" x1="330" y1="50" x2="330" y2="332"/><line class="lf" x1="580" y1="50" x2="580" y2="332"/><line class="ln" x1="83" y1="80" x2="327" y2="80" marker-end="url(#a)"/><text x="205.0" y="73" text-anchor="middle" class="s">1. SYN/ACK probe</text><line class="ln" x1="327" y1="120" x2="83" y2="120" marker-end="url(#a)"/><text x="205.0" y="113" text-anchor="middle" class="s">RST, IP ID = 1000</text><line class="ln" x1="83" y1="160" x2="577" y2="160" marker-end="url(#a)"/><text x="330.0" y="153" text-anchor="middle" class="s">2. SYN, source address forged as Zombie</text><line class="ln" x1="577" y1="200" x2="333" y2="200" marker-end="url(#a)"/><text x="455.0" y="193" text-anchor="middle" class="s">3. RST (port is closed)</text><text x="330.0" y="240" text-anchor="middle" class="s">Zombie ignores an unexpected RST: IP ID unchanged</text><line class="ln" x1="83" y1="266" x2="327" y2="266" marker-end="url(#a)"/><text x="205.0" y="259" text-anchor="middle" class="s">4. SYN/ACK probe</text><line class="ln" x1="327" y1="306" x2="83" y2="306" marker-end="url(#a)"/><text x="205.0" y="299" text-anchor="middle" class="s">RST, IP ID = 1001: rose by 1, so CLOSED</text></svg><figcaption>Idle scan when the target port is closed. The zombie sends nothing extra, so its IP ID rises by only 1.</figcaption></figure>
+<p>The three steps:</p>
+<ol>
+<li>Send <strong>SYN/ACK</strong> to the zombie. It replies RST, revealing its IP ID.</li>
+<li>Send a <strong>SYN</strong> to the target with the <strong>zombie's address as the source</strong>.</li>
+<li>Probe the zombie again and compare.</li>
+</ol>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>IP ID change</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Increased by 2</td>
+<td>Port is <strong>open</strong></td>
+</tr>
+<tr>
+<td>Increased by 1</td>
+<td>Port is <strong>closed</strong> (Nmap says <code>closed|filtered</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>Zombie requirements:</strong> it must be idle, and it must assign IP IDs incrementally and globally.</li>
+<li><strong>What the target logs:</strong> the zombie's address, not yours.</li>
+<li><strong>Command:</strong> <code>nmap -Pn -sI zombie.example.lab target.example.lab</code></li>
+</ul>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>Count the zombie's packets. Open port: the zombie sends <strong>two</strong> (one RST to the target, one to you), so <strong>+2</strong>. Closed port: only the <strong>one</strong> to you, so <strong>+1</strong>.</p>
+</div>
+<h3 class="tg-M" id="the-whole-section-on-one-screen">The whole section on one screen <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Scan</th>
+<th M="M">Nmap</th>
+<th>Probe</th>
+<th>Open port replies</th>
+<th>Closed port replies</th>
+<th>Needs root</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Connect</td>
+<td><code>-sT</code></td>
+<td>Full handshake</td>
+<td>SYN/ACK</td>
+<td>RST</td>
+<td>No</td>
+</tr>
+<tr>
+<td>SYN / half-open</td>
+<td><code>-sS</code></td>
+<td>SYN</td>
+<td>SYN/ACK</td>
+<td>RST</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>FIN</td>
+<td><code>-sF</code></td>
+<td>FIN</td>
+<td>Nothing</td>
+<td>RST</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NULL</td>
+<td><code>-sN</code></td>
+<td>No flags</td>
+<td>Nothing</td>
+<td>RST</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Xmas</td>
+<td><code>-sX</code></td>
+<td>FIN+URG+PSH</td>
+<td>Nothing</td>
+<td>RST</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Maimon</td>
+<td><code>-sM</code></td>
+<td>FIN/ACK</td>
+<td>Nothing (BSD)</td>
+<td>RST</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>ACK</td>
+<td><code>-sA</code></td>
+<td>ACK</td>
+<td>RST (unfiltered)</td>
+<td>RST (unfiltered)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Window</td>
+<td><code>-sW</code></td>
+<td>ACK</td>
+<td>RST, window &gt; 0</td>
+<td>RST, window = 0</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Idle</td>
+<td><code>-sI</code></td>
+<td>Spoofed SYN via zombie</td>
+<td>Zombie IP ID +2</td>
+<td>Zombie IP ID +1</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition trap">
+<p class="admonition-title">Exam traps</p>
+<ul>
+<li>"Which scan completes the three-way handshake?" Only TCP connect.</li>
+<li>"Which scan needs no privileges?" Only TCP connect.</li>
+<li>The ACK scan never reports <code>open</code>. It reports <code>unfiltered</code> or <code>filtered</code>.</li>
+<li>In the idle scan the first probe to the zombie is <strong>SYN/ACK</strong>, not SYN.</li>
+</ul>
+</div>
+<div class="admonition cpent">
+<p class="admonition-title">CPENT depth: how professionals actually scan</p>
+<ul>
+<li><strong>Two-pass method.</strong> Pass one: a fast sweep of every port, <code>nmap -p- --min-rate 2000 -n -oA all &lt;host&gt;</code>. Pass two: <code>-sC -sV -O</code> against only the open ports. Much faster than <code>-A -p-</code>.</li>
+<li><strong>Firewall rule inference.</strong> Run SYN and ACK scans against the same ports. Filtered on SYN but unfiltered on ACK means a stateless filter. Filtered on both means stateful.</li>
+<li><strong>Through a pivot.</strong> Only full TCP connections pass a SOCKS proxy, so you are limited to <code>-sT -Pn</code>.</li>
+</ul>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Run a SYN scan and an ACK scan against the same host and compare the STATE columns.</p>
+<p><code>bash
+nmap -sS -p 21,80 10.77.0.20 ; nmap -sA -p 21,80 10.77.0.20</code></p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 4</p>
+<ul>
+<li>Three TCP families: open (connect), stealth (SYN, inverse flag, ACK probe), third-party (idle).</li>
+<li>Connect <code>-sT</code> completes the handshake and needs no root. SYN <code>-sS</code> sends RST instead of the last ACK.</li>
+<li>FIN, NULL, Xmas, Maimon: open = silence, closed = RST. Not effective against Windows.</li>
+<li>ACK <code>-sA</code> maps firewalls: RST = unfiltered. TTL below 64 or non-zero window = open.</li>
+<li>Idle <code>-sI</code>: zombie IP ID +2 = open, +1 = closed.</li>
+</ul>
+</div>
+<h2 class="tg-U" id="5-udp-sctp-ssdp-list-and-ipv6-scans">5. UDP, SCTP, SSDP, list and IPv6 scans <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h2>
+<h3 class="tg-M" id="udp-scan">UDP scan <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<figure class="dg"><svg viewBox="0 0 810 182" width="810" role="img" aria-label="udp scan: open versus closed port"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><text x="195.0" y="22" text-anchor="middle" class="h">Port open</text><rect class="b" x="18" y="44" width="124" height="28" rx="6"/><text x="80" y="63" text-anchor="middle" class="h">Scanner</text><rect class="b" x="248" y="44" width="124" height="28" rx="6"/><text x="310" y="63" text-anchor="middle" class="h">Target</text><line class="lf" x1="80" y1="72" x2="80" y2="168"/><line class="lf" x1="310" y1="72" x2="310" y2="168"/><line class="ln" x1="83" y1="102" x2="307" y2="102" marker-end="url(#a)"/><text x="195.0" y="95" text-anchor="middle" class="s">UDP datagram</text><line class="ln da" x1="310" y1="142" x2="167.4" y2="142"/><text x="159.4" y="147" text-anchor="middle" class="bad h">✕</text><text x="195.0" y="135" text-anchor="middle" class="s">UDP reply, or often nothing</text><line class="lf" x1="405" y1="6" x2="405" y2="176"/><text x="615.0" y="22" text-anchor="middle" class="h">Port closed</text><rect class="b" x="438" y="44" width="124" height="28" rx="6"/><text x="500" y="63" text-anchor="middle" class="h">Scanner</text><rect class="b" x="668" y="44" width="124" height="28" rx="6"/><text x="730" y="63" text-anchor="middle" class="h">Target</text><line class="lf" x1="500" y1="72" x2="500" y2="168"/><line class="lf" x1="730" y1="72" x2="730" y2="168"/><line class="ln" x1="503" y1="102" x2="727" y2="102" marker-end="url(#a)"/><text x="615.0" y="95" text-anchor="middle" class="s">UDP datagram</text><line class="ln" x1="727" y1="142" x2="503" y2="142" marker-end="url(#a)"/><text x="615.0" y="135" text-anchor="middle" class="s">ICMP type 3 code 3 (port unreachable)</text></svg><figcaption>UDP scan. Closed ports are loud; open ports are often silent.</figcaption></figure>
+<ul>
+<li><strong>Closed:</strong> ICMP port unreachable, type 3 code 3.</li>
+<li><strong>Open:</strong> a UDP reply, or very often nothing, reported as <code>open|filtered</code>.</li>
+<li><strong>Command:</strong> <code>nmap -sU</code>. It needs root.</li>
+</ul>
+<p>UDP scanning is slow because operating systems limit how many ICMP errors they send. Old Linux kernels allowed one per second, so a full scan of one host could take 18 hours. The courseware adds that Windows usually applies no such limit, so UDP scans of Windows hosts run quickly. <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></p>
+<p>A UDP scan reports ports only. Add <code>-sV</code> to send real protocol payloads, which turns many <code>open|filtered</code> results into <code>open</code>:</p>
+<pre><code class="language-bash">nmap -sU --top-ports 50 -sV 10.77.0.10
+</code></pre>
+<p>Do not skip UDP. DNS (53), SNMP (161), NTP (123), TFTP (69) and IKE (500) live there and are frequent weak points.</p>
+<p>There is an unprivileged variant, <strong>UDP <code>recvfrom()</code> and <code>write()</code> scanning</strong>. A normal user cannot read ICMP errors directly, but the operating system reports them indirectly: a second <code>write()</code> to a closed port fails, and <code>recvfrom()</code> returns "connection refused" instead of "try again". <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<h3 class="tg-M" id="sctp-init-and-cookie-echo-scans">SCTP INIT and COOKIE ECHO scans <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>SCTP</strong> is a third transport protocol, used in telephone signalling (SS7/SIGTRAN) and voice over IP. It opens with a <strong>four-way</strong> handshake: INIT, INIT-ACK, COOKIE-ECHO, COOKIE-ACK.</p>
+<figure class="dg"><svg viewBox="0 0 810 182" width="810" role="img" aria-label="sctp scan: open versus closed port"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><text x="195.0" y="22" text-anchor="middle" class="h">Port open</text><rect class="b" x="18" y="44" width="124" height="28" rx="6"/><text x="80" y="63" text-anchor="middle" class="h">Scanner</text><rect class="b" x="248" y="44" width="124" height="28" rx="6"/><text x="310" y="63" text-anchor="middle" class="h">Target</text><line class="lf" x1="80" y1="72" x2="80" y2="168"/><line class="lf" x1="310" y1="72" x2="310" y2="168"/><line class="ln" x1="83" y1="102" x2="307" y2="102" marker-end="url(#a)"/><text x="195.0" y="95" text-anchor="middle" class="s">INIT chunk</text><line class="ln" x1="307" y1="142" x2="83" y2="142" marker-end="url(#a)"/><text x="195.0" y="135" text-anchor="middle" class="s">INIT-ACK</text><line class="lf" x1="405" y1="6" x2="405" y2="176"/><text x="615.0" y="22" text-anchor="middle" class="h">Port closed</text><rect class="b" x="438" y="44" width="124" height="28" rx="6"/><text x="500" y="63" text-anchor="middle" class="h">Scanner</text><rect class="b" x="668" y="44" width="124" height="28" rx="6"/><text x="730" y="63" text-anchor="middle" class="h">Target</text><line class="lf" x1="500" y1="72" x2="500" y2="168"/><line class="lf" x1="730" y1="72" x2="730" y2="168"/><line class="ln" x1="503" y1="102" x2="727" y2="102" marker-end="url(#a)"/><text x="615.0" y="95" text-anchor="middle" class="s">INIT chunk</text><line class="ln" x1="727" y1="142" x2="503" y2="142" marker-end="url(#a)"/><text x="615.0" y="135" text-anchor="middle" class="s">ABORT</text></svg><figcaption>SCTP INIT scan, the SCTP equivalent of the SYN scan.</figcaption></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Scan</th>
+<th>Nmap</th>
+<th>Open</th>
+<th>Closed</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SCTP INIT</td>
+<td><code>-sY</code></td>
+<td>INIT-ACK</td>
+<td>ABORT</td>
+<td>Half-open, like SYN. Tells open, closed and filtered apart clearly</td>
+</tr>
+<tr>
+<td>SCTP COOKIE ECHO</td>
+<td><code>-sZ</code></td>
+<td>No reply</td>
+<td>ABORT</td>
+<td>Less conspicuous, but reports <code>open|filtered</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 class="tg-R" id="ssdp-scan-and-list-scan">SSDP scan and list scan <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h3>
+<ul>
+<li><strong>SSDP</strong> (Simple Service Discovery Protocol) is how Universal Plug and Play (UPnP) devices announce themselves. Querying it reveals routers, cameras and printers and whether their UPnP service is exposed to buffer overflow or denial-of-service attacks. The courseware demonstrates it with the UPnP SSDP <strong>M-SEARCH</strong> discovery tool. On the wire it is UDP port 1900 and the multicast address 239.255.255.250.</li>
+<li><strong>List scan</strong>, <code>nmap -sL</code>, sends nothing to the targets. It lists the addresses in a range and reverse-resolves their names, so every host shows as "not scanned". Use it as a sanity check on your target list.</li>
+</ul>
+<h3 class="tg-M" id="ipv6-scan">IPv6 scan <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>IPv6 addresses are <strong>128 bits</strong> long against IPv4's 32. A single standard subnet has 64 bits of host addresses, that is 2^64 of them. Sweeping a range is hopeless.</p>
+<p>So IPv6 scanning depends on <em>finding</em> addresses first: from network traffic, logs, email headers, DNS, or the "all hosts" link-local multicast address once you control one machine on the segment. Then scan as usual with <code>-6</code>:</p>
+<pre><code class="language-bash">nmap -6 -sS -p 22,80,443 fd00:77::20
+</code></pre>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> at one probe per second, sweeping a 2^64 subnet "would take about 5 billion years".</p>
+<p><strong>In practice:</strong> the arithmetic gives about 585 billion years. Either way: impossible. Networks often filter IPv4 carefully and forget IPv6, so a host can be closed on one and open on the other.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p><code>bash
+nmap -sL 10.77.0.0/29</code></p>
+<p>No packet reaches the targets. If the lab DNS server answers, you get hostnames for free.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 5</p>
+<ul>
+<li>UDP <code>-sU</code>: closed = ICMP type 3 code 3; open = reply or silence (<code>open|filtered</code>). Slow because of ICMP rate limits.</li>
+<li>SCTP has a four-way handshake. <code>-sY</code> INIT: INIT-ACK open, ABORT closed. <code>-sZ</code> COOKIE ECHO: silence open.</li>
+<li>SSDP finds UPnP devices; the M-SEARCH tool queries them.</li>
+<li><code>-sL</code> lists and resolves names without scanning.</li>
+<li>IPv6: 128-bit addresses, 2^64 per subnet, so harvest addresses, then use <code>-6</code>.</li>
+</ul>
+</div>
+<h2 class="tg-U" id="6-service-versions-and-faster-scans">6. Service versions and faster scans <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h2>
+<h3 class="tg-M" id="service-version-discovery">Service version discovery <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>A port number is only a hint. Version detection, <strong><code>-sV</code></strong>, connects to each open port, sends probes from Nmap's <code>nmap-service-probes</code> database and matches the replies to name the product and version.</p>
+<pre><code class="language-bash">nmap -sV 10.77.0.20                        # version detection
+nmap -sV --version-intensity 9 10.77.0.20  # try every probe (default is 7)
+nmap -sC -sV 10.77.0.20                    # add the default NSE scripts
+nmap -A 10.77.0.20                         # -sV, -sC, -O and traceroute together
+</code></pre>
+<p>Illustrative output:</p>
+<pre><code class="language-text">PORT   STATE SERVICE VERSION
+21/tcp open  ftp     vsftpd 2.3.4
+25/tcp open  smtp    Sendmail 8.14.4
+80/tcp open  http    Apache httpd 2.4.49 ((Unix))
+</code></pre>
+<p>Each version string is a lead for Module 5: an exact version tells you which known vulnerabilities to look up. Treat it as a claim, though. Administrators can change banners.</p>
+<h3 class="tg-M" id="nmap-scan-time-reduction">Nmap scan time reduction <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>The courseware names seven techniques. Know the list.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Omit non-critical tests</td>
+<td>Limit the ports; use <code>-sn</code> if you only need to know who is up; leave out <code>-sC</code>, <code>-sV</code>, <code>-O</code>, <code>--traceroute</code> and <code>-A</code>; switch DNS off with <code>-n</code></td>
+</tr>
+<tr>
+<td>Optimise timing parameters</td>
+<td>Use the <code>-T</code> templates</td>
+</tr>
+<tr>
+<td>Separate and optimise UDP scans</td>
+<td>UDP has different timing; run it apart from TCP</td>
+</tr>
+<tr>
+<td>Upgrade Nmap</td>
+<td>Newer versions are faster and fix bugs</td>
+</tr>
+<tr>
+<td>Execute concurrent Nmap instances</td>
+<td>Split the range and run several scans in parallel</td>
+</tr>
+<tr>
+<td>Scan from a favourable network location</td>
+<td>Scan from inside the local network when you can</td>
+</tr>
+<tr>
+<td>Increase available bandwidth and CPU time</td>
+<td>More of both shortens the scan</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Name</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-T0</code></td>
+<td>Paranoid</td>
+<td>One probe at a time, 5 minutes apart. For IDS evasion</td>
+</tr>
+<tr>
+<td><code>-T1</code></td>
+<td>Sneaky</td>
+<td>15 seconds between probes</td>
+</tr>
+<tr>
+<td><code>-T2</code></td>
+<td>Polite</td>
+<td>0.4 seconds between probes; spares fragile hosts</td>
+</tr>
+<tr>
+<td><code>-T3</code></td>
+<td>Normal</td>
+<td>The default</td>
+</tr>
+<tr>
+<td><code>-T4</code></td>
+<td>Aggressive</td>
+<td>For fast, reliable networks</td>
+</tr>
+<tr>
+<td><code>-T5</code></td>
+<td>Insane</td>
+<td>Sacrifices accuracy for speed</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>T0 to T5: <strong>P</strong>lease <strong>S</strong>top <strong>P</strong>ushing, <strong>N</strong>obody <strong>A</strong>cts <strong>I</strong>nsane: Paranoid, Sneaky, Polite, Normal, Aggressive, Insane.</p>
+</div>
+<h3 class="tg-M" id="port-and-output-options">Port and output options <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-p 22,80</code> / <code>-p 1-1024</code> / <code>-p-</code></td>
+<td>A list, a range, all 65,535 ports</td>
+</tr>
+<tr>
+<td><code>-F</code></td>
+<td>Fast: the 100 most common ports</td>
+</tr>
+<tr>
+<td><code>-iL file</code></td>
+<td>Read targets from a file</td>
+</tr>
+<tr>
+<td><code>-oN</code> / <code>-oX</code> / <code>-oG</code> / <code>-oA</code></td>
+<td>Output as Normal, XML, Greppable, or All three</td>
+</tr>
+<tr>
+<td><code>--open</code>, <code>--reason</code>, <code>-v</code></td>
+<td>Show only open ports; show why; be verbose</td>
+</tr>
+<tr>
+<td><code>-n</code></td>
+<td>No DNS resolution</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p><code>bash
+nmap -sV --version-light -p 21,25,80 10.77.0.20,30,40</code></p>
+<p>Three hosts, three ports, with the service version of whatever is open.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 6</p>
+<ul>
+<li><code>-sV</code> detects versions; <code>-sC</code> runs default scripts; <code>-A</code> is -sV, -sC, -O and traceroute.</li>
+<li>Seven ways to cut scan time: omit tests, tune timing, separate UDP, upgrade, run concurrently, scan from nearby, add bandwidth and CPU.</li>
+<li><code>-T0</code> Paranoid to <code>-T5</code> Insane; <code>-T3</code> is the default.</li>
+<li><code>-p-</code> all ports, <code>-F</code> top 100, <code>-iL</code> targets from a file, <code>-n</code> no DNS.</li>
+<li><code>-oN</code>, <code>-oX</code>, <code>-oG</code>, <code>-oA</code>: normal, XML, greppable, all.</li>
+</ul>
+</div>
+<h2 class="tg-U" id="7-os-discovery">7. OS discovery <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h2>
+<p>Knowing the operating system tells you which exploits and which privilege-escalation paths apply. The standards leave many small choices to each implementer, and every operating system chose slightly differently. <strong>Fingerprinting</strong> measures those choices.</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> the courseware treats <strong>banner grabbing</strong> and <strong>OS fingerprinting</strong> as the same thing: determining the operating system of a remote host.</p>
+<p><strong>In practice:</strong> working testers use "banner grabbing" for reading the text a <em>service</em> announces (<code>nc</code>, <code>curl -I</code>), and "OS fingerprinting" for analysing the TCP/IP stack. The exam uses the terms interchangeably.</p>
+</div>
+<h3 class="tg-M" id="active-and-passive">Active and passive <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>How it works</th>
+<th>Detectable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Active banner grabbing</td>
+<td>Send specially crafted packets to the host and compare the replies with a database</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Passive banner grabbing</td>
+<td>Never probe. Read error messages, <strong>sniff</strong> existing traffic, or infer from page extensions such as <code>.aspx</code> (IIS on Windows)</td>
+<td>No</td>
+</tr>
+</tbody>
+</table></div>
+<p>Passive fingerprinting of a sniffed packet looks at <strong>four fields</strong>: <strong>TTL</strong>, <strong>window size</strong>, the <strong>DF</strong> (don't fragment) bit and <strong>TOS</strong> (type of service).</p>
+<p>For the active method, the courseware lists Nmap's nine classic tests:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Probe</th>
+<th>Sent to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td R="R">1</td>
+<td>SYN + ECN-Echo</td>
+<td>Open TCP port</td>
+</tr>
+<tr>
+<td R="R">2</td>
+<td>No flags (NULL)</td>
+<td>Open TCP port</td>
+</tr>
+<tr>
+<td R="R">3</td>
+<td>URG, PSH, SYN, FIN</td>
+<td>Open TCP port</td>
+</tr>
+<tr>
+<td R="R">4</td>
+<td>ACK</td>
+<td>Open TCP port</td>
+</tr>
+<tr>
+<td R="R">5</td>
+<td>SYN</td>
+<td>Closed TCP port</td>
+</tr>
+<tr>
+<td R="R">6</td>
+<td>ACK</td>
+<td>Closed TCP port</td>
+</tr>
+<tr>
+<td R="R">7</td>
+<td>URG, PSH, FIN</td>
+<td>Closed TCP port</td>
+</tr>
+<tr>
+<td R="R">8, "PU"</td>
+<td>UDP datagram</td>
+<td>Closed UDP port, to draw an ICMP port unreachable</td>
+</tr>
+<tr>
+<td R="R">9, "TSeq"</td>
+<td>Six SYN packets</td>
+<td>Open TCP port, to sample sequence numbers</td>
+</tr>
+</tbody>
+</table></div>
+<p>This is why Nmap's OS detection needs <strong>at least one open and one closed port</strong>.</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> Nmap uses a series of <strong>nine tests</strong>.</p>
+<p><strong>In practice:</strong> that describes Nmap's first-generation engine. The current engine sends up to 16 probes. The principle is unchanged.</p>
+</div>
+<h3 class="tg-M" id="ttl-and-window-size">TTL and window size <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>The quickest manual clue is the <strong>TTL</strong> of a reply. It starts at a fixed value and drops by one at each router, so a reply arriving with TTL 61 most likely started at 64.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Operating system</th>
+<th>Initial TTL</th>
+<th>TCP window size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linux</td>
+<td>64</td>
+<td>5840</td>
+</tr>
+<tr>
+<td>FreeBSD</td>
+<td>64</td>
+<td>65535</td>
+</tr>
+<tr>
+<td>OpenBSD</td>
+<td>255</td>
+<td>16384</td>
+</tr>
+<tr>
+<td>Windows</td>
+<td>128</td>
+<td>65,535 bytes to 1 gigabyte</td>
+</tr>
+<tr>
+<td>Cisco routers</td>
+<td>255</td>
+<td>4128</td>
+</tr>
+<tr>
+<td>Solaris</td>
+<td>255</td>
+<td>8760</td>
+</tr>
+<tr>
+<td>AIX</td>
+<td>255</td>
+<td>16384</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> the table above, exactly as written.</p>
+<p><strong>In practice:</strong> it is a snapshot from the early 2000s. Current OpenBSD and Solaris start at 64, modern Linux advertises a far larger window, and windows scale dynamically. TTL still gives a dependable first guess: about 64 is Unix-like, about 128 is Windows, about 255 is network equipment.</p>
+</div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>TTL roughly doubles up the list: <strong>64</strong> Linux and BSD, <strong>128</strong> Windows, <strong>255</strong> Cisco and the old Unix giants.</p>
+</div>
+<h3 class="tg-M" id="the-tools">The tools <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wireshark</td>
+<td>Capture a reply and read the TTL and window size in the first TCP packet</td>
+</tr>
+<tr>
+<td>Nmap</td>
+<td><code>nmap -O &lt;target&gt;</code></td>
+</tr>
+<tr>
+<td>Unicornscan</td>
+<td><code>unicornscan &lt;target&gt;</code>; read the OS from the TTL it prints</td>
+</tr>
+<tr>
+<td>Nmap Scripting Engine</td>
+<td><code>nmap --script smb-os-discovery &lt;target&gt;</code> asks Windows file sharing directly. <code>-sC</code> runs the default scripts; <code>--script</code> names specific ones</td>
+</tr>
+<tr>
+<td>IPv6 fingerprinting</td>
+<td><code>nmap -6 -O &lt;target&gt;</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>IPv6 fingerprinting uses a separate detection engine and nearly 18 probes, in this order: sequence generation (S1 to S6), ICMPv6 echo (IE1, IE2), node information query (NI), neighbour solicitation (NS), UDP (U1), TCP explicit congestion notification (TECN), then TCP (T2 to T7). <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Guess the OS two ways and compare.</p>
+<p><code>bash
+ping -c 1 10.77.0.20 | grep ttl ; nmap -O --osscan-guess 10.77.0.20</code></p>
+<p>Lab hosts are Linux containers, so expect a TTL of 64.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 7</p>
+<ul>
+<li>Exam vocabulary: banner grabbing = OS fingerprinting. Active sends crafted packets; passive sniffs and reads.</li>
+<li>Passive looks at TTL, window size, DF bit and TOS.</li>
+<li>TTL: Linux and FreeBSD 64, Windows 128, Cisco, Solaris, AIX and (exam table) OpenBSD 255.</li>
+<li><code>nmap -O</code> needs one open and one closed port. <code>smb-os-discovery</code> asks Windows directly.</li>
+<li>Also Wireshark, Unicornscan and <code>nmap -6 -O</code>.</li>
+</ul>
+</div>
+<h2 class="tg-U" id="8-scanning-beyond-ids-and-firewall">8. Scanning beyond IDS and firewall <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h2>
+<p>A <strong>firewall</strong> decides which packets may pass. An <strong>intrusion detection system (IDS)</strong> watches traffic and raises alerts on patterns, such as one source touching a thousand ports in two seconds. Evasion attacks one of three things: the filter's rules, the detector's pattern matching, or the link between the scan and you.</p>
+<h3 class="tg-M" id="the-techniques_1">The techniques <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>Nmap or tool</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Packet fragmentation</td>
+<td><code>-f</code>, <code>--mtu</code></td>
+<td>Splits the probe into tiny IP fragments so the TCP header is spread over several packets</td>
+</tr>
+<tr>
+<td>Source routing</td>
+<td>IP options</td>
+<td>The sender lists the routers the packet must pass (loose or strict), steering it around a firewall</td>
+</tr>
+<tr>
+<td>Source port manipulation</td>
+<td><code>-g</code> or <code>--source-port</code></td>
+<td>Sends from a trusted-looking port such as 80 (HTTP), 53 (DNS) or 20 (FTP data)</td>
+</tr>
+<tr>
+<td>IP address decoy</td>
+<td><code>-D RND:10</code> or <code>-D a,b,ME,c</code></td>
+<td>Mixes your probes with identical ones from forged addresses</td>
+</tr>
+<tr>
+<td>IP address spoofing</td>
+<td><code>hping3 &lt;target&gt; -a &lt;fake IP&gt;</code></td>
+<td>Sends probes with a false source address</td>
+</tr>
+<tr>
+<td>MAC address spoofing</td>
+<td><code>--spoof-mac 0</code>, a vendor name, or a full MAC</td>
+<td>Fakes the hardware address to pass MAC filters</td>
+</tr>
+<tr>
+<td>Creating custom packets</td>
+<td>Colasoft Packet Builder, NetScanTools Pro</td>
+<td>Builds packets by hand so they match no signature</td>
+</tr>
+<tr>
+<td>Randomising host order</td>
+<td><code>--randomize-hosts</code></td>
+<td>Shuffles the target order</td>
+</tr>
+<tr>
+<td>Sending bad checksums</td>
+<td><code>--badsum</code></td>
+<td>Sends deliberately corrupt TCP, UDP or SCTP checksums</td>
+</tr>
+<tr>
+<td>Proxy servers and proxy chaining</td>
+<td>Proxy Switcher, CyberGhost VPN</td>
+<td>Routes the scan through intermediaries</td>
+</tr>
+<tr>
+<td>Anonymizers</td>
+<td>Whonix, Psiphon, TunnelBear, I2P</td>
+<td>Hides the origin and bypasses censorship</td>
+</tr>
+</tbody>
+</table></div>
+<h3 class="tg-U" id="the-details-the-exam-asks-about">The details the exam asks about <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h3>
+<p><strong>Fragmentation.</strong> The courseware calls its example <strong>SYN/FIN scanning using IP fragments</strong>: the TCP header is split over several fragments so that no single fragment shows a filter the full picture.</p>
+<figure class="dg"><svg viewBox="0 0 680 96" width="680" role="img" aria-label="A 20-byte TCP header split across three 8-byte fragments"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="b" x="10" y="14" width="110.0" height="50" rx="4"/><text x="65.0" y="36" text-anchor="middle" class="h">IP header</text><text x="65.0" y="54" text-anchor="middle" class="s">fragment 1</text><rect class="t" x="120.0" y="14" width="110.0" height="50" rx="4"/><text x="175.0" y="36" text-anchor="middle" class="h">TCP bytes 0-7</text><text x="175.0" y="54" text-anchor="middle" class="s">ports + sequence</text><rect class="b" x="230.0" y="14" width="110.0" height="50" rx="4"/><text x="285.0" y="36" text-anchor="middle" class="h">IP header</text><text x="285.0" y="54" text-anchor="middle" class="s">fragment 2</text><rect class="d" x="340.0" y="14" width="110.0" height="50" rx="4"/><text x="395.0" y="36" text-anchor="middle" class="h">TCP bytes 8-15</text><text x="395.0" y="54" text-anchor="middle" class="s">ack no. + FLAGS</text><rect class="b" x="450.0" y="14" width="110.0" height="50" rx="4"/><text x="505.0" y="36" text-anchor="middle" class="h">IP header</text><text x="505.0" y="54" text-anchor="middle" class="s">fragment 3</text><rect class="t" x="560.0" y="14" width="110.0" height="50" rx="4"/><text x="615.0" y="36" text-anchor="middle" class="h">TCP bytes 16-19</text><text x="615.0" y="54" text-anchor="middle" class="s">checksum, urgent</text><text x="340.0" y="84" text-anchor="middle" class="s">The ports travel in fragment 1 and the flags in fragment 2.</text></svg><figcaption>How -f splits a TCP header into 8-byte pieces. A filter that judges fragments one by one never sees ports and flags together.</figcaption></figure>
+<p><strong>Decoys.</strong> <code>-D RND:10</code> generates ten random decoy addresses. <code>ME</code> in a manual list fixes where your real address sits; without it Nmap picks a random position. Decoys fail if the defender traces router paths or drops responses, and many decoys slow the scan.</p>
+<p><strong>Spoofing.</strong> With a spoofed source you <strong>cannot complete a three-way handshake</strong>, because the replies go to the forged address. That limits spoofing to blind techniques such as the idle scan and to denial of service.</p>
+<p><strong>MAC spoofing</strong> has three forms: <code>--spoof-mac 0</code> for a random address, <code>--spoof-mac Dell</code> for a vendor's prefix, and <code>--spoof-mac 00:11:22:33:44:55</code> for an exact one.</p>
+<p><strong>Colasoft Packet Builder</strong> has three views: <strong>Packet List</strong>, <strong>Decode Editor</strong> and <strong>Hex Editor</strong>. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<p><strong>Randomising</strong> shuffles hosts in groups of up to <strong>16384</strong>. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<p><strong>Bad checksums.</strong> A real host drops a packet with a bad checksum. If you get a <strong>reply</strong>, it came from a firewall or IDS that did not bother to verify it.</p>
+<p><strong>Proxy chaining.</strong> Each proxy strips identifying information and passes the request on. The more proxies, the greater the anonymity and the slower the connection. Other proxy tools to recognise: Burp Suite, Tor, Hotspot Shield, Proxifier, IPRoyal. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<p><strong>Anonymizers</strong> come in two types. A <strong>networked</strong> anonymizer relays you through several computers: hard to trace, but every hop is a risk to confidentiality. A <strong>single-point</strong> anonymizer relays you through one site: simpler, but weaker against traffic analysis. <strong>Censorship circumvention tools</strong>: AstrillVPN and Tails (a live operating system run from a USB stick that leaves no trace).</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> fragmentation works because most IDS skip fragmented packets during port scans to save processing.</p>
+<p><strong>In practice:</strong> current firewalls and intrusion detection systems reassemble fragments before judging them, and source routing is disabled almost everywhere. These techniques survive in exam questions and against old or badly configured equipment.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Watch fragmentation and a decoy scan happen. <code>--packet-trace</code> prints every packet sent.</p>
+<p><code>bash
+nmap -sS -f -D RND:3 -p 80 --packet-trace 10.77.0.20</code></p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 8</p>
+<ul>
+<li>Fragment with <code>-f</code>; change source port with <code>-g</code>; decoy with <code>-D</code>; spoof MAC with <code>--spoof-mac</code>.</li>
+<li>Spoofed source means no completed handshake: replies go elsewhere.</li>
+<li><code>--badsum</code>: a reply reveals a firewall or IDS that skipped checksum verification.</li>
+<li>Proxies and proxy chains hide the origin. Anonymizers are networked or single-point.</li>
+<li>Tools: Colasoft Packet Builder, Proxy Switcher, CyberGhost VPN, Whonix, AstrillVPN, Tails.</li>
+</ul>
+</div>
+<h2 class="tg-M" id="9-countermeasures">9. Countermeasures <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h2>
+<p>This is the defender's half of the module, and the exam weights it. A penetration-test report is judged on this section: finding open ports is easy; recommending the right fix is the value.</p>
+<h3 class="tg-M" id="against-ping-sweeps">Against ping sweeps <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<ul>
+<li>Configure firewalls to block incoming ICMP echo requests from unknown sources.</li>
+<li>Use an IDS or IPS such as <strong>Snort</strong> to detect and prevent sweeps.</li>
+<li><strong>Terminate the connection with any host sending more than 10 ICMP echo requests.</strong></li>
+<li>Use a DMZ and allow only ICMP <strong>echo reply, host unreachable and time exceeded</strong> in it.</li>
+<li>Limit ICMP with access-control lists; rate-limit ICMP packets.</li>
+<li>Segment the network, and hide internal addresses behind private ranges and NAT.</li>
+</ul>
+<h3 class="tg-M" id="against-port-scanning">Against port scanning <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<ul>
+<li>Configure firewall and IDS rules to detect and block probes. The firewall should inspect packet <strong>data</strong>, not only the TCP header.</li>
+<li>Run port scanners against your own hosts to check that the firewall detects them.</li>
+<li>Keep router, IDS and firewall firmware up to date.</li>
+<li>Keep as few ports open as possible. <strong>Filter ports 135-159, 256-258, 389, 445, 1080, 1745 and 3268.</strong></li>
+<li>Block inbound ICMP message types and <strong>all outbound ICMP type 3 unreachable messages</strong> at border routers.</li>
+<li>Block source routing, and make sure filters cannot be bypassed by a chosen source port.</li>
+<li>Configure anti-scanning and anti-spoofing rules; use TCP wrappers to limit access by domain or address.</li>
+<li>Use proxy servers to block fragmented or malformed packets.</li>
+<li>Divert scans to empty hosts or <strong>honeypots</strong>. Hide open ports with <strong>port knocking</strong>.</li>
+<li>Use an IPS to blacklist scanning addresses; use NAT, egress filtering and VLANs.</li>
+</ul>
+<h3 class="tg-M" id="against-banner-grabbing">Against banner grabbing <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>Disable or change the banner.</strong></p>
+<ul>
+<li>Display false banners; turn off unnecessary services; use server masking tools.</li>
+<li>Apache: use <code>mod_headers</code> to rewrite the Server header; set <strong><code>ServerSignature Off</code></strong>; change <strong><code>ServerTokens</code></strong> from <code>Full</code> to <strong><code>Prod</code></strong> in <code>httpd.conf</code>.</li>
+<li>IIS: set <strong><code>RemoveServerHeader</code></strong> from 0 to <strong>1</strong> in <code>UrlScan.ini</code>; set <code>AlternateServerName</code> to a false value; remove <code>X-Powered-By</code> through <code>customHeaders</code> in <code>web.config</code>.</li>
+<li>Disable unneeded HTTP methods such as CONNECT, PUT, DELETE and OPTIONS.</li>
+</ul>
+<p><strong>Hide file extensions.</strong> Replace mappings such as <code>.asp</code> with <code>.htm</code>; Apache users can use <strong><code>mod_negotiation</code></strong>. Best of all, use no extensions.</p>
+<p><strong>Other measures.</strong> Filter access to ports that leak banners, monitor with IDS/IPS, and replace clear-text protocols (HTTP, FTP, Telnet) with encrypted ones (HTTPS, SFTP, SSH).</p>
+<h3 class="tg-M" id="ip-spoofing-detection">IP spoofing detection <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>How it works</th>
+<th>Limit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Direct TTL probes</td>
+<td>Send a probe to the claimed source and compare the reply's TTL with the suspect packet's. Different TTL: spoofed</td>
+<td>Works when the attacker is on a <strong>different subnet</strong> from the victim</td>
+</tr>
+<tr>
+<td>IP identification number</td>
+<td>Probe the claimed source and compare IP IDs. The reply's IP ID should be close to, and slightly above, the suspect packet's</td>
+<td>Works <strong>even on the same subnet</strong></td>
+</tr>
+<tr>
+<td>TCP flow control method</td>
+<td>A spoofer never sees your replies, so cannot obey your window size. Send SYN/ACK with the <strong>window set to zero</strong>: an ACK that arrives <strong>with data</strong> is spoofed</td>
+<td>Applied during the handshake</td>
+</tr>
+</tbody>
+</table></div>
+<figure class="dg"><svg viewBox="0 0 660 226" width="660" role="img" aria-label="Detecting a spoofed source address by probing the claimed sender"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="b" x="18" y="22" width="124" height="28" rx="6"/><text x="80" y="41" text-anchor="middle" class="h">Attacker</text><rect class="b" x="268" y="22" width="124" height="28" rx="6"/><text x="330" y="41" text-anchor="middle" class="h">Real Host A</text><rect class="b" x="518" y="22" width="124" height="28" rx="6"/><text x="580" y="41" text-anchor="middle" class="h">Defender</text><line class="lf" x1="80" y1="50" x2="80" y2="212"/><line class="lf" x1="330" y1="50" x2="330" y2="212"/><line class="lf" x1="580" y1="50" x2="580" y2="212"/><line class="ln" x1="83" y1="80" x2="577" y2="80" marker-end="url(#a)"/><text x="330.0" y="73" text-anchor="middle" class="s">Packet claiming to come from Host A</text><line class="ln" x1="577" y1="120" x2="333" y2="120" marker-end="url(#a)"/><text x="455.0" y="113" text-anchor="middle" class="s">Probe sent to the real Host A</text><line class="ln" x1="333" y1="160" x2="577" y2="160" marker-end="url(#a)"/><text x="455.0" y="153" text-anchor="middle" class="s">Reply shows A&#x27;s real TTL and IP ID</text><text x="330.0" y="200" text-anchor="middle" class="s">Values do not match the suspect packet: the source was forged</text></svg><figcaption>Direct TTL probe: ask the host the packet claims to be from, and compare.</figcaption></figure>
+<p>Common initial TTL values: <strong>64 and 128 for TCP and UDP; 128 and 255 for ICMP.</strong></p>
+<h3 class="tg-M" id="ip-spoofing-countermeasures">IP spoofing countermeasures <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<ul>
+<li><strong>Avoid trust relationships:</strong> do not authenticate by IP address alone.</li>
+<li><strong>Use firewalls and filtering</strong>, with ACLs, on both incoming and outgoing packets.</li>
+<li><strong>Use random initial sequence numbers</strong>, so the next sequence number cannot be predicted.</li>
+<li><strong>Ingress filtering:</strong> drop incoming packets whose source address is outside the expected range.</li>
+<li><strong>Egress filtering:</strong> drop outgoing packets whose source address is not your own.</li>
+<li><strong>Use encryption</strong>, such as IPsec. The courseware calls this the best prevention.</li>
+<li><strong>SYN flooding countermeasures</strong> also help.</li>
+<li>Others: migrate to IPv6, digital certificates, a VPN on public networks, DHCP static address tables on switches.</li>
+</ul>
+<h3 class="tg-R" id="scanning-detection-and-prevention-tools">Scanning detection and prevention tools <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h3>
+<p><strong>ExtraHop</strong> is the featured tool: it discovers and classifies every device and analyses all traffic in real time, including encrypted traffic. Recognise also Splunk Enterprise Security, Scanlogd, Vectra Detect, IBM Security QRadar XDR and Cynet 360 AutoXDR.</p>
+<div class="admonition hospital">
+<p class="admonition-title">Worked example: scanning a hospital network safely</p>
+<p>A hospital asks you to assess the segment that carries its lab analysers, an imaging archive and a patient portal. The clinical risk is not your report. It is that an aggressive scan can freeze an old imaging console or an analyser mid-run.</p>
+<ol>
+<li><strong>Agree the window and method with biomedical engineering first.</strong> Which devices are fragile, which hours are safe, and who stands beside the device during the test.</li>
+<li><strong>Discover gently.</strong> <code>nmap -sn -PE -PS443 -T2 10.20.0.0/24</code>, excluding any range the biomedical team flags, written to <code>live.txt</code>.</li>
+<li><strong>Port scan conservatively.</strong> <code>nmap -sS -T2 --max-retries 1 -iL live.txt -oA hosp</code>. No <code>-T4</code> or <code>-T5</code>, and no version detection yet: <code>-sV</code> sends unexpected data that old devices handle badly.</li>
+<li><strong>Add <code>-sV</code> only to hosts cleared for it.</strong> Expect clinical protocols: DICOM (104, 11112) on the imaging archive and HL7 (often 2575) on the lab interface.</li>
+<li><strong>Report in clinical terms.</strong> "The lab interface on 10.20.0.45 accepts unauthenticated connections" means "anyone on this network could read or alter patient results". That sentence, not the Nmap output, is the deliverable.</li>
+</ol>
+<p>The same discipline applies in a factory, a power station or a warehouse full of barcode scanners: fragile, old devices first, speed last.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Be the defender. The lab web server announces its version. Read the banner you would have to hide:</p>
+<p><code>bash
+curl -sI http://10.77.0.20/ | grep -i -E 'server|powered'</code></p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 9</p>
+<ul>
+<li>Ping sweeps: block ICMP echo, cut off hosts sending more than 10 echo requests, allow only echo reply, host unreachable and time exceeded in the DMZ.</li>
+<li>Port scans: fewest open ports; filter 135-159, 256-258, 389, 445, 1080, 1745, 3268; honeypots and port knocking.</li>
+<li>Banners: <code>ServerSignature Off</code>, <code>ServerTokens Prod</code>, <code>RemoveServerHeader 1</code>, hide file extensions.</li>
+<li>Spoofing detection: direct TTL probes, IP ID number, TCP flow control (zero window).</li>
+<li>Spoofing prevention: no IP-based trust, ingress and egress filtering, random sequence numbers, encryption.</li>
+</ul>
+</div>
+<h2 class="tg-D" id="10-scanning-with-an-ai-assistant">10. Scanning with an AI assistant <span class="tag tag-D" title="A hands-on skill for the practical exams. Run it at a keyboard.">DO</span></h2>
+<p>The v13 syllabus adds AI-assisted steps to every stage: hping3 scans, host discovery, port scanning, version discovery, OS discovery, and a custom script that chains them. In each, you describe the task in plain language and the assistant returns a command. The exam may show a prompt and ask which command it produces, so read commands fluently.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>You ask for</th>
+<th>A correct command looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td D="D">Live hosts in a range, addresses only, saved to a file</td>
+<td><code>nmap -sn 10.10.1.0/24 -oG - | awk '/Up$/{print $2}' &gt; scan1.txt</code></td>
+</tr>
+<tr>
+<td D="D">A fast scan of the hosts in that file, quiet output, saved</td>
+<td><code>nmap -T4 -iL scan1.txt -oN scan2.txt -v0</code></td>
+</tr>
+<tr>
+<td D="D">An ICMP echo ping sweep</td>
+<td><code>nmap -sn -PE 10.10.1.0/24</code></td>
+</tr>
+<tr>
+<td D="D">An Xmas scan</td>
+<td><code>nmap -sX 10.10.1.11</code></td>
+</tr>
+<tr>
+<td D="D">Open ports with service versions for a list of hosts</td>
+<td><code>nmap -sV -iL scan1.txt --open</code></td>
+</tr>
+<tr>
+<td D="D">A TCP port scan with Metasploit</td>
+<td><code>msfconsole -q -x "use auxiliary/scanner/portscan/tcp; set RHOSTS 10.10.1.22; run; exit"</code></td>
+</tr>
+<tr>
+<td D="D">The OS from the TTL</td>
+<td><code>ping -c 1 10.10.1.11</code>, then read the <code>ttl=</code> value</td>
+</tr>
+<tr>
+<td D="D">Ten ICMP packets with hping3</td>
+<td><code>hping3 --icmp --count 10 10.10.1.11</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>A three-line script covers the whole chapter: discover, save the live hosts, version-scan them.</p>
+<pre><code class="language-bash">#!/bin/bash
+nmap -sn 10.10.1.0/24 -oG - | awk '/Up$/{print $2}' &gt; live_hosts.txt &amp;&amp;
+nmap -iL live_hosts.txt -sV -oA scan_results &amp;&amp;
+cat scan_results.nmap
+</code></pre>
+<p><strong>A safe pattern for real work:</strong></p>
+<ol>
+<li><strong>Describe the goal and the constraints.</strong> "Find live hosts on 10.77.0.0/24 without ICMP and save all output formats" gets a better command than "scan this".</li>
+<li><strong>Ask it to explain output.</strong> Paste a confusing result and ask why a port is <code>open|filtered</code>.</li>
+<li><strong>Verify before you run.</strong> Assistants invent plausible switches. Check each one against <code>man nmap</code>. Case matters: <code>-sV</code> is version detection, <code>-sv</code> is an error; <code>-oG</code> is output, <code>-OG</code> is not.</li>
+</ol>
+<p>A model drafting a command is not authorisation to scan. The permission rule does not change.</p>
+<div class="admonition coasp">
+<p class="admonition-title">COASP link: scanning AI systems</p>
+<p>AI infrastructure is ordinary network software on unusual default ports, often deployed by data teams without authentication. Add these to your port list when the target runs machine-learning workloads, and confirm each against the product's documentation.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Often found there</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11434</td>
+<td>Ollama model server</td>
+</tr>
+<tr>
+<td>8888</td>
+<td>Jupyter notebook server</td>
+</tr>
+<tr>
+<td>5000</td>
+<td>MLflow tracking server</td>
+</tr>
+<tr>
+<td>7860, 8501</td>
+<td>Gradio and Streamlit demo apps</td>
+</tr>
+<tr>
+<td>8000-8002</td>
+<td>NVIDIA Triton inference server</td>
+</tr>
+<tr>
+<td>8080, 8081</td>
+<td>TorchServe inference and management</td>
+</tr>
+<tr>
+<td>8265</td>
+<td>Ray dashboard</td>
+</tr>
+<tr>
+<td>6333, 19530</td>
+<td>Qdrant and Milvus vector databases</td>
+</tr>
+</tbody>
+</table></div>
+<p>The method is this chapter's method: discover, port scan, version-detect, read the HTTP response. An open model API that lists its models to anyone is the AI-era anonymous FTP server. In COASP the AI also becomes the <em>target</em>: the habit of reading a service's replies carefully becomes reading a model's responses for leaked instructions.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Ask any AI assistant for "an Nmap command that scans all TCP ports of 10.77.0.45 quickly and saves every output format". Check each switch in <code>man nmap</code>, then run it in the lab.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 10</p>
+<ul>
+<li>The assistant drafts; you verify and you own the decision to run.</li>
+<li>Discovery to file: <code>nmap -sn &lt;range&gt; -oG - | awk '/Up$/{print $2}'</code>.</li>
+<li><code>-iL</code> reads that file; <code>-sV --open</code> lists services on open ports.</li>
+<li>Metasploit one-liner: <code>msfconsole -q -x "use auxiliary/scanner/portscan/tcp; ..."</code>.</li>
+<li>Check every generated switch; case matters.</li>
+</ul>
+</div>
+<h2 class="tg-D" id="11-lab-walk-through">11. Lab walk-through <span class="tag tag-D" title="A hands-on skill for the practical exams. Run it at a keyboard.">DO</span></h2>
+<p>Run this in course lab L01. The generic skin (Kestrel Freight, a logistics firm) and the healthcare skin (Aarogya Demo Hospital) behave identically here. Work from the attacker container. Allow about 90 minutes including notes.</p>
+<pre><code class="language-bash"># 1. Host discovery: who is alive on the lab network?
+nmap -sn 10.77.0.0/24
+
+# 2. Default port scan of what you found. One host shows nothing. Why?
+nmap 10.77.0.10,20,30,40,45
+
+# 3. Full TCP range. The quiet host has a service on a high port.
+nmap -p- --min-rate 1000 -oA ports 10.77.0.10,20,30,40,45
+
+# 4. Service and OS detail against only the open ports
+nmap -sC -sV -O -p &lt;the ports you found&gt; 10.77.0.20
+
+# 5. UDP on the name server
+nmap -sU -p 53,161 -sV 10.77.0.10
+
+# 6. Banner-grab the legacy service by hand
+nc 10.77.0.45 &lt;its port&gt;
+</code></pre>
+<p>Answer these in your log as you go:</p>
+<ol>
+<li>Which discovery probe did Nmap use in step 1, and why that one? (You are on the same segment.)</li>
+<li>Why did step 2 miss the legacy host's service?</li>
+<li>What do the version strings in step 4 tell you to look up next?</li>
+<li>Write one countermeasure from section 9 for each thing you found.</li>
+</ol>
+<p>Write every command and its result in a log. That log is your evidence in a real engagement and your revision material before the exam.</p>
+<h2 id="quiz">Quiz</h2>
+<p>Twelve questions. The options are shuffled every time you load the page.</p>
+<div class="quiz">
+<div class="q"><p><b>1.</b> A SYN scan receives SYN/ACK from a port. What is the port&#x27;s state? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">Closed</button>
+<button type="button" data-ok>Open</button>
+<button type="button">Filtered</button>
+<button type="button">Unfiltered</button>
+<p class="why" hidden>SYN/ACK is the open-port reply in the handshake. The scanner then sends RST instead of completing it.</p></div>
+<div class="q"><p><b>2.</b> Which flags does an Xmas scan set? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">SYN, ACK and RST</button>
+<button type="button" data-ok>FIN, URG and PSH</button>
+<button type="button">FIN and ACK</button>
+<button type="button">No flags at all</button>
+<p class="why" hidden>Xmas lights up FIN, URG and PSH. FIN/ACK is the Maimon scan; no flags is the NULL scan.</p></div>
+<div class="q"><p><b>3.</b> An ACK probe gets a RST back. What have you learned? <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></p>
+<button type="button">The port is open</button>
+<button type="button">The port is closed</button>
+<button type="button" data-ok>The port is not filtered</button>
+<button type="button">The service version</button>
+<p class="why" hidden>The ACK scan maps filtering, not port state. A RST means no stateful firewall blocked the probe.</p></div>
+<div class="q"><p><b>4.</b> In an idle scan the zombie&#x27;s IP ID rises by 2 between your probes. The target port is? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">Closed</button>
+<button type="button">Filtered</button>
+<button type="button" data-ok>Open</button>
+<button type="button">Unfiltered</button>
+<p class="why" hidden>The zombie sent one extra packet, a RST answering the target&#x27;s SYN/ACK, so the port is open. A rise of 1 means closed.</p></div>
+<div class="q"><p><b>5.</b> Which reply marks a closed UDP port? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">A UDP datagram</button>
+<button type="button" data-ok>ICMP type 3 code 3, port unreachable</button>
+<button type="button">RST/ACK</button>
+<button type="button">No reply</button>
+<p class="why" hidden>Closed UDP ports answer with ICMP port unreachable. Open ones often stay silent.</p></div>
+<div class="q"><p><b>6.</b> Which option makes Nmap skip the port scan and only report which hosts are up? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button"><code>-Pn</code></button>
+<button type="button" data-ok><code>-sn</code></button>
+<button type="button"><code>-sL</code></button>
+<button type="button"><code>-n</code></button>
+<p class="why" hidden>-sn means no port scan. -Pn skips the ping, -sL only lists targets, -n turns off DNS resolution.</p></div>
+<div class="q"><p><b>7.</b> A reply arrives with TTL 126. Using the exam table, the most likely system is? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">Linux</button>
+<button type="button" data-ok>Windows</button>
+<button type="button">A Cisco router</button>
+<button type="button">Solaris</button>
+<p class="why" hidden>Windows starts at 128. Two router hops bring it to 126.</p></div>
+<div class="q"><p><b>8.</b> You FIN-scan a Windows server and learn nothing useful. Why? <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></p>
+<button type="button">A firewall always blocks FIN packets</button>
+<button type="button" data-ok>Windows does not follow the RFC 793 behaviour the scan relies on</button>
+<button type="button">FIN scans need a zombie host</button>
+<button type="button">Windows has no TCP ports</button>
+<p class="why" hidden>Inverse scans rely on open ports staying silent. Windows resets from every port, so the scan cannot separate open from closed.</p></div>
+<div class="q"><p><b>9.</b> With <code>--badsum</code>, you receive a reply to a probe. What does that suggest? <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></p>
+<button type="button">The target host is misconfigured and vulnerable</button>
+<button type="button" data-ok>A firewall or IDS answered without verifying the checksum</button>
+<button type="button">The port is open</button>
+<button type="button">The decoys worked</button>
+<p class="why" hidden>A real host discards a packet with a bad checksum. A reply came from a device in the path that did not check.</p></div>
+<div class="q"><p><b>10.</b> Which spoofing detection technique works even when attacker and victim share a subnet? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">Direct TTL probes</button>
+<button type="button" data-ok>IP identification number</button>
+<button type="button">Ingress filtering</button>
+<button type="button">Port knocking</button>
+<p class="why" hidden>TTL comparison needs the attacker to be a different number of hops away. The IP ID method does not.</p></div>
+<div class="q"><p><b>11.</b> Which Apache setting stops the server version appearing in the banner? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button"><code>RemoveServerHeader 1</code></button>
+<button type="button" data-ok><code>ServerTokens Prod</code></button>
+<button type="button"><code>mod_negotiation On</code></button>
+<button type="button"><code>AlternateServerName</code></button>
+<p class="why" hidden>ServerTokens Prod reduces the header to the product name. RemoveServerHeader and AlternateServerName are IIS UrlScan settings.</p></div>
+<div class="q"><p><b>12.</b> On a hospital engagement, what comes before any scan? <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></p>
+<button type="button">Running <code>-T5</code> to finish quickly</button>
+<button type="button" data-ok>Agreeing timing and fragile-device exclusions with biomedical engineering</button>
+<button type="button">Scanning UDP only</button>
+<button type="button">Asking an AI assistant for permission</button>
+<p class="why" hidden>Aggressive scans can crash old medical devices, so the plan is agreed with the people responsible for them first.</p></div>
+<p class="score" aria-live="polite"></p></div>
+<h2 id="exam-cheat-sheet">Exam cheat sheet</h2>
+<p>Only the MEMORISE items from this chapter, collected automatically. If a fact is not here, you need to understand or recognise it, not recite it.</p>
+<div class="cheat">
+<p><strong>Scanning concepts</strong></p>
+<ul>
+<li>Three kinds of scanning: port scanning lists open ports and services; network scanning lists live hosts; vulnerability scanning lists known weaknesses</li>
+<li>Port ranges: 0-1023 well-known; 1024-49151 registered; 49152-65535 dynamic or private</li>
+<li>Six TCP flags (exam: 1 bit each, 6 bits): SYN opens, ACK acknowledges, FIN closes politely, RST aborts, PSH delivers now, URG goes first. SYN, ACK, FIN, RST manage the connection; PSH and URG instruct about data</li>
+<li>Handshake: SYN, SYN/ACK, ACK. Close: FIN then ACK from each side, or a single RST</li>
+<li>ICMP types: echo 8/0; timestamp 13/14; address mask 17/18. Type 3 code 3 = port unreachable (closed UDP port). Type 3 codes 1, 2, 3, 9, 10, 13 = filtered. A ping is 64 bytes: 56 data + 8 header</li>
+<li>Six Nmap port states: open; closed; filtered; unfiltered (ACK scan got RST); open|filtered (no reply to UDP, FIN, NULL, Xmas, Maimon); closed|filtered (idle scan only)</li>
+</ul>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Service</th>
+<th>Port</th>
+<th>Service</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>20, 21 TCP</td>
+<td>FTP data, FTP control</td>
+<td>137, 138, 139</td>
+<td>NetBIOS name, datagram, session</td>
+</tr>
+<tr>
+<td>22 TCP</td>
+<td>SSH</td>
+<td>143 TCP</td>
+<td>IMAP</td>
+</tr>
+<tr>
+<td>23 TCP</td>
+<td>Telnet</td>
+<td>161, 162 UDP</td>
+<td>SNMP, SNMP trap</td>
+</tr>
+<tr>
+<td>25 TCP</td>
+<td>SMTP (mail)</td>
+<td>389</td>
+<td>LDAP</td>
+</tr>
+<tr>
+<td>53 TCP and UDP</td>
+<td>DNS</td>
+<td>443 TCP</td>
+<td>HTTPS</td>
+</tr>
+<tr>
+<td>67, 68 UDP</td>
+<td>DHCP server, client</td>
+<td>445 TCP</td>
+<td>SMB (Microsoft-DS)</td>
+</tr>
+<tr>
+<td>69 UDP</td>
+<td>TFTP</td>
+<td>500 UDP</td>
+<td>ISAKMP / IKE (VPN)</td>
+</tr>
+<tr>
+<td>80 TCP</td>
+<td>HTTP</td>
+<td>514 UDP</td>
+<td>Syslog</td>
+</tr>
+<tr>
+<td>88</td>
+<td>Kerberos</td>
+<td>1433, 1434</td>
+<td>Microsoft SQL Server, monitor</td>
+</tr>
+<tr>
+<td>110 TCP</td>
+<td>POP3</td>
+<td>2049</td>
+<td>NFS</td>
+</tr>
+<tr>
+<td>111</td>
+<td>RPC portmapper</td>
+<td>3306 TCP</td>
+<td>MySQL</td>
+</tr>
+<tr>
+<td>123 UDP</td>
+<td>NTP</td>
+<td>3389 TCP</td>
+<td>Remote Desktop (RDP)</td>
+</tr>
+<tr>
+<td>135 TCP</td>
+<td>Microsoft RPC</td>
+<td>5060, 5061</td>
+<td>SIP (voice calls)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>The scanning toolbox</strong></p>
+<ul>
+<li>hping3 modes: -1 ICMP, -2 UDP, -8 scan, -9 listen. Flags: -S -A -F -P -U -R. <code>-a</code> spoofs the source; <code>-Q</code> collects sequence numbers; <code>--flood</code> floods</li>
+</ul>
+<p><strong>Host discovery</strong></p>
+<ul>
+<li>Host discovery: ARP <code>-PR</code> (local segment only); UDP <code>-PU</code>; ICMP echo <code>-PE</code> (8/0), timestamp <code>-PP</code> (13/14), address mask <code>-PM</code> (17/18); TCP SYN <code>-PS</code>; TCP ACK <code>-PA</code>; IP protocol <code>-PO</code>. Any reply, even RST, means the host is up</li>
+<li><code>-sn</code> = no port scan (old <code>-sP</code>). <code>-Pn</code> = no ping (old <code>-P0</code>, <code>-PN</code>). <code>-sL</code> = list targets only. Defaults: <code>-PS</code> and <code>-PA</code> port 80; <code>-PU</code> port 40125; <code>-PO</code> protocols 1, 2, 4</li>
+</ul>
+<p><strong>TCP port scans</strong></p>
+<ul>
+<li>Scan families: open = TCP connect; stealth = half-open (SYN), inverse flag (FIN, NULL, Xmas, Maimon), ACK probe (TTL, window); third-party and spoofed = IDLE/IPID</li>
+<li>Inverse scans (FIN, NULL, Xmas, Maimon): open = no reply, closed = RST. Work on RFC 793-compliant UNIX and BSD stacks, not Windows. Need root. Xmas = FIN + URG + PSH</li>
+<li>ACK scan: RST = unfiltered (no stateful firewall); no reply = filtered. TTL-based: RST with TTL below 64 = open. Window-based (-sW): non-zero window = open</li>
+<li>Idle scan: probe the zombie with SYN/ACK, spoof a SYN to the target as the zombie, probe again. Zombie IP ID +2 = open, +1 = closed. Zombie must be idle with incremental, global IP IDs</li>
+</ul>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Scan</th>
+<th>Nmap</th>
+<th>Probe</th>
+<th>Open port replies</th>
+<th>Closed port replies</th>
+<th>Needs root</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Connect</td>
+<td><code>-sT</code></td>
+<td>Full handshake</td>
+<td>SYN/ACK</td>
+<td>RST</td>
+<td>No</td>
+</tr>
+<tr>
+<td>SYN / half-open</td>
+<td><code>-sS</code></td>
+<td>SYN</td>
+<td>SYN/ACK</td>
+<td>RST</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>FIN</td>
+<td><code>-sF</code></td>
+<td>FIN</td>
+<td>Nothing</td>
+<td>RST</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NULL</td>
+<td><code>-sN</code></td>
+<td>No flags</td>
+<td>Nothing</td>
+<td>RST</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Xmas</td>
+<td><code>-sX</code></td>
+<td>FIN+URG+PSH</td>
+<td>Nothing</td>
+<td>RST</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Maimon</td>
+<td><code>-sM</code></td>
+<td>FIN/ACK</td>
+<td>Nothing (BSD)</td>
+<td>RST</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>ACK</td>
+<td><code>-sA</code></td>
+<td>ACK</td>
+<td>RST (unfiltered)</td>
+<td>RST (unfiltered)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Window</td>
+<td><code>-sW</code></td>
+<td>ACK</td>
+<td>RST, window &gt; 0</td>
+<td>RST, window = 0</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Idle</td>
+<td><code>-sI</code></td>
+<td>Spoofed SYN via zombie</td>
+<td>Zombie IP ID +2</td>
+<td>Zombie IP ID +1</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>UDP, SCTP, SSDP, list and IPv6 scans</strong></p>
+<ul>
+<li>UDP scan (-sU, root): closed = ICMP type 3 code 3; open = UDP reply or silence (open|filtered). Slow because of ICMP rate limiting</li>
+<li>SCTP: four-way handshake (INIT, INIT-ACK, COOKIE-ECHO, COOKIE-ACK). INIT scan -sY: INIT-ACK = open, ABORT = closed. COOKIE ECHO scan -sZ: no reply = open|filtered, ABORT = closed</li>
+<li>IPv6: 128-bit addresses, 2^64 hosts per subnet, so sweeps are infeasible. Harvest addresses from traffic, logs and email headers, then scan with -6</li>
+</ul>
+<p><strong>Service versions and faster scans</strong></p>
+<ul>
+<li><code>-sV</code> version detection; <code>-sC</code> default scripts; <code>-O</code> OS detection; <code>-A</code> = -sV, -sC, -O and traceroute</li>
+<li>Seven scan-time reductions: omit non-critical tests; optimise timing; separate UDP scans; upgrade Nmap; run concurrent instances; scan from a favourable network location; increase bandwidth and CPU time</li>
+<li>Timing: T0 Paranoid (5 min apart), T1 Sneaky (15 s), T2 Polite (0.4 s), T3 Normal (default), T4 Aggressive, T5 Insane. Options: <code>-p-</code> all ports; <code>-F</code> top 100; <code>-iL</code> targets from file; <code>-n</code> no DNS; <code>-oN</code> normal, <code>-oX</code> XML, <code>-oG</code> greppable, <code>-oA</code> all</li>
+</ul>
+<p><strong>OS discovery</strong></p>
+<ul>
+<li>Banner grabbing = OS fingerprinting (exam). Active: send crafted packets, compare replies with a database. Passive: error messages, sniffing traffic, page extensions. Passive fields: TTL, window size, DF bit, TOS. Nmap -O needs one open and one closed port</li>
+<li>TTL / window (exam table): Linux 64 / 5840; FreeBSD 64 / 65535; OpenBSD 255 / 16384; Windows 128 / 65,535 bytes to 1 GB; Cisco routers 255 / 4128; Solaris 255 / 8760; AIX 255 / 16384</li>
+<li>OS discovery tools: Wireshark (read TTL and window), <code>nmap -O</code>, Unicornscan (TTL), NSE <code>--script smb-os-discovery</code>, IPv6 <code>nmap -6 -O</code></li>
+</ul>
+<p><strong>Scanning beyond IDS and firewall</strong></p>
+<ul>
+<li>Evasion: fragmentation <code>-f</code> / <code>--mtu</code>; source routing (loose or strict); source port <code>-g</code> / <code>--source-port</code>; decoys <code>-D RND:10</code> or <code>-D a,b,ME,c</code>; IP spoofing <code>hping3 -a</code>; MAC spoofing <code>--spoof-mac</code> 0, vendor or MAC; custom packets (Colasoft Packet Builder); <code>--randomize-hosts</code>; <code>--badsum</code>; proxy servers and chaining; anonymizers. A spoofed source cannot complete the handshake. A reply to <code>--badsum</code> came from a firewall or IDS. Anonymizers: networked or single-point. Censorship circumvention: AstrillVPN, Tails</li>
+</ul>
+<p><strong>Countermeasures</strong></p>
+<ul>
+<li>Ping sweep defence: block ICMP echo; cut off any host sending more than 10 ICMP echo requests; in the DMZ allow only echo reply, host unreachable and time exceeded; Snort</li>
+<li>Port scan defence: fewest open ports; filter 135-159, 256-258, 389, 445, 1080, 1745, 3268; block outbound ICMP type 3; honeypots; port knocking; TCP wrappers</li>
+<li>Banner defence: Apache <code>ServerSignature Off</code>, <code>ServerTokens Prod</code>, mod_headers; IIS UrlScan <code>RemoveServerHeader 1</code>, <code>AlternateServerName</code>; hide file extensions (mod_negotiation); false banners</li>
+<li>Spoofing detection: direct TTL probes (attacker on a different subnet); IP identification number (works on the same subnet); TCP flow control (SYN/ACK with zero window: an ACK carrying data is spoofed). Initial TTLs: TCP/UDP 64 and 128; ICMP 128 and 255</li>
+<li>Spoofing prevention: avoid IP-based trust; firewalls and ACLs; random initial sequence numbers; ingress filtering; egress filtering; encryption (IPsec, the best method)</li>
+</ul>
+</div>
+<h2 id="coverage-check-against-the-official-module-3">Coverage check against the official Module 3</h2>
+<p>Each sub-topic of the official module, and where this chapter covers it. The full section-by-section verification report is kept with the handbook source as <code>verification/ceh/m03-scanning-networks.md</code>. This is a completeness map; no official text is reproduced.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Official sub-topic</th>
+<th>Covered in</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Overview, types and objectives of network scanning</td>
+<td>1</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>TCP communication flags</td>
+<td>1</td>
+<td>OK, exam/practice note on six vs eight flags</td>
+</tr>
+<tr>
+<td>TCP/IP communication: handshake and termination</td>
+<td>1</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Scanning tools: Nmap, hping3 and its commands, Metasploit, NetScanTools Pro, others</td>
+<td>2</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>hping scan with AI</td>
+<td>10</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Host discovery techniques (ARP, UDP, ICMP echo, sweep, timestamp, address mask, TCP SYN, TCP ACK, IP protocol)</td>
+<td>3</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Host discovery with AI</td>
+<td>10</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Ping sweep tools</td>
+<td>3</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>List of common ports and services</td>
+<td>1</td>
+<td>OK, reduced to a must-know list</td>
+</tr>
+<tr>
+<td>Port scanning technique classification</td>
+<td>4</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>TCP connect, stealth, inverse flag, Xmas, Maimon, ACK flag probe (TTL, window), IDLE/IPID</td>
+<td>4</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>UDP scanning, including recvfrom() and write()</td>
+<td>5</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>SCTP INIT and COOKIE ECHO</td>
+<td>5</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>SSDP and list scanning; IPv6 scanning</td>
+<td>5</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Port scanning with AI; service version discovery, and with AI</td>
+<td>6, 10</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Nmap scan time reduction techniques</td>
+<td>6</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>OS discovery / banner grabbing: active, passive, why</td>
+<td>7</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Identifying the target OS: TTL and window table</td>
+<td>7</td>
+<td>OK, exam/practice note</td>
+</tr>
+<tr>
+<td>OS discovery with Wireshark, Nmap, Unicornscan, NSE, IPv6 fingerprinting, AI</td>
+<td>7, 10</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Custom script to automate scanning with AI</td>
+<td>10</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Scanning beyond IDS and firewall: all eleven techniques, proxy tools, anonymizers, censorship circumvention</td>
+<td>8</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Countermeasures: ping sweep, port scanning, banner grabbing</td>
+<td>9</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>IP spoofing detection techniques and countermeasures</td>
+<td>9</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Scanning detection and prevention tools</td>
+<td>9</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Module summary</td>
+<td>Recaps and cheat sheet</td>
+<td>OK</td>
+</tr>
+</tbody>
+</table></div><nav class="pn" aria-label="Chapters"><a href="m01-introduction-to-ethical-hacking.html">← Module 1</a><span></span></nav>
+<footer><p>Written and maintained by <b>Dr. Atul Tiwari</b>. &copy; 2026 Dr. Atul Tiwari. All rights reserved.</p><p>Unofficial, independent study material. Not affiliated with or endorsed by EC-Council. CEH, CPENT and COASP are trademarks of EC-Council. Written in our own words from public protocol standards and tool documentation. Use these techniques only on systems you own or are authorised in writing to test.</p></footer></main></div>
+<script>(function(){
+var key='hb:'+location.pathname,done={};try{done=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}
+function save(){try{localStorage.setItem(key,JSON.stringify(done))}catch(e){}}
+// wrap each h2 block in a section so it can be filtered and marked
+var main=document.querySelector('main'),kids=[].slice.call(main.children),sec=null;
+kids.forEach(function(el){if(el.tagName==='H2'){sec=document.createElement('section');main.insertBefore(sec,el)}if(sec&&el.tagName!=='FOOTER'&&el.className!=='pn')sec.appendChild(el)});
+function paint(h){var on=!!done[h.id];h.classList.toggle('done',on);h.querySelector('.mark').textContent=on?'Done ✓':'Mark done';
+var a=document.querySelector('.side a[href="#'+h.id+'"]');if(a)a.parentNode.classList.toggle('done',on)}
+[].forEach.call(document.querySelectorAll('main h2'),function(h){var b=document.createElement('span');b.className='mark';b.setAttribute('role','button');b.tabIndex=0;h.appendChild(b);
+function t(){done[h.id]=!done[h.id];save();paint(h)}b.onclick=t;b.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}};paint(h)});
+document.getElementById('find').addEventListener('input',function(){var q=this.value.trim().toLowerCase();
+[].forEach.call(document.querySelectorAll('main section'),function(s){s.classList.toggle('hide',!!q&&s.textContent.toLowerCase().indexOf(q)<0)})});
+// quiz: options are shuffled on every load so the position of the answer cannot be learned
+[].forEach.call(document.querySelectorAll('.quiz'),function(z){var n=0,ok=0,tot=z.querySelectorAll('.q').length;
+[].forEach.call(z.querySelectorAll('.q'),function(q){var bs=[].slice.call(q.querySelectorAll('button')),why=q.querySelector('.why');
+for(var i=bs.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=bs[i];bs[i]=bs[j];bs[j]=t}bs.forEach(function(b){q.insertBefore(b,why)})});
+z.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var q=b.parentNode;if(q.dataset.done)return;q.dataset.done=1;n++;
+if(b.hasAttribute('data-ok'))ok++;else b.classList.add('wrong');q.querySelector('button[data-ok]').classList.add('right');q.querySelector('.why').hidden=false;
+z.querySelector('.score').textContent='Score: '+ok+' of '+n+' answered ('+tot+' questions)'})});
+// cheat sheet: print only that section
+var cheat=document.querySelector('.cheat');
+if(cheat){var s=cheat.closest('section');if(s)s.classList.add('sheet');var pb=document.createElement('button');pb.type='button';pb.className='pbtn';pb.textContent='Print the cheat sheet only';
+pb.onclick=function(){document.body.classList.add('sheet');window.print();setTimeout(function(){document.body.classList.remove('sheet')},500)};cheat.parentNode.insertBefore(pb,cheat)}
+// mobile contents menu
+var mb=document.getElementById('menu');if(mb){mb.onclick=function(){var on=document.body.classList.toggle('nav');mb.setAttribute('aria-expanded',on);mb.textContent=on?'Close':'Contents'};
+document.getElementById('side').addEventListener('click',function(e){if(e.target.tagName==='A'){document.body.classList.remove('nav');mb.setAttribute('aria-expanded',false);mb.textContent='Contents'}})}
+var links=[].slice.call(document.querySelectorAll('.side a'));
+if('IntersectionObserver'in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
+[].forEach.call(document.querySelectorAll('main h2,main h3'),function(h){io.observe(h)})}
+})();
+</script></body></html>
