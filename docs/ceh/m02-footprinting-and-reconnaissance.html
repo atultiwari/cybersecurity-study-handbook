@@ -1,0 +1,1984 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="author" content="Dr. Atul Tiwari"><title>Module 2 - Footprinting and Reconnaissance</title><style>:root{--bg:#fbfaf7;--fg:#1d2127;--mut:#5d6570;--line:#d9d5cc;--card:#fff;--acc:#0b6e69;--acc2:#b4530f;--ok:#1d7a3e;--bad:#b3261e;--code:#f1eee7;--cp:#5b3fa8;--ai:#0b5cab;--mem:#a3123a;--und:#0b5cab;--rec:#6a5a12;--do:#1d7a3e;--gold:#8a6500}
+@media(prefers-color-scheme:dark){:root{--bg:#14171b;--fg:#e6e3dc;--mut:#9aa3ad;--line:#333a42;--card:#1b1f24;--acc:#4fc3bb;--acc2:#f0a25e;--ok:#6fcf8e;--bad:#ff8a80;--code:#22272e;--cp:#b9a3ff;--ai:#7fb8ff;--mem:#ff8fab;--und:#7fb8ff;--rec:#d9c46a;--do:#6fcf8e;--gold:#e0bd55}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.65 Georgia,"Iowan Old Style",serif}
+.top{position:sticky;top:0;z-index:5;display:flex;gap:16px;align-items:center;justify-content:space-between;padding:10px 20px;background:var(--bg);border-bottom:1px solid var(--line);font-family:system-ui,sans-serif;font-size:14px}
+.top a{color:var(--fg);text-decoration:none;font-weight:600}.top input{width:220px;max-width:45vw;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg)}
+.wrap{display:grid;grid-template-columns:270px minmax(0,1fr);max-width:1240px;margin:0 auto}
+.side{position:sticky;top:50px;align-self:start;max-height:calc(100vh - 50px);overflow:auto;padding:20px 12px 40px 20px;font:13.5px/1.4 system-ui,sans-serif}
+.side ul{list-style:none;margin:0;padding-left:0}.side ul ul{padding-left:12px;border-left:1px solid var(--line);margin:2px 0 8px}
+.side a{display:block;padding:3px 6px;color:var(--mut);text-decoration:none;border-radius:4px}.side a:hover,.side a.on{color:var(--acc);background:var(--card)}
+.side li.done>a::after{content:" \2713";color:var(--ok)}
+main{padding:28px 36px 80px;max-width:860px;min-width:0}
+.kicker{font:600 12.5px system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--acc2);margin:0}
+h1{font-size:2.1em;line-height:1.15;margin:.2em 0 .5em;text-wrap:balance}h2{font-size:1.5em;margin:2.2em 0 .5em;padding-top:.6em;border-top:2px solid var(--fg)}
+h3{font-size:1.15em;margin:1.8em 0 .4em}h4{font:600 .95em system-ui,sans-serif;margin:1.4em 0 .3em}
+h2 .mark{float:right;font:500 12px system-ui,sans-serif;color:var(--mut);cursor:pointer;border:1px solid var(--line);border-radius:12px;padding:2px 10px;background:var(--card)}
+h2.done .mark{color:var(--ok);border-color:var(--ok)}
+a{color:var(--acc)}code{font:.86em ui-monospace,Menlo,monospace;background:var(--code);padding:1px 5px;border-radius:4px}
+pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow:auto;line-height:1.45;border:1px solid var(--line)}pre code{background:none;padding:0;font-size:.82em}
+.tw{overflow-x:auto;margin:1em 0}table{border-collapse:collapse;width:100%;font:14.5px/1.45 system-ui,sans-serif}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}th{font-weight:600;border-bottom:2px solid var(--fg)}
+.dg{margin:1.4em 0;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow-x:auto}
+.dg svg{display:block;margin:0 auto;max-width:100%;height:auto;font-family:system-ui,sans-serif}
+.dg figcaption{font:13.5px system-ui,sans-serif;color:var(--mut);margin-top:8px;text-align:center}
+svg .b{fill:var(--card);stroke:var(--fg);stroke-width:1.3}svg .d{fill:var(--code);stroke:var(--acc2);stroke-width:1.5}svg .t{fill:var(--code);stroke:var(--acc);stroke-width:1.5}
+svg .g{fill:none;stroke:var(--ok);stroke-width:1.6}svg .r{fill:none;stroke:var(--bad);stroke-width:1.6}
+svg text{fill:var(--fg);font-size:13px}svg .s{font-size:11.5px;fill:var(--mut)}svg .h{font-weight:600}
+svg .ln{stroke:var(--fg);stroke-width:1.4;fill:none}svg .lf{stroke:var(--mut);stroke-width:1;stroke-dasharray:4 4;fill:none}svg .da{stroke-dasharray:6 4}
+svg .ar{fill:var(--fg)}svg .ok{fill:var(--ok)}svg .bad{fill:var(--bad)}svg .acc{fill:var(--acc)}
+/* memorise / understand / recognise / do tags */
+.tag{display:inline-block;font:700 10.5px/1 system-ui,sans-serif;letter-spacing:.07em;padding:3px 6px;border-radius:4px;border:1px solid currentColor;vertical-align:middle;white-space:nowrap;cursor:help}
+.tag-M{color:var(--mem)}.tag-U{color:var(--und)}.tag-R{color:var(--rec)}.tag-D{color:var(--do)}
+h2 .tag,h3 .tag{margin-left:6px}
+.legend{list-style:none;padding:10px 14px;margin:1em 0;background:var(--card);border:1px solid var(--line);border-radius:8px;font:14px/1.9 system-ui,sans-serif}
+.legend .tag{min-width:92px;text-align:center;margin-right:8px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;font:13.5px system-ui,sans-serif;color:var(--mut);margin:0 0 1.4em}.meta b{color:var(--fg);font-weight:600}
+/* boxes */
+.admonition{margin:1.3em 0;padding:10px 16px 6px;border-left:4px solid var(--acc);background:var(--card);border-radius:0 8px 8px 0;font-size:.96em}
+.admonition-title{font:600 12.5px system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;margin:0 0 4px;color:var(--acc)}
+.admonition.cpent{border-color:var(--cp)}.cpent .admonition-title{color:var(--cp)}.admonition.coasp{border-color:var(--ai)}.coasp .admonition-title{color:var(--ai)}
+.admonition.trap{border-color:var(--bad)}.trap .admonition-title{color:var(--bad)}.admonition.hospital{border-color:var(--acc2)}.hospital .admonition-title{color:var(--acc2)}
+.admonition.try{border-color:var(--do)}.try .admonition-title{color:var(--do)}.try .admonition-title::before{content:"\25B6  "}
+.admonition.remember{border-color:var(--gold);border-style:dashed;border-width:1px 1px 1px 4px}.remember .admonition-title{color:var(--gold)}
+.admonition.recap{border:1px solid var(--line);border-top:3px solid var(--fg);border-radius:0 0 8px 8px}.recap .admonition-title{color:var(--fg)}
+.admonition.exam{border-color:var(--mem);background:linear-gradient(90deg,color-mix(in srgb,var(--mem) 7%,var(--card)),var(--card))}.exam .admonition-title{color:var(--mem)}
+.admonition.story{border-color:var(--mut);font-style:italic}.story .admonition-title{color:var(--mut);font-style:normal}
+.admonition.before,.admonition.why{border:1px solid var(--line);border-left:4px solid var(--acc);}
+.cheat{border:2px solid var(--mem);border-radius:10px;padding:6px 18px 10px;background:var(--card);font-size:.93em}
+.cheat ul{margin:.3em 0 .8em;padding-left:1.2em}.cheat table{font-size:13.5px}.cheat p{margin:.7em 0 .2em}
+.pbtn{font:600 13px system-ui,sans-serif;padding:6px 12px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
+.pn{display:flex;justify-content:space-between;margin-top:50px;font:600 14px system-ui,sans-serif}
+.quiz .q{border:1px solid var(--line);border-radius:8px;padding:8px 14px 12px;margin:10px 0;background:var(--card)}
+.quiz button{display:block;width:100%;text-align:left;margin:5px 0;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);font:14.5px system-ui,sans-serif;cursor:pointer}
+.quiz button.right{border-color:var(--ok);color:var(--ok);font-weight:600}.quiz button.wrong{border-color:var(--bad);color:var(--bad)}
+.quiz .why{font:14px system-ui,sans-serif;color:var(--mut);margin:6px 0 0}.score{font:600 15px system-ui,sans-serif}
+footer{margin-top:60px;padding-top:14px;border-top:1px solid var(--line);font:13px system-ui,sans-serif;color:var(--mut)}
+section.hide{display:none}
+.admonition.update{border-color:var(--ai);border-width:1px 1px 1px 4px;border-style:solid}.update .admonition-title{color:var(--ai)}.update .admonition-title::before{content:"\21BB  "}
+.mbtn{display:none;font:600 13px system-ui,sans-serif;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
+.byline{font:14.5px system-ui,sans-serif;color:var(--mut);margin:-.3em 0 1.2em}
+@media(max-width:860px){.wrap{display:block}.mbtn{display:inline-block}.top{padding:8px 12px;gap:10px;justify-content:flex-start}.top a{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.top input{width:120px}
+.side{display:none;position:fixed;top:46px;left:0;right:0;bottom:0;max-height:none;z-index:4;background:var(--bg);padding:14px 18px 60px;font-size:15px}.side a{padding:7px 6px}body.nav .side{display:block}body.nav{overflow:hidden}
+main{padding:18px 15px 60px}body{font-size:16.5px}h1{font-size:1.75em}h2{font-size:1.32em}h2 .mark{float:none;display:inline-block;margin-left:8px}
+.dg{padding:10px}.dg svg{max-width:none}.dg figcaption{text-align:left}table{font-size:14px}th,td{padding:6px 8px}pre{font-size:.92em}.admonition{padding:9px 12px 5px}.legend .tag{min-width:86px}}
+@media print{.top,.side,.mark,.pbtn,.pn{display:none}.wrap{display:block}body{font-size:11.5pt}.dg{break-inside:avoid}
+body.sheet main>*{display:none}body.sheet main>section.sheet{display:block}body.sheet .cheat{border:none;padding:0;font-size:9.5pt}body.sheet h2{border:none;margin-top:0}}
+@page sheet{size:A4 landscape;margin:8mm}
+@media print{body.sheet{page:sheet}body.sheet .cheat{columns:3;column-gap:16px;font-size:6.9pt;line-height:1.2}body.sheet .cheat ul{margin:.1em 0 .4em}body.sheet .cheat p{margin:.4em 0 .1em}body.sheet .tw{overflow:visible;margin:.3em 0}body.sheet section.sheet h2{font-size:12pt;margin:0 0 2pt;padding:0}body.sheet .cheat table{font-size:6.3pt;break-inside:avoid}body.sheet .cheat th,body.sheet .cheat td{padding:1px 2px}body.sheet .cheat code{font-size:.95em;padding:0}body.sheet section.sheet>p{display:none}@page{margin:9mm}}
+</style></head>
+<body><header class="top"><button type="button" id="menu" class="mbtn" aria-expanded="false" aria-controls="side">Contents</button><a href="index.html">Ethical Hacking Study Handbook</a>
+<input id="find" type="search" placeholder="Filter sections" aria-label="Filter sections"></header>
+<div class="wrap"><nav class="side" id="side" aria-label="Contents"><div class="toc">
+<ul>
+<li><a href="#what-this-chapter-is-about">What this chapter is about</a><ul>
+<li><a href="#how-the-tags-work">How the tags work</a></li>
+</ul>
+</li>
+<li><a href="#1-footprinting-concepts">1. Footprinting concepts</a><ul>
+<li><a href="#passive-and-active">Passive and active</a></li>
+<li><a href="#what-footprinting-collects">What footprinting collects</a></li>
+<li><a href="#objectives-and-threats">Objectives and threats</a></li>
+</ul>
+</li>
+<li><a href="#2-footprinting-through-search-engines">2. Footprinting through search engines</a><ul>
+<li><a href="#advanced-search-operators">Advanced search operators</a></li>
+<li><a href="#what-google-hacking-finds">What Google hacking finds</a></li>
+<li><a href="#the-google-hacking-database">The Google Hacking Database</a></li>
+<li><a href="#vpn-and-ftp-dorks">VPN and FTP dorks</a></li>
+<li><a href="#other-kinds-of-search-engine">Other kinds of search engine</a></li>
+</ul>
+</li>
+<li><a href="#3-footprinting-through-internet-research-services">3. Footprinting through internet research services</a><ul>
+<li><a href="#domains-subdomains-and-old-pages">Domains, subdomains and old pages</a></li>
+<li><a href="#people-jobs-and-the-dark-web">People, jobs and the dark web</a></li>
+<li><a href="#competitive-intelligence">Competitive intelligence</a></li>
+<li><a href="#other-research-services">Other research services</a></li>
+</ul>
+</li>
+<li><a href="#4-footprinting-through-social-networking-sites">4. Footprinting through social networking sites</a><ul>
+<li><a href="#what-is-collected">What is collected</a></li>
+<li><a href="#harvesting-names-and-email-addresses">Harvesting names and email addresses</a></li>
+</ul>
+</li>
+<li><a href="#5-whois-footprinting">5. Whois footprinting</a><ul>
+<li><a href="#what-a-whois-query-returns">What a Whois query returns</a></li>
+<li><a href="#the-five-regional-internet-registries">The five regional internet registries</a></li>
+<li><a href="#tools-and-ip-geolocation">Tools and IP geolocation</a></li>
+</ul>
+</li>
+<li><a href="#6-dns-footprinting">6. DNS footprinting</a><ul>
+<li><a href="#record-types">Record types</a></li>
+<li><a href="#zone-transfers-and-interrogation-tools">Zone transfers and interrogation tools</a></li>
+<li><a href="#reverse-dns-lookup">Reverse DNS lookup</a></li>
+</ul>
+</li>
+<li><a href="#7-network-and-email-footprinting">7. Network and email footprinting</a><ul>
+<li><a href="#finding-the-network-range">Finding the network range</a></li>
+<li><a href="#traceroute">Traceroute</a></li>
+<li><a href="#tracking-email">Tracking email</a></li>
+</ul>
+</li>
+<li><a href="#8-footprinting-through-social-engineering">8. Footprinting through social engineering</a><ul>
+<li><a href="#the-four-techniques">The four techniques</a></li>
+<li><a href="#what-social-networks-give-away">What social networks give away</a></li>
+</ul>
+</li>
+<li><a href="#9-footprinting-tools-and-ai">9. Footprinting tools and AI</a><ul>
+<li><a href="#frameworks">Frameworks</a></li>
+<li><a href="#ai-powered-osint">AI-powered OSINT</a></li>
+<li><a href="#prompt-to-command">Prompt to command</a></li>
+</ul>
+</li>
+<li><a href="#10-footprinting-countermeasures">10. Footprinting countermeasures</a><ul>
+<li><a href="#the-list-grouped">The list, grouped</a></li>
+</ul>
+</li>
+<li><a href="#11-lab-walk-through">11. Lab walk-through</a></li>
+<li><a href="#quiz">Quiz</a></li>
+<li><a href="#exam-cheat-sheet">Exam cheat sheet</a></li>
+<li><a href="#coverage-check-against-the-official-module-2">Coverage check against the official Module 2</a></li>
+</ul>
+</div>
+</nav>
+<main><p class="kicker">Ethical hacking track · Module 2 of 20</p><h1 id="footprinting-and-reconnaissance">Footprinting and Reconnaissance</h1>
+<p class="meta"><span><b>Reading</b> about 55 min</span><span><b>Lab</b> 60 min</span><span><b>Difficulty</b> Beginner</span><span><b>Checked</b> 18 Nov 2026: CEH v13 courseware Module 02, ICANN, Google Search Central, RFC 8482</span></p>
+<h2 id="what-this-chapter-is-about">What this chapter is about</h2>
+<p>Footprinting is the homework you do before you touch anything. You start with the name of an organisation. You finish with a profile: its domain names, its internet addresses, the people who work there, the technology it runs, and the places where it has told the world more than it meant to.</p>
+<div class="admonition story">
+<p class="admonition-title">An everyday picture</p>
+<p>A sales representative has a first meeting with a company next week. She reads its website and its annual report. She looks up the directors on a professional network, checks the news, and finds the office on a street-view map so she knows which door to use. The company has no idea any of this happened. That is <strong>passive</strong> footprinting. Then she phones reception and asks who looks after the IT contract. Now the company could notice her. That is <strong>active</strong> footprinting.</p>
+</div>
+<p>Attackers do exactly this, with different intentions. Ethical hackers do it first, with permission, so the organisation can see itself the way a stranger does and tidy up.</p>
+<div class="admonition before">
+<p class="admonition-title">Before you start</p>
+<p>This chapter assumes five ideas. The one-line version is enough to carry on.</p>
+<ul>
+<li><strong>Domain name.</strong> The readable name of an organisation on the internet, such as <code>example.com</code>. A <strong>subdomain</strong> is a name inside it, such as <code>mail.example.com</code>.</li>
+<li><strong>IP address.</strong> The number that identifies a machine on a network, such as <code>10.77.0.20</code>.</li>
+<li><strong>DNS.</strong> The internet's phone book. It turns names into IP addresses. Section 6 teaches the parts you need.</li>
+<li><strong>Search engine index.</strong> The giant catalogue a search engine builds by visiting web pages with automated programs called crawlers.</li>
+<li><strong>Metadata.</strong> Data about data: the author name, software version and date stored inside a document or photo.</li>
+</ul>
+<p>You do not need Module 1. Where this chapter leans on it, it says so.</p>
+</div>
+<div class="admonition why">
+<p class="admonition-title">Why this matters to you</p>
+<ul>
+<li><strong>Exam candidate.</strong> Expect questions that describe a task and ask for the tool or the search operator, and questions on Whois, DNS record types and traceroute. The newer questions show an AI prompt and ask which command it produces.</li>
+<li><strong>Defending a network.</strong> Almost everything here uses information your organisation published itself. Running these steps against your own name is the cheapest security review you will ever do. Section 10 is written for you.</li>
+<li><strong>Working with sensitive data.</strong> If you work in a hospital, a bank or a school, staff pages, job adverts and shared documents describe your systems to strangers. This chapter shows what they can piece together, and why "it is only our public website" is not a defence.</li>
+</ul>
+</div>
+<h3 id="how-the-tags-work">How the tags work</h3>
+<ul class="legend"><li><span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span> Likely to be asked directly. Know it exactly.</li><li><span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span> Needed to reason through scenario questions. Do not recite it.</li><li><span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span> Know the name and what it does when you see it in an option list.</li><li><span class="tag tag-D" title="A hands-on skill for the practical exams. Run it at a keyboard.">DO</span> A hands-on skill for the practical exams. Run it at a keyboard.</li></ul>
+<p>Facts tagged MEMORISE are collected automatically into the <a href="#exam-cheat-sheet">cheat sheet</a> at the end.</p>
+<p><strong>How to use this chapter.</strong> Read sections 1 and 2 first; the rest can be taken in any order. Run each "Try it" box in lab L01. The lab has no internet connection, so where a technique needs the internet the box says so and names a safe target: a domain you own, or <code>example.com</code>, which is reserved for examples. Finish with the lab walk-through and the quiz.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>After this chapter you can</th>
+<th>Section</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tell passive from active footprinting and list what each collects</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Write a search query with advanced operators and explain the Google Hacking Database</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Match an online research service to the information it gives</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Describe what social networks and email harvesting reveal</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Read a Whois record and name the regional registries</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Name the DNS record types and perform a zone transfer</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Explain traceroute and read an email header</td>
+<td>7</td>
+</tr>
+<tr>
+<td>Recognise the footprinting tools, including the AI-assisted ones</td>
+<td>8, 9</td>
+</tr>
+<tr>
+<td>Recommend countermeasures</td>
+<td>10</td>
+</tr>
+</tbody>
+</table></div>
+<h2 class="tg-U" id="1-footprinting-concepts">1. Footprinting concepts <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h2>
+<p><strong>Footprinting</strong> is collecting as much information as possible about a target organisation and its network before any attack or test begins. The result is a <strong>blueprint</strong> of the organisation's security profile. The courseware uses <strong>reconnaissance</strong> as another word for the same thing.</p>
+<p>There is no single fixed method, because the information can be found in many ways. What matters is that the work is organised, so nothing is collected twice and nothing is missed.</p>
+<figure class="dg"><svg viewBox="0 0 660 312" width="660" role="img" aria-label="Footprinting narrows an organisation&#x27;s name down to hosts, people and technology"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="b" x="14" y="8" width="230" height="32" rx="6"/><text x="129.0" y="29" text-anchor="middle" class="h">1. A name</text><text x="260" y="29" text-anchor="start" class="s">All you start with: &quot;Kestrel Freight&quot;.</text><line class="ln" x1="129.0" y1="40" x2="129.0" y2="52" marker-end="url(#a)"/><rect class="b" x="14" y="52" width="230" height="32" rx="6"/><text x="129.0" y="73" text-anchor="middle" class="h">2. Domains</text><text x="260" y="73" text-anchor="start" class="s">Search engines, company registers, Whois.</text><line class="ln" x1="129.0" y1="84" x2="129.0" y2="96" marker-end="url(#a)"/><rect class="b" x="14" y="96" width="230" height="32" rx="6"/><text x="129.0" y="117" text-anchor="middle" class="h">3. Subdomains and hosts</text><text x="260" y="117" text-anchor="start" class="s">DNS records, zone transfers, certificate and archive data.</text><line class="ln" x1="129.0" y1="128" x2="129.0" y2="140" marker-end="url(#a)"/><rect class="b" x="14" y="140" width="230" height="32" rx="6"/><text x="129.0" y="161" text-anchor="middle" class="h">4. Network ranges</text><text x="260" y="161" text-anchor="start" class="s">Regional registry records, traceroute.</text><line class="ln" x1="129.0" y1="172" x2="129.0" y2="184" marker-end="url(#a)"/><rect class="b" x="14" y="184" width="230" height="32" rx="6"/><text x="129.0" y="205" text-anchor="middle" class="h">5. People and email addresses</text><text x="260" y="205" text-anchor="start" class="s">Staff pages, social networks, job adverts.</text><line class="ln" x1="129.0" y1="216" x2="129.0" y2="228" marker-end="url(#a)"/><rect class="b" x="14" y="228" width="230" height="32" rx="6"/><text x="129.0" y="249" text-anchor="middle" class="h">6. Technology in use</text><text x="260" y="249" text-anchor="start" class="s">Banners, job adverts, document metadata.</text><line class="ln" x1="129.0" y1="260" x2="129.0" y2="272" marker-end="url(#a)"/><rect class="b" x="14" y="272" width="230" height="32" rx="6"/><text x="129.0" y="293" text-anchor="middle" class="h">7. A footprint report</text><text x="260" y="293" text-anchor="start" class="s">The blueprint that scanning (Module 3) is aimed with.</text></svg><figcaption>Footprinting narrows a name down, step by step, to things that can be tested.</figcaption></figure>
+<h3 class="tg-M" id="passive-and-active">Passive and active <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<figure class="dg"><svg viewBox="0 0 670 152" width="670" role="img" aria-label="Passive footprinting compared with active footprinting"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="t" x="20" y="10" width="300" height="34" rx="6"/><text x="170" y="32" text-anchor="middle" class="h">Passive footprinting</text><rect class="b" x="20" y="50" width="300" height="92" rx="6"/><text x="170" y="72" text-anchor="middle" class="">No direct contact with the target</text><text x="170" y="91" text-anchor="middle" class="s">Search engines, social networks,</text><text x="170" y="110" text-anchor="middle" class="s">archives, paid databases, shared intel</text><text x="170" y="129" text-anchor="middle" class="s">Very hard for the target to notice</text><rect class="d" x="350" y="10" width="300" height="34" rx="6"/><text x="500" y="32" text-anchor="middle" class="h">Active footprinting</text><rect class="b" x="350" y="50" width="300" height="92" rx="6"/><text x="500" y="72" text-anchor="middle" class="">Direct contact with the target</text><text x="500" y="91" text-anchor="middle" class="s">DNS interrogation, social engineering,</text><text x="500" y="110" text-anchor="middle" class="s">network and port scanning, enumeration</text><text x="500" y="129" text-anchor="middle" class="s">May leave traces and raise an alert</text></svg><figcaption>The two kinds of footprinting. The dividing line is whether the target could notice you.</figcaption></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>How</th>
+<th>Includes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Passive footprinting</td>
+<td>No direct interaction. You read what is already stored somewhere else</td>
+<td>Open-source intelligence (<strong>OSINT</strong>), proprietary databases and paid services, intelligence shared by partner organisations or industry groups</td>
+</tr>
+<tr>
+<td>Active footprinting</td>
+<td>Direct interaction. The target may recognise what is happening</td>
+<td>DNS interrogation, social engineering, network and port scanning, user and service enumeration</td>
+</tr>
+</tbody>
+</table></div>
+<p>Passive footprinting only finds what has been archived or published. Active footprinting finds more, needs more preparation, and may leave traces that alert the target.</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> reconnaissance and footprinting are the same thing, and it is the <strong>first step</strong> of ethical hacking. Port scanning and enumeration appear in the courseware's list of <strong>active footprinting</strong> activities.</p>
+<p><strong>In practice:</strong> testers treat scanning (Module 3) and enumeration (Module 4) as separate phases that come after footprinting. Module 1's attack classes also list footprinting as a <strong>passive</strong> attack. If a question asks for the class of attack, answer passive; if it asks what active footprinting includes, the list above is the answer.</p>
+</div>
+<figure class="dg"><svg viewBox="0 0 650 305" width="650" role="img" aria-label="Deciding whether a footprinting step is passive or active, and whether it is allowed"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><line class="ln" x1="300.0" y1="50" x2="405.0" y2="50" marker-end="url(#a)"/><text x="352.5" y="44" text-anchor="middle" class="s h">no</text><line class="ln" x1="170" y1="85.0" x2="170" y2="135.0" marker-end="url(#a)"/><text x="178" y="114.0" text-anchor="start" class="s h">yes</text><line class="ln" x1="300.0" y1="170" x2="405.0" y2="170" marker-end="url(#a)"/><text x="352.5" y="164" text-anchor="middle" class="s h">yes</text><line class="ln" x1="170" y1="205.0" x2="170" y2="253.0" marker-end="url(#a)"/><text x="178" y="233.0" text-anchor="start" class="s h">no</text><polygon class="d" points="170,15.0 300.0,50 170,85.0 40.0,50"/><text x="170" y="39" text-anchor="middle" class="">Does the technique send</text><text x="170" y="55" text-anchor="middle" class="">anything to the target&#x27;s</text><text x="170" y="71" text-anchor="middle" class="">own systems or people?</text><rect class="t" x="405.0" y="25.0" width="230" height="50" rx="18"/><text x="520" y="47" text-anchor="middle" class="">Passive</text><text x="520" y="63" text-anchor="middle" class="">search engines, archives, Whois</text><polygon class="d" points="170,135.0 300.0,170 170,205.0 40.0,170"/><text x="170" y="167" text-anchor="middle" class="">Is it inside your signed</text><text x="170" y="183" text-anchor="middle" class="">scope and time window?</text><rect class="t" x="405.0" y="145.0" width="230" height="50" rx="18"/><text x="520" y="167" text-anchor="middle" class="">Active, allowed</text><text x="520" y="183" text-anchor="middle" class="">DNS queries, zone transfer, calls</text><rect class="b" x="40.0" y="253.0" width="260" height="44" rx="6"/><text x="170" y="280" text-anchor="middle" class="">Stop. Ask the client first.</text></svg><figcaption>A working rule. Passive steps need care; active steps need permission.</figcaption></figure>
+<h3 class="tg-M" id="what-footprinting-collects">What footprinting collects <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Examples</th>
+<th>Where it comes from</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Organisation information</td>
+<td>Employee names, job titles and contact details; addresses and phone numbers; branches; partners; web technologies; news, press releases, legal documents, patents and trademarks</td>
+<td>The organisation's own website, Whois</td>
+</tr>
+<tr>
+<td>Network information</td>
+<td>Domains and subdomains; network blocks; topology, trusted routers and firewalls; IP addresses of reachable systems; Whois and DNS records</td>
+<td>Whois database analysis, traceroute</td>
+</tr>
+<tr>
+<td>System information</td>
+<td>Web server operating system; location of web servers; publicly available email addresses; usernames and passwords</td>
+<td>Network, DNS, website and email footprinting</td>
+</tr>
+</tbody>
+</table></div>
+<h3 class="tg-M" id="objectives-and-threats">Objectives and threats <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>Footprinting has four <strong>objectives</strong>: <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></p>
+<ol>
+<li>Learn the <strong>security posture</strong>: where firewalls, proxies and other defences sit.</li>
+<li><strong>Reduce the focus area</strong> from "an organisation" to specific domain names, network blocks and individual IP addresses.</li>
+<li><strong>Identify vulnerabilities</strong> so the right exploits can be chosen.</li>
+<li>Build an <strong>information database</strong> of weaknesses that points to the weakest link.</li>
+</ol>
+<p>The courseware lists six <strong>threats</strong> that footprinting makes possible:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Threat</th>
+<th>In one line</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Social engineering</td>
+<td>Staff who do not know the caller's intent hand over information willingly</td>
+</tr>
+<tr>
+<td>System and network attacks</td>
+<td>Knowing the configuration and operating system leads straight to its known flaws</td>
+</tr>
+<tr>
+<td>Information leakage</td>
+<td>Sensitive information reaches an attacker, who uses or sells it</td>
+</tr>
+<tr>
+<td>Privacy loss</td>
+<td>Access gained with the help of footprinting exposes the organisation and its people</td>
+</tr>
+<tr>
+<td>Corporate espionage</td>
+<td>Competitors use what they learn to copy products and undercut prices</td>
+</tr>
+<tr>
+<td>Business loss</td>
+<td>Online shops, banks and finance firms lose money to the attacks that follow</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>Three kinds of information: <strong>O-N-S</strong>, Organisation, Network, System: "<strong>O</strong>utsiders <strong>N</strong>otice <strong>S</strong>tuff". Six threats: "<strong>S</strong>ome <strong>S</strong>taff <strong>I</strong>nnocently <strong>P</strong>ost <strong>C</strong>ompany <strong>B</strong>usiness": Social engineering, System and network attacks, Information leakage, Privacy loss, Corporate espionage, Business loss.</p>
+</div>
+<div class="admonition trap">
+<p class="admonition-title">Exam traps</p>
+<ul>
+<li>A <strong>zone transfer</strong>, a phone call to the help desk and a port scan are all <strong>active</strong>. Reading a cached page, an archive or a Whois record is <strong>passive</strong>.</li>
+<li>"Reducing the focus area" is an objective. "Information leakage" is a threat. Questions swap the two lists.</li>
+<li>OSINT means <strong>open-source</strong> intelligence: public sources. It does not mean open-source software.</li>
+</ul>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>One request can yield system information. In the L01 attacker container:</p>
+<p><code>bash
+curl -s -D - -o /dev/null http://10.77.0.20/</code></p>
+<p>The <code>Server</code> and <code>X-Powered-By</code> lines name the web server software, its version and the language behind it. This touches the target, so it is active, and it is in scope here.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 1</p>
+<ul>
+<li>Footprinting (reconnaissance) is the first step: collect information and build a blueprint of the target.</li>
+<li>Passive: no direct interaction. Active: direct interaction that may be noticed.</li>
+<li>It collects organisation, network and system information.</li>
+<li>Objectives: learn the security posture, reduce the focus area, identify vulnerabilities, build an information database.</li>
+<li>Six threats: social engineering, system and network attacks, information leakage, privacy loss, corporate espionage, business loss.</li>
+</ul>
+</div>
+<h2 class="tg-M" id="2-footprinting-through-search-engines">2. Footprinting through search engines <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h2>
+<p>A search engine has already visited the target's website, its forgotten test pages and the documents it left lying about. Asking the search engine is passive: the question goes to the search engine, not to the target.</p>
+<h3 class="tg-M" id="advanced-search-operators">Advanced search operators <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>Google hacking</strong>, also called <strong>Google dorking</strong>, means using a search engine's advanced operators to build precise queries that surface sensitive or hidden information. A single query of this kind is a <strong>dork</strong>. The syntax is <code>operator:search_term</code>, with no space after the colon.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Restricts results to</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>site:</code></td>
+<td>One site or domain</td>
+<td><code>site:example.com careers</code></td>
+</tr>
+<tr>
+<td><code>inurl:</code></td>
+<td>Pages with the word in the URL</td>
+<td><code>inurl:admin site:example.com</code></td>
+</tr>
+<tr>
+<td><code>allinurl:</code></td>
+<td>Pages with <strong>all</strong> the words in the URL</td>
+<td><code>allinurl:staff login</code></td>
+</tr>
+<tr>
+<td><code>intitle:</code></td>
+<td>Pages with the word in the title</td>
+<td><code>intitle:"index of" backup</code></td>
+</tr>
+<tr>
+<td><code>allintitle:</code></td>
+<td>Pages with <strong>all</strong> the words in the title</td>
+<td><code>allintitle:network diagram</code></td>
+</tr>
+<tr>
+<td><code>intext:</code></td>
+<td>Pages with the word in the body text</td>
+<td><code>intext:"vpn configuration"</code></td>
+</tr>
+<tr>
+<td><code>inanchor:</code></td>
+<td>Pages whose inbound link text has the word</td>
+<td><code>inanchor:intranet</code></td>
+</tr>
+<tr>
+<td><code>allinanchor:</code></td>
+<td>Pages whose inbound link text has <strong>all</strong> the words</td>
+<td><code>allinanchor:staff portal login</code></td>
+</tr>
+<tr>
+<td><code>filetype:</code></td>
+<td>Files with that extension</td>
+<td><code>site:example.com filetype:pdf</code></td>
+</tr>
+<tr>
+<td><code>cache:</code></td>
+<td>Google's stored copy of a page</td>
+<td><code>cache:example.com</code></td>
+</tr>
+<tr>
+<td><code>link:</code></td>
+<td>Pages that link to the given page</td>
+<td><code>link:example.com</code></td>
+</tr>
+<tr>
+<td><code>related:</code></td>
+<td>Sites similar to the given one</td>
+<td><code>related:example.com</code></td>
+</tr>
+<tr>
+<td><code>info:</code></td>
+<td>Information Google holds about a page</td>
+<td><code>info:example.com</code></td>
+</tr>
+<tr>
+<td><code>location:</code></td>
+<td>News about a place</td>
+<td><code>location:udaipur flood</code></td>
+</tr>
+<tr>
+<td><code>source:</code></td>
+<td>One publication in Google News</td>
+<td><code>ransomware source:"The Hindu"</code></td>
+</tr>
+<tr>
+<td><code>phonebook:</code></td>
+<td>Phone listings for a person or business</td>
+<td>(retired)</td>
+</tr>
+<tr>
+<td><code>before:</code> / <code>after:</code></td>
+<td>Results dated before or after a day</td>
+<td><code>breach after:2024-01-01</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>A minus sign excludes a word. The classic query for finding subdomains removes the main site: <code>site:example.com -inurl:www</code>. <span class="tag tag-D" title="A hands-on skill for the practical exams. Run it at a keyboard.">DO</span></p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> every operator in the table works as described, and there is no space between the operator and its term.</p>
+<p><strong>In practice:</strong> several of them have been switched off (see the box below), and the courseware's own examples sometimes include a space, or write the <code>filetype:</code> example without the word <code>filetype</code>. Learn the meanings; do not expect them all to return results today.</p>
+</div>
+<div class="admonition update">
+<p class="admonition-title">Updated: September 2024</p>
+<p><strong>What changed.</strong> Google has retired its cached pages. The "Cached" link left search results early in 2024, and in <strong>September 2024</strong> Google removed <code>cache:</code> from its operator documentation because the operator no longer works. Its current operator page documents only <code>site:</code>, <code>filetype:</code>, <code>src:</code> and <code>imagesize:</code>. Earlier retirements: <code>phonebook:</code> (<strong>2010</strong>), <code>link:</code> (<strong>2017</strong>) and <code>related:</code> (<strong>2023</strong>); <code>info:</code> has also gone. For an old copy of a page, use the Wayback Machine (section 3). Status checked 18 November 2026.</p>
+<p><strong>The exam still expects:</strong> <code>cache:</code> shows Google's stored copy, <code>link:</code> finds pages linking to a site, <code>related:</code> finds similar sites and <code>info:</code> describes a page.</p>
+</div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>Read the operator as plain English. <strong>in-url</strong>, <strong>in-title</strong>, <strong>in-text</strong>, <strong>in-anchor</strong> say where to look. Put <strong>all</strong> in front and every word must be there. <strong>site</strong> fences the search into one domain; <strong>filetype</strong> picks the kind of file.</p>
+</div>
+<h3 class="tg-U" id="what-google-hacking-finds">What Google hacking finds <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h3>
+<p>With the right dork, a search engine will list things the owner never meant to publish: error messages that reveal software and file paths; files containing passwords; sensitive directories; login portals; firewall and intrusion-detection logs; security advisories and software versions; web application source code; control panels of unprotected internet-connected devices; and hidden intranet or VPN pages.</p>
+<p>A typical people-and-intranet dork combines three operators: <code>intitle:intranet inurl:intranet +intext:"human resources"</code>. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<h3 class="tg-M" id="the-google-hacking-database">The Google Hacking Database <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>The <strong>Google Hacking Database (GHDB)</strong> is a public collection of ready-made dorks. It is part of <strong>Exploit-DB</strong>, the exploit archive at exploit-db.com. Its fourteen categories are worth recognising: <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Footholds</td>
+<td>Files containing usernames</td>
+<td>Sensitive directories</td>
+</tr>
+<tr>
+<td>Web server detection</td>
+<td>Vulnerable files</td>
+<td>Vulnerable servers</td>
+</tr>
+<tr>
+<td>Error messages</td>
+<td>Files containing juicy info</td>
+<td>Files containing passwords</td>
+</tr>
+<tr>
+<td>Sensitive online shopping info</td>
+<td>Network or vulnerability data</td>
+<td>Pages containing login portals</td>
+</tr>
+<tr>
+<td>Various online devices</td>
+<td>Advisories and vulnerabilities</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Attackers use the GHDB for reconnaissance, to exploit misconfigurations, to find systems running outdated software, to harvest credentials and to spot exposed services.</p>
+<p><strong>SearchSploit</strong> is a command-line tool that searches a local copy of Exploit-DB. Because the copy is on your own disk, it works on isolated networks with no internet access.</p>
+<h3 class="tg-R" id="vpn-and-ftp-dorks">VPN and FTP dorks <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h3>
+<p>The courseware prints two tables of dorks. You are not expected to recite them; recognise the pattern, which is always an operator from the table above plus a tell-tale string.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Looking for</th>
+<th>The dork contains</th>
+<th>Finds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td R="R">VPN login portals</td>
+<td><code>inurl:</code> with a vendor's login path, or <code>site:vpn.*.*/ intitle:"login"</code></td>
+<td>Remote-access login pages (Fortinet, Cisco ASA, Citrix, WatchGuard, Zyxel)</td>
+</tr>
+<tr>
+<td R="R">OpenVPN material</td>
+<td><code>intitle:"index of" /etc/openvpn/</code>, or a search for files ending <code>.ovpn</code></td>
+<td>Configuration files, certificates and static keys</td>
+</tr>
+<tr>
+<td R="R">FTP servers</td>
+<td><code>intitle:"index of" ftp</code>, <code>inurl:ftp</code></td>
+<td>Open file listings</td>
+</tr>
+<tr>
+<td R="R">FTP client leftovers</td>
+<td><code>ws_ftp.ini</code>, <code>ws_ftp.log</code></td>
+<td>Stored FTP usernames, passwords and transfer logs</td>
+</tr>
+</tbody>
+</table></div>
+<h3 class="tg-M" id="other-kinds-of-search-engine">Other kinds of search engine <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>What it does</th>
+<th>Names to know</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Advanced search, image search</td>
+<td>Google's Advanced Search form builds operator queries for you. Advanced Image Search filters by size, colour, type and domain</td>
+<td>Google Advanced Search</td>
+</tr>
+<tr>
+<td>Reverse image search</td>
+<td>Starts from a picture and finds where else it appears: the original source of a profile photo, for example</td>
+<td>Google Image Search, TinEye, Yahoo, Bing, Pinterest</td>
+</tr>
+<tr>
+<td>Video search and analysis</td>
+<td>Finds video about the target, then reads its upload time, thumbnails and other hidden details</td>
+<td>YouTube, Google Videos; YouTube Metadata, YouTube DataViewer, EZGif, VideoReverser.com</td>
+</tr>
+<tr>
+<td>Meta search engine</td>
+<td>Sends your query to several other search engines at once and merges the answers. Has <strong>no index of its own</strong> and hides your IP address</td>
+<td>Startpage, MetaGer, eTools.ch</td>
+</tr>
+<tr>
+<td>FTP search engine</td>
+<td>Searches files stored on FTP servers</td>
+<td>NAPALM FTP Indexer, FreewareWeb FTP File Search, Mamont, Globalfilesearch.com</td>
+</tr>
+<tr>
+<td>IoT search engine</td>
+<td>Indexes internet-connected <strong>devices</strong>, not pages: cameras, industrial control (SCADA) systems, routers</td>
+<td>Shodan, Censys, ZoomEye</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Shodan</strong> deserves a second look. It scans the whole internet and records what each address answers with, so you can search for devices by city, country, hostname, operating system or IP address. The courseware uses it for VoIP and VPN footprinting and, in section 3, for identifying a target's operating system. <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></p>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>The lab has no internet, so look at the two things a search engine would have found. In the L01 attacker container:</p>
+<p><code>bash
+curl -s http://10.77.0.20/robots.txt ; curl -s http://10.77.0.20/backup/</code></p>
+<p><code>robots.txt</code> asks search engines to stay out of one folder, which tells every reader the folder exists. The second command shows that folder's open file listing: exactly the page an <code>intitle:"index of"</code> dork is built to find. <strong>With internet:</strong> search <code>site:example.com filetype:pdf</code> for a domain you own.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 2</p>
+<ul>
+<li>Google hacking (dorking) uses advanced operators to find sensitive pages. Syntax: <code>operator:term</code>.</li>
+<li><code>site:</code>, <code>inurl:</code>, <code>intitle:</code>, <code>intext:</code>, <code>inanchor:</code>, <code>filetype:</code>, <code>cache:</code>, <code>link:</code>, <code>related:</code>, <code>info:</code>; the <code>all...</code> forms need every word.</li>
+<li>The GHDB is the dork collection on Exploit-DB; SearchSploit searches Exploit-DB offline.</li>
+<li>Meta search engines have no index of their own. FTP search engines find files. IoT search engines find devices.</li>
+<li>In practice <code>cache:</code>, <code>link:</code>, <code>related:</code> and <code>info:</code> no longer work; the exam still asks about them.</li>
+</ul>
+</div>
+<h2 class="tg-R" id="3-footprinting-through-internet-research-services">3. Footprinting through internet research services <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h2>
+<p>Beyond search engines there is a whole industry of websites that collect and resell public information. Each one answers a different question about the target. Most of this section is name recognition: match the service to the job.</p>
+<h3 class="tg-M" id="domains-subdomains-and-old-pages">Domains, subdomains and old pages <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>A company's main website is built for the public. Its <strong>subdomains</strong> often are not: test sites, staff portals and forgotten projects sit there, usually less well protected. Finding them is the first technical job in footprinting.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it gives</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Netcraft</td>
+<td>Subdomains of a domain; site reports showing hosting and technology</td>
+</tr>
+<tr>
+<td>DNSdumpster</td>
+<td>Hosts related to a domain: subdomains, IP addresses, DNS servers</td>
+</tr>
+<tr>
+<td>Pentest-Tools Find Subdomains</td>
+<td>Subdomains with IP addresses, web server, technology and page titles</td>
+</tr>
+<tr>
+<td>Sublist3r</td>
+<td>Command-line subdomain enumeration: <code>sublist3r -d example.com -o subdomains.txt</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>The <strong>Wayback Machine</strong> at archive.org stores copies of web pages from the day it first visited them. Information the organisation has since removed (old staff lists, documents, even source code) may still be there. <strong>Photon</strong> is a crawler that can pull a site's archived addresses: <code>python photon.py -u &lt;URL&gt; -l 3 -t 200 --wayback</code>. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<div class="admonition story">
+<p class="admonition-title">The idea</p>
+<p>Deleting a page from your website is like taking a poster down from a noticeboard after a photographer has already been round. The board is clean. The photograph is not yours to delete.</p>
+</div>
+<h3 class="tg-M" id="people-jobs-and-the-dark-web">People, jobs and the dark web <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>People search services</strong> (Spokeo is the featured one; also Intelius, pipl, BeenVerified, Whitepages, Instant Checkmate and PeekYou) return a person's addresses, phone numbers, email addresses, age, relatives, social profiles and court records. They mostly cover the United States. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<p><strong>Job sites</strong> (Dice, LinkedIn, Glassdoor, Simply Hired) leak technology. An advert for a network administrator that asks for experience with a named firewall, hypervisor and database version is a free inventory of the target's systems. Staff CVs do the same in reverse. <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></p>
+<figure class="dg"><svg viewBox="0 0 670 196" width="670" role="img" aria-label="Surface web, deep web and dark web as nested layers"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="t" x="12" y="10" width="646" height="176" rx="8"/><text x="26" y="32" text-anchor="start" class="h">Surface web</text><text x="26" y="50" text-anchor="start" class="s">Indexed by search engines. Any browser.</text><rect class="b" x="46" y="68" width="578" height="118" rx="8"/><text x="60" y="90" text-anchor="start" class="h">Deep web</text><text x="60" y="108" text-anchor="start" class="s">Not indexed: behind logins, forms and databases. Mostly ordinary.</text><rect class="d" x="80" y="126" width="510" height="60" rx="8"/><text x="94" y="148" text-anchor="start" class="h">Dark web</text><text x="94" y="166" text-anchor="start" class="s">Hidden services reached only with special software such as Tor Browser.</text></svg><figcaption>Three layers. The dark web is a small part of the deep web, not another name for it.</figcaption></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>What it is</th>
+<th>Reached with</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Surface web</td>
+<td>Pages that search engines have indexed</td>
+<td>Any browser</td>
+</tr>
+<tr>
+<td>Deep web</td>
+<td>Pages search engines cannot index: anything behind a login, a form or a database</td>
+<td>An ordinary browser and the right credentials</td>
+</tr>
+<tr>
+<td>Dark web (darknet)</td>
+<td>A subset of the deep web that lets people publish and browse anonymously</td>
+<td>Special software such as Tor Browser</td>
+</tr>
+</tbody>
+</table></div>
+<p>On the dark web attackers look for what has already been stolen: card details, identity documents, medical records, account credentials. The courseware names <strong>Tor Browser</strong>, <strong>ExoneraTor</strong> and <strong>OnionLand Search</strong> as dark web tools, and shows searches refined by person, publication, court record, member directory, medical record and location.</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> the dark web is searched with tools such as Tor Browser, ExoneraTor and OnionLand Search, using operators such as <code>filetype:pdf site:onion confidential</code>. The courseware also describes Tor Browser as acting like a default VPN.</p>
+<p><strong>In practice:</strong> Tor Browser is a browser, not a search engine and not a VPN. ExoneraTor, by the Tor Project's own description, only answers whether an IP address was a Tor relay on a given date. Google-style operators are honoured by few dark web search engines. Buying or downloading stolen data is a crime even for a tester; dark web checks are normally done through a contracted monitoring service.</p>
+</div>
+<h3 class="tg-M" id="competitive-intelligence">Competitive intelligence <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>Competitive intelligence gathering</strong> is identifying, collecting, analysing and using information about competitors from public sources. It is legal and non-interfering, which separates it from industrial espionage. An attacker uses the same sources to plan.</p>
+<p>There are two approaches. The <strong>direct</strong> approach gathers from trade shows and by social engineering employees and customers. The <strong>indirect</strong> approach uses online resources: company websites and job adverts, press releases and annual reports, patents and trademarks, social media, customer reviews, financial filings and business databases.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>The question</th>
+<th>Sites to recognise</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>When did the company begin? How did it develop?</td>
+<td><strong>EDGAR</strong> (company filings with the US Securities and Exchange Commission), <strong>D&amp;B Hoovers</strong> (business records), <strong>LexisNexis</strong> (legal and public records), <strong>Business Wire</strong> (press releases), <strong>Factiva</strong> (global news database)</td>
+</tr>
+<tr>
+<td>What are the company's plans?</td>
+<td><strong>MarketWatch</strong>, <strong>The Wall Street Transcript</strong> (interviews with executives and analysts), <strong>Euromonitor</strong> (market research), <strong>Experian</strong>, <strong>The Search Monitor</strong> (brand and advertising monitoring), <strong>USPTO</strong> (United States patents and trademarks)</td>
+</tr>
+<tr>
+<td>What do experts say about the company?</td>
+<td><strong>SEMRush</strong> (keyword and advertising research), <strong>ABI/INFORM Global</strong> (business database), <strong>SimilarWeb</strong> (website traffic estimates), <strong>SERanking</strong> (competitor analysis)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 class="tg-R" id="other-research-services">Other research services <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Service type</th>
+<th>What an attacker learns</th>
+<th>Names to know</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Operating system lookups</td>
+<td>The operating system and software of public servers</td>
+<td>Netcraft, Shodan, Censys</td>
+</tr>
+<tr>
+<td>Maps and geography</td>
+<td>Entrances, cameras, fences, nearby Wi-Fi; a basis for dumpster diving and tailgating</td>
+<td>Google Earth, Google Maps, Wikimapia</td>
+</tr>
+<tr>
+<td>Financial services</td>
+<td>Share value, company profile, competitors, press releases</td>
+<td>Google Finance, MSN Money, Yahoo Finance, Investing.com</td>
+</tr>
+<tr>
+<td>Business profile sites</td>
+<td>Location, contact details, departments, type of business</td>
+<td>opencorporates, Crunchbase, corporationwiki</td>
+</tr>
+<tr>
+<td>Alert services</td>
+<td>Automatic notice whenever the target is mentioned</td>
+<td>Google Alerts, X Alerts, Giga Alerts</td>
+</tr>
+<tr>
+<td>Online reputation management (ORM)</td>
+<td>What people are saying about the brand, in real time</td>
+<td>Mention, ReviewPush, Reputology</td>
+</tr>
+<tr>
+<td>Groups, forums and blogs</td>
+<td>Staff discussing work: network details, names, email addresses</td>
+<td>Google Groups, LinkedIn Groups</td>
+</tr>
+<tr>
+<td>Public source-code repositories</td>
+<td>Configuration files, private SSH and TLS keys, source code</td>
+<td>GitHub, GitLab, SourceForge, Bitbucket; found with <strong>Recon-ng</strong></td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition update">
+<p class="admonition-title">Updated: services that have moved on</p>
+<p>Each line gives what changed and when. The exam still expects the courseware's version.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Service</th>
+<th>What changed</th>
+<th>When</th>
+<th>Exam still expects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Censys</td>
+<td>Censys set the retirement of its original search site (Legacy Search) for this date and has switched off free access to it; searches now run on the Censys Platform with a new query language</td>
+<td><strong>September 2026</strong></td>
+<td>"Censys" as an IoT search engine and operating-system lookup</td>
+</tr>
+<tr>
+<td>USPTO</td>
+<td>The trademark search system TESS was retired and replaced by a new Trademark Search. The patent databases PatFT and AppFT had already given way to Patent Public Search</td>
+<td><strong>November 2023</strong>; patents <strong>September 2022</strong></td>
+<td>"USPTO" as the source for patents and trademarks</td>
+</tr>
+<tr>
+<td>Google+</td>
+<td>The courseware's description of BuzzSumo still lists it. The consumer service closed</td>
+<td><strong>April 2019</strong></td>
+<td>Recognise BuzzSumo as a social content search tool</td>
+</tr>
+</tbody>
+</table></div>
+<p>Status checked 18 November 2026. These services change often; look at the owner's site before you rely on one.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Guess subdomains the way the online tools do. In the L01 attacker container (use <code>aarogya-demo.lab</code> in the healthcare skin):</p>
+<p><code>bash
+for w in $(cat /usr/share/wordlists/common-small.txt) mail ns1 www; do a=$(dig +short $w.kestrel-freight.lab @10.77.0.10); [ -n "$a" ] &amp;&amp; echo "$w $a"; done</code></p>
+<p>Four names answer. Keep the list; section 6 shows a host that guessing cannot find. <strong>With internet:</strong> look up a domain you own on the Wayback Machine.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 3</p>
+<ul>
+<li>Subdomains: Netcraft, DNSdumpster, Pentest-Tools, Sublist3r, or <code>site:target.com -inurl:www</code>.</li>
+<li>archive.org keeps pages the owner has deleted; Photon retrieves the archived addresses.</li>
+<li>Surface web is indexed; deep web is not; dark web is the anonymous subset reached with Tor Browser.</li>
+<li>Competitive intelligence is legal; direct or indirect. Know which sites answer "began", "plans" and "expert opinion".</li>
+<li>Job adverts, maps, alerts, reputation tools and code repositories all leak.</li>
+</ul>
+</div>
+<h2 class="tg-R" id="4-footprinting-through-social-networking-sites">4. Footprinting through social networking sites <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h2>
+<p>This is not the same as social engineering. In <strong>social engineering</strong> the attacker tricks a person into giving information. In <strong>footprinting through social networking sites</strong> the attacker simply collects what people and organisations have posted. The first can use the second as its starting point.</p>
+<h3 class="tg-U" id="what-is-collected">What is collected <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h3>
+<p>Sites such as Facebook, X (formerly Twitter), LinkedIn and Instagram let anyone search by name, employer, school or location. A profile gives a person's job title, employer, location, education, contacts and photographs. <strong>LinkedIn</strong> is the richest source about an organisation, because staff list their own roles, projects and the technology they work with.</p>
+<h3 class="tg-M" id="harvesting-names-and-email-addresses">Harvesting names and email addresses <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Command to recognise</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>theHarvester</strong></td>
+<td>Collects employee names, job titles and email addresses for a domain from public sources</td>
+<td><code>theHarvester -d example.com -l 200 -b baidu</code></td>
+</tr>
+<tr>
+<td R="R"><strong>Email Spider</strong></td>
+<td>Harvests email addresses for a domain from search engines</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Sherlock</strong></td>
+<td>Checks hundreds of social networks for one username and lists the profile addresses</td>
+<td><code>sherlock &lt;username&gt;</code></td>
+</tr>
+<tr>
+<td R="R"><strong>Social Searcher</strong></td>
+<td>Searches social networks in real time for a user's posts and profiles</td>
+<td></td>
+</tr>
+<tr>
+<td R="R"><strong>BuzzSumo</strong></td>
+<td>Finds the most shared content for a topic, author or domain</td>
+<td></td>
+</tr>
+<tr>
+<td R="R">Google Trends, Hashatit, Ubersuggest</td>
+<td>Further tools for analysing a target's social media presence</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>In theHarvester, <code>-d</code> names the domain or company, <code>-l</code> limits the number of results and <code>-b</code> chooses the data source. <code>-b linkedin</code> lists employees; a search engine such as <code>-b baidu</code> finds email addresses. A harvested email list feeds two later attacks: social engineering and password guessing.</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> <code>theHarvester -d microsoft -l 200 -b linkedin</code> enumerates a company's employees on LinkedIn; <code>-b</code> names the source and <code>-l</code> the limit.</p>
+<p><strong>In practice:</strong> as checked in November 2026, theHarvester's own source list no longer includes <code>linkedin</code>, <code>google</code> or <code>bing</code>; <code>baidu</code> is still there, alongside sources such as <code>crtsh</code> and <code>duckduckgo</code>. Run <code>theHarvester -h</code> and use what your version offers.</p>
+</div>
+<div class="admonition trap">
+<p class="admonition-title">Exam traps</p>
+<ul>
+<li>Collecting posted information is <strong>footprinting through social networking sites</strong>. Sending a fake friend request to see restricted posts is <strong>social engineering</strong>.</li>
+<li><strong>Sherlock</strong> hunts a <em>username</em> across sites. <strong>theHarvester</strong> harvests <em>emails and names</em> for a <em>domain</em>.</li>
+<li>In theHarvester, <code>-b</code> is the data source, not "brute force".</li>
+</ul>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Harvest an email list by hand. In the L01 attacker container:</p>
+<p><code>bash
+curl -s http://10.77.0.20/staff | grep -oE '[a-z]+@[a-z.-]+' | sort -u</code></p>
+<p>Five addresses, and from them the username pattern: first initial plus surname. That one line is what theHarvester automates across many sources.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 4</p>
+<ul>
+<li>Social networking footprinting collects what is posted; social engineering tricks people.</li>
+<li>LinkedIn reveals staff, roles and technology.</li>
+<li>theHarvester: <code>-d</code> domain, <code>-l</code> limit, <code>-b</code> source, <code>-f</code> output file.</li>
+<li>Sherlock finds one username across many networks; Social Searcher and BuzzSumo analyse social content.</li>
+<li>An email list gives the username format for later attacks.</li>
+</ul>
+</div>
+<h2 class="tg-M" id="5-whois-footprinting">5. Whois footprinting <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h2>
+<p>Every domain name and every block of IP addresses is registered to someone. <strong>Whois</strong> is the query-and-response protocol for asking who. It listens on <strong>TCP port 43</strong>.</p>
+<h3 class="tg-M" id="what-a-whois-query-returns">What a Whois query returns <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>A Whois record can show: domain name details; the registrar; the owner's contact details; the domain's name servers; the <strong>NetRange</strong> (the block of IP addresses); the dates the domain was created, last updated and will expire; and the domain's status.</p>
+<p>An attacker uses this to map the organisation's network, to find its name servers for section 6, and to impersonate the people named in the record.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Whois data model</th>
+<th>What the central database stores</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Thick Whois</td>
+<td>The complete Whois information from all registrars</td>
+</tr>
+<tr>
+<td>Thin Whois</td>
+<td>Only the name of the registrar's Whois server, which holds the full details</td>
+</tr>
+<tr>
+<td>Decentralized Whois</td>
+<td>Complete information, managed by several independent entities</td>
+</tr>
+</tbody>
+</table></div>
+<p>The courseware adds the labels "distributed model" to thick and "centralized model" to thin. Other references do not use those labels consistently, so learn the definitions, not the labels.</p>
+<h3 class="tg-M" id="the-five-regional-internet-registries">The five regional internet registries <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Registry</th>
+<th>Full name</th>
+<th>Region</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ARIN</td>
+<td>American Registry for Internet Numbers</td>
+<td>United States, Canada, parts of the Caribbean</td>
+</tr>
+<tr>
+<td>RIPE NCC</td>
+<td>Réseaux IP Européens Network Coordination Centre</td>
+<td>Europe, the Middle East, Central Asia</td>
+</tr>
+<tr>
+<td>APNIC</td>
+<td>Asia Pacific Network Information Centre</td>
+<td>Asia and the Pacific, including India</td>
+</tr>
+<tr>
+<td>LACNIC</td>
+<td>Latin American and Caribbean Network Information Centre</td>
+<td>Latin America and the Caribbean</td>
+</tr>
+<tr>
+<td>AFRINIC</td>
+<td>African Network Information Centre</td>
+<td>Africa</td>
+</tr>
+</tbody>
+</table></div>
+<figure class="dg"><svg viewBox="0 0 660 260" width="660" role="img" aria-label="Domain names and IP numbers are registered through two separate hierarchies"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="t" x="14" y="8" width="292" height="26" rx="6"/><text x="26" y="26" text-anchor="start" class="h">Who keeps which registration record?</text><path class="lf" d="M26 34V57H44"/><rect class="b" x="44" y="44" width="381" height="26" rx="6"/><text x="56" y="62" text-anchor="start" class="h">Names:  ICANN sets the rules for generic domains</text><path class="lf" d="M56 70V93H74"/><rect class="b" x="74" y="80" width="447" height="26" rx="6"/><text x="86" y="98" text-anchor="start" class="">Registry: runs one top-level domain, such as .com or .org</text><path class="lf" d="M86 106V129H104"/><rect class="b" x="104" y="116" width="492" height="26" rx="6"/><text x="116" y="134" text-anchor="start" class="">Registrar: sells the name; holds the customer&#x27;s contact details</text><path class="lf" d="M26 34V165H44"/><rect class="b" x="44" y="152" width="544" height="26" rx="6"/><text x="56" y="170" text-anchor="start" class="h">Numbers:  IANA hands address blocks to five regional registries (RIRs)</text><path class="lf" d="M56 178V201H74"/><rect class="b" x="74" y="188" width="336" height="26" rx="6"/><text x="86" y="206" text-anchor="start" class="">ARIN,  RIPE NCC,  APNIC,  LACNIC,  AFRINIC</text><path class="lf" d="M86 214V237H104"/><rect class="b" x="104" y="224" width="447" height="26" rx="6"/><text x="116" y="242" text-anchor="start" class="">ISPs and organisations: hold the IP ranges and AS numbers</text></svg><figcaption>Two hierarchies. A domain lookup goes down the first; an IP address lookup goes down the second.</figcaption></figure>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> the regional internet registries (RIRs) maintain the Whois databases, which hold the personal information of domain owners.</p>
+<p><strong>In practice:</strong> RIRs register <strong>numbers</strong>: IP address blocks and autonomous system numbers. Domain <strong>names</strong> are registered through registries and registrars under ICANN's rules. Ask an RIR about an IP address; ask a registry or registrar about a domain. And since 2018 most personal contact details in domain records are redacted for privacy.</p>
+</div>
+<div class="admonition update">
+<p class="admonition-title">Updated: January 2025 and August 2025</p>
+<p><strong>What changed.</strong> Whois is being replaced. From <strong>28 January 2025</strong> ICANN made the Registration Data Access Protocol (<strong>RDAP</strong>) the definitive source for registration data on generic top-level domains such as <code>.com</code> and <code>.org</code>, and ended the contractual duty to offer Whois for them. RDAP answers over HTTPS in a structured format. ICANN's Registration Data Policy, in effect from <strong>21 August 2025</strong>, sets which fields are published and which are redacted. Many registries still run Whois voluntarily, and country domains set their own rules. Status checked 18 November 2026.</p>
+<p><strong>The exam still expects:</strong> Whois, a query and response protocol on TCP port 43, returning the fields listed above.</p>
+</div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p>Five registries, five regions: <strong>A</strong>RIN America, <strong>R</strong>IPE Europe, <strong>AP</strong>NIC Asia Pacific, <strong>LAC</strong>NIC Latin America and the Caribbean, <strong>AF</strong>RINIC Africa. Whois is on port <strong>43</strong>: "<strong>Who is</strong> at door forty-three?"</p>
+</div>
+<h3 class="tg-R" id="tools-and-ip-geolocation">Tools and IP geolocation <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h3>
+<ul>
+<li><strong>Whois lookup tools:</strong> whois.domaintools.com; SmartWhois at tamos.com; Batch IP Converter (also handles non-English domain names and IPv6); WHOIS Domain Lookup; Active Whois.</li>
+<li><strong>IP geolocation tools:</strong> IP2Location (featured), IP Location Finder, IP Address Geographical Location Finder. They estimate country, region, city, latitude and longitude, postal code, time zone, connection speed, internet provider and domain name from an IP address.</li>
+</ul>
+<p>Geolocation is an estimate drawn from a database. It usually finds the right country and often the wrong street.</p>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>The lab has no Whois server. Its DNS holds the nearest thing, the zone's start-of-authority record:</p>
+<p><code>bash
+dig +noall +answer kestrel-freight.lab SOA @10.77.0.10</code></p>
+<p>It names the primary name server, the responsible mailbox (<code>hostmaster.</code> stands for <code>hostmaster@</code>) and a serial number that reads as a date. <strong>With internet:</strong> run <code>whois example.com</code>, or use ICANN's lookup page at lookup.icann.org, on a domain you own.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 5</p>
+<ul>
+<li>Whois: who registered a domain or address block. TCP port 43.</li>
+<li>It returns registrar, owner contacts, name servers, NetRange, dates and status.</li>
+<li>Thick stores everything; thin stores a pointer to the registrar; decentralized spreads it across entities.</li>
+<li>Five RIRs: ARIN, RIPE NCC, APNIC, LACNIC, AFRINIC.</li>
+<li>In practice RDAP has replaced Whois for generic domains and most personal details are redacted.</li>
+</ul>
+</div>
+<h2 class="tg-M" id="6-dns-footprinting">6. DNS footprinting <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h2>
+<p>The <strong>Domain Name System (DNS)</strong> maps names to addresses. An organisation's DNS data is called its <strong>zone</strong>. The zone is a list of the hosts the organisation considers important enough to name, so reading it is the fastest way to find key systems.</p>
+<h3 class="tg-M" id="record-types">Record types <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th M="M">Record</th>
+<th>What it holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>The IPv4 address of a host</td>
+</tr>
+<tr>
+<td>AAAA</td>
+<td>The IPv6 address of a host</td>
+</tr>
+<tr>
+<td>MX</td>
+<td>The domain's mail server</td>
+</tr>
+<tr>
+<td>NS</td>
+<td>The domain's name server</td>
+</tr>
+<tr>
+<td>CNAME</td>
+<td>An alias: another name for a host</td>
+</tr>
+<tr>
+<td>SOA</td>
+<td>Start of authority: which server is authoritative for the domain</td>
+</tr>
+<tr>
+<td>SRV</td>
+<td>Service records: where a named service runs</td>
+</tr>
+<tr>
+<td>PTR</td>
+<td>Maps an IP address back to a hostname (reverse lookup)</td>
+</tr>
+<tr>
+<td>RP</td>
+<td>The responsible person</td>
+</tr>
+<tr>
+<td>HINFO</td>
+<td>Host information: CPU type and operating system</td>
+</tr>
+<tr>
+<td>TXT</td>
+<td>Unstructured text</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition remember">
+<p class="admonition-title">Remember</p>
+<p><strong>A</strong> for <strong>A</strong>ddress, four <strong>A</strong>s for the longer IPv6 one. <strong>M</strong>ail e<strong>X</strong>changer. <strong>N</strong>ame <strong>S</strong>erver. <strong>C</strong>anonical <strong>NAME</strong> is an alias. <strong>P</strong>oin<strong>T</strong>e<strong>R</strong> points backwards, from number to name.</p>
+</div>
+<h3 class="tg-M" id="zone-transfers-and-interrogation-tools">Zone transfers and interrogation tools <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p>A <strong>zone transfer</strong> is how a backup name server copies the whole zone from the primary. If the primary answers that request from anyone, an attacker gets every record in one reply, including hosts that are never linked from anywhere.</p>
+<figure class="dg"><svg viewBox="0 0 810 262" width="810" role="img" aria-label="An ordinary DNS lookup compared with a zone transfer"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><text x="195.0" y="22" text-anchor="middle" class="h">Ordinary lookup</text><rect class="b" x="18" y="44" width="124" height="28" rx="6"/><text x="80" y="63" text-anchor="middle" class="h">You</text><rect class="b" x="248" y="44" width="124" height="28" rx="6"/><text x="310" y="63" text-anchor="middle" class="h">Name server</text><line class="lf" x1="80" y1="72" x2="80" y2="248"/><line class="lf" x1="310" y1="72" x2="310" y2="248"/><line class="ln" x1="83" y1="102" x2="307" y2="102" marker-end="url(#a)"/><text x="195.0" y="95" text-anchor="middle" class="s">A record for portal?</text><line class="ln" x1="307" y1="142" x2="83" y2="142" marker-end="url(#a)"/><text x="195.0" y="135" text-anchor="middle" class="s">10.77.0.20</text><line class="ln" x1="83" y1="182" x2="307" y2="182" marker-end="url(#a)"/><text x="195.0" y="175" text-anchor="middle" class="s">A record for erp-legacy?</text><line class="ln" x1="307" y1="222" x2="83" y2="222" marker-end="url(#a)"/><text x="195.0" y="215" text-anchor="middle" class="s">NXDOMAIN: no such name</text><line class="lf" x1="405" y1="6" x2="405" y2="256"/><text x="615.0" y="22" text-anchor="middle" class="h">Zone transfer left open</text><rect class="b" x="438" y="44" width="124" height="28" rx="6"/><text x="500" y="63" text-anchor="middle" class="h">You</text><rect class="b" x="668" y="44" width="124" height="28" rx="6"/><text x="730" y="63" text-anchor="middle" class="h">Name server</text><line class="lf" x1="500" y1="72" x2="500" y2="168"/><line class="lf" x1="730" y1="72" x2="730" y2="168"/><line class="ln" x1="503" y1="102" x2="727" y2="102" marker-end="url(#a)"/><text x="615.0" y="95" text-anchor="middle" class="s">AXFR: send me the whole zone</text><line class="ln" x1="727" y1="142" x2="503" y2="142" marker-end="url(#a)"/><text x="615.0" y="135" text-anchor="middle" class="s">Every record, hidden hosts included</text></svg><figcaption>Left: ordinary lookups reveal only the names you already know to ask for. Right: an open zone transfer reveals everything.</figcaption></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SecurityTrails</strong></td>
+<td>Builds a DNS map of a domain: current and historical A, AAAA, NS, MX, SOA and TXT records, and subdomains</td>
+</tr>
+<tr>
+<td><strong>Fierce</strong></td>
+<td>DNS reconnaissance: finds subdomains and nearby, non-contiguous IP space</td>
+</tr>
+<tr>
+<td><strong>DNSRecon</strong></td>
+<td>Command-line DNS enumeration, zone transfers and reverse lookups</td>
+</tr>
+<tr>
+<td R="R">DNSChecker, zdns, DNSdumpster</td>
+<td>Further DNS interrogation tools</td>
+</tr>
+</tbody>
+</table></div>
+<p>Fierce commands to recognise: <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fierce --domain example.com</code></td>
+<td>Basic scan</td>
+</tr>
+<tr>
+<td><code>fierce --domain example.com --subdomains admin mail</code></td>
+<td>Test only the named subdomains</td>
+</tr>
+<tr>
+<td><code>fierce --domain example.com --subdomains mail --traverse 10</code></td>
+<td>Also check 10 addresses either side of each record found</td>
+</tr>
+<tr>
+<td><code>fierce --domain example.com --subdomains mail --connect</code></td>
+<td>Try an HTTP connection to each host found</td>
+</tr>
+<tr>
+<td><code>fierce --domain example.com --wide</code></td>
+<td>Scan the whole range of every record found</td>
+</tr>
+</tbody>
+</table></div>
+<h3 class="tg-U" id="reverse-dns-lookup">Reverse DNS lookup <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h3>
+<p>An ordinary lookup turns a name into an address. A <strong>reverse DNS lookup</strong> turns an address into a name by finding its <strong>PTR</strong> record. Run across a whole range, it reveals hosts that share a block with a known server.</p>
+<pre><code class="language-bash">dnsrecon -d example.com -t std            # standard enumeration of a domain
+dnsrecon -r 192.0.2.0-192.0.2.255         # reverse lookup of every address in a range
+</code></pre>
+<p>Other reverse lookup tools to recognise: Reverse Lookup (MxToolbox), puredns, Reverse IP Domain Check and Reverse IP Lookup. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> the courseware's AI example asks for all subdomains "using dig" and answers with a command that queries the domain's <strong>NS</strong> records, saying the name servers listed "often include the subdomains as well".</p>
+<p><strong>In practice:</strong> NS records list name servers and nothing else. <code>dig</code> finds subdomains only if you guess them one by one, or if a zone transfer (<code>dig axfr</code>) is permitted. Recognise the command for the exam; do not rely on the claim.</p>
+</div>
+<div class="admonition update">
+<p class="admonition-title">Updated: January 2019</p>
+<p><strong>What changed.</strong> The courseware's AI-generated script runs <code>dig &lt;domain&gt; ANY</code> to fetch every record type at once. <strong>RFC 8482</strong>, published <strong>January 2019</strong>, allows a DNS server to refuse that: it may answer an <code>ANY</code> query with a small subset of records, or with a single made-up HINFO record whose CPU field reads "RFC8482". Many large providers do exactly this, so <code>ANY</code> now returns almost nothing from them.</p>
+<p><strong>The exam still expects:</strong> <code>ANY</code> as the query that requests all record types. In real work, ask for each type by name.</p>
+</div>
+<div class="admonition cpent">
+<p class="admonition-title">CPENT depth: how professionals map a domain</p>
+<ul>
+<li><strong>Check ownership first.</strong> A name that points at a cloud provider or a shared host belongs partly to someone else. Confirm with the client which names and ranges they may authorise.</li>
+<li><strong>Certificate transparency.</strong> Every publicly trusted TLS certificate is logged. Searching those logs (crt.sh is the usual front end) lists hostnames without sending one packet to the target.</li>
+<li><strong>Layer the sources.</strong> Passive tools first (subfinder, amass in passive mode), then resolve what they found, then brute-force names, then try <code>dig axfr</code> against each name server. Record which source produced each name.</li>
+<li><strong>From names to networks.</strong> Group the resolved addresses by the registry's NetRange and by autonomous system to see which blocks really belong to the client.</li>
+</ul>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Ask the lab's name server for everything. In the L01 attacker container:</p>
+<p><code>bash
+dig axfr kestrel-freight.lab @10.77.0.10</code></p>
+<p>Compare the answer with your list from section 3. One host is new: guessing could not find it and an ordinary lookup of its name returns NXDOMAIN. Read the TXT records too. The lab has no reverse zone, so <code>dig -x 10.77.0.20 @10.77.0.10</code> is refused.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 6</p>
+<ul>
+<li>A and AAAA addresses; MX mail; NS name server; CNAME alias; SOA authority; SRV service; PTR reverse; RP person; HINFO host; TXT text.</li>
+<li>A zone transfer (AXFR) copies the whole zone. Open to anyone, it is a full host list.</li>
+<li>Tools: SecurityTrails, Fierce, DNSRecon, DNSChecker, zdns, DNSdumpster.</li>
+<li><code>dnsrecon -d domain -t std</code>; <code>dnsrecon -r range</code> for reverse lookups, which use PTR records.</li>
+<li>In practice <code>ANY</code> queries are often refused, and NS records do not list subdomains.</li>
+</ul>
+</div>
+<h2 class="tg-U" id="7-network-and-email-footprinting">7. Network and email footprinting <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h2>
+<h3 class="tg-U" id="finding-the-network-range">Finding the network range <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h3>
+<p>Once Whois has given a server's IP address, the regional registry's database gives the whole block it belongs to. For an address in North America that means the ARIN Whois search. The range shows how big the network is and where to look for live machines in Module 3.</p>
+<p>Three ranges are reserved for <strong>private</strong> networks and never appear on the public internet: <code>10.0.0.0/8</code>, <code>172.16.0.0/12</code> and <code>192.168.0.0/16</code>. Seeing one in a leaked document or an email header tells you about the inside of a network.</p>
+<h3 class="tg-M" id="traceroute">Traceroute <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>Traceroute</strong> lists the routers between you and a target. It works by abusing a safety feature. Every IP packet carries a <strong>time to live (TTL)</strong> number. Each router subtracts one. A router that brings it to zero throws the packet away and sends back an ICMP "time exceeded" message, which reveals that router's address.</p>
+<figure class="dg"><svg viewBox="0 0 700 346" width="700" role="img" aria-label="How traceroute uses the TTL field to reveal each router on a path"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="b" x="18" y="22" width="124" height="28" rx="6"/><text x="80" y="41" text-anchor="middle" class="h">You</text><rect class="b" x="198" y="22" width="124" height="28" rx="6"/><text x="260" y="41" text-anchor="middle" class="h">Router 1</text><rect class="b" x="378" y="22" width="124" height="28" rx="6"/><text x="440" y="41" text-anchor="middle" class="h">Router 2</text><rect class="b" x="558" y="22" width="124" height="28" rx="6"/><text x="620" y="41" text-anchor="middle" class="h">Target</text><line class="lf" x1="80" y1="50" x2="80" y2="332"/><line class="lf" x1="260" y1="50" x2="260" y2="332"/><line class="lf" x1="440" y1="50" x2="440" y2="332"/><line class="lf" x1="620" y1="50" x2="620" y2="332"/><line class="ln" x1="83" y1="80" x2="257" y2="80" marker-end="url(#a)"/><text x="170.0" y="73" text-anchor="middle" class="s">Probe 1, TTL = 1</text><line class="ln" x1="257" y1="120" x2="83" y2="120" marker-end="url(#a)"/><text x="170.0" y="113" text-anchor="middle" class="s">ICMP time exceeded: router 1 revealed</text><line class="ln" x1="83" y1="160" x2="437" y2="160" marker-end="url(#a)"/><text x="260.0" y="153" text-anchor="middle" class="s">Probe 2, TTL = 2</text><line class="ln" x1="437" y1="200" x2="83" y2="200" marker-end="url(#a)"/><text x="260.0" y="193" text-anchor="middle" class="s">ICMP time exceeded: router 2 revealed</text><line class="ln" x1="83" y1="240" x2="617" y2="240" marker-end="url(#a)"/><text x="350.0" y="233" text-anchor="middle" class="s">Probe 3, TTL = 3</text><line class="ln" x1="617" y1="280" x2="83" y2="280" marker-end="url(#a)"/><text x="350.0" y="273" text-anchor="middle" class="s">Final reply: the target is reached</text><text x="350.0" y="320" text-anchor="middle" class="s">Each router subtracts 1 from the TTL. At 0 it discards the packet and reports back.</text></svg><figcaption>Traceroute sends probes with TTL 1, 2, 3 and so on. Each one dies one router further along.</figcaption></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Command</th>
+<th>Probe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ICMP traceroute</td>
+<td><code>tracert 192.0.2.10</code> (Windows default)</td>
+<td>ICMP echo requests</td>
+</tr>
+<tr>
+<td>UDP traceroute</td>
+<td><code>traceroute www.example.com</code> (Linux default)</td>
+<td>UDP datagrams</td>
+</tr>
+<tr>
+<td>TCP traceroute</td>
+<td><code>sudo tcptraceroute www.example.com</code></td>
+<td>TCP packets; gets through where ICMP is blocked</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Traceroute analysis</strong> means running traces to several hosts in the target's range and comparing the last few hops. A hop that appears just before many different targets is probably their gateway router or firewall. That is how an outsider sketches a network's layout. <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></p>
+<p>Traceroute tools to recognise: <strong>NetScanTools Pro</strong> (ICMP, UDP or TCP traces, with the country of each hop), <strong>PingPlotter</strong> (graphs latency and packet loss over time), Traceroute NG and the built-in <code>tracert</code>. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> traceroute uses ICMP and the TTL field; Windows <code>tracert</code> uses ICMP and Linux <code>traceroute</code> uses UDP. One line of the courseware places the TTL "in the ICMP header", and says the destination finally answers with a normal ping reply.</p>
+<p><strong>In practice:</strong> TTL is a field of the <strong>IP header</strong>. The final answer depends on the probe: an ICMP echo reply for <code>tracert</code>, an ICMP "port unreachable" for a UDP trace, a TCP reply for <code>tcptraceroute</code>. Lines of <code>* * *</code> mean a router chose not to answer, not that the path is broken.</p>
+</div>
+<h3 class="tg-M" id="tracking-email">Tracking email <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>Email tracking</strong> monitors what happens to a message after it is sent. Tracking tools can report the recipient's IP address and rough location, when the message was received and read, how long it was open, whether links were clicked, whether it was forwarded, and the device, operating system and browser used.</p>
+<p>An <strong>email header</strong> is the routing record at the top of every message, normally hidden. It contains:</p>
+<ul>
+<li>the sender's mail server and the authentication system it used;</li>
+<li>the sender's IP address and the address the message was sent from;</li>
+<li>the date and time the message was sent, and when each server received it;</li>
+<li>a unique message ID;</li>
+<li>the sender's full name.</li>
+</ul>
+<figure class="dg"><svg viewBox="0 0 690 248" width="690" role="img" aria-label="Each mail server on the way adds a Received line to the top of the email header"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar" d="M0 0L10 5L0 10z"/></marker></defs><rect class="b" x="14" y="8" width="200" height="32" rx="6"/><text x="114.0" y="29" text-anchor="middle" class="h">Sender&#x27;s device</text><text x="230" y="29" text-anchor="start" class="s">The oldest Received line, at the bottom, may show its IP address.</text><line class="ln" x1="114.0" y1="40" x2="114.0" y2="58" marker-end="url(#a)"/><rect class="b" x="14" y="58" width="200" height="32" rx="6"/><text x="114.0" y="79" text-anchor="middle" class="h">Sender&#x27;s mail server</text><text x="230" y="79" text-anchor="start" class="s">Adds a Received line and the authentication results.</text><line class="ln" x1="114.0" y1="90" x2="114.0" y2="108" marker-end="url(#a)"/><rect class="b" x="14" y="108" width="200" height="32" rx="6"/><text x="114.0" y="129" text-anchor="middle" class="h">Relays in between</text><text x="230" y="129" text-anchor="start" class="s">Each one adds another Received line on top.</text><line class="ln" x1="114.0" y1="140" x2="114.0" y2="158" marker-end="url(#a)"/><rect class="b" x="14" y="158" width="200" height="32" rx="6"/><text x="114.0" y="179" text-anchor="middle" class="h">Recipient&#x27;s mail server</text><text x="230" y="179" text-anchor="start" class="s">The newest Received line is at the top.</text><line class="ln" x1="114.0" y1="190" x2="114.0" y2="208" marker-end="url(#a)"/><rect class="b" x="14" y="208" width="200" height="32" rx="6"/><text x="114.0" y="229" text-anchor="middle" class="h">Recipient&#x27;s mailbox</text><text x="230" y="229" text-anchor="start" class="s">Read the header from the bottom up to follow the journey.</text></svg><figcaption>An email&#x27;s journey. Every server stamps the header, newest stamp on top.</figcaption></figure>
+<p>Tools to recognise: <strong>eMailTrackerPro</strong> (analyses headers and maps the sender's location), <strong>IP2LOCATION's Email Header Tracer</strong>, MxToolbox, Holehe, DNS Checker Email Header Analyzer and Social Catfish. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> email tracking reveals the recipient's IP address, location, device and reading time.</p>
+<p><strong>In practice:</strong> tracking depends on the mail program loading a hidden image. Large mail services now fetch images through their own servers, so the tracker sees the provider's address, not the reader's. Header analysis is still reliable for the path a message took.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>The lab is one network segment, so a traceroute there has nothing to show. Read the mail server's greeting instead; it names the host and its software:</p>
+<p><code>bash
+printf 'QUIT\r\n' | nc -w 3 10.77.0.40 25</code></p>
+<p><strong>With internet:</strong> run <code>traceroute example.com</code> (macOS, Linux) or <code>tracert example.com</code> (Windows) from your own computer and count the hops. Then open any email you have received, choose "show original" or "view source", and find the bottom <code>Received:</code> line.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 7</p>
+<ul>
+<li>The regional registry gives the network range for a known IP address.</li>
+<li>Private ranges: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16.</li>
+<li>Traceroute raises the TTL one hop at a time; routers reply "time exceeded".</li>
+<li>Windows <code>tracert</code> is ICMP; Linux <code>traceroute</code> is UDP; <code>tcptraceroute</code> is TCP.</li>
+<li>An email header shows the sender's server, IP address, times, authentication and message ID.</li>
+</ul>
+</div>
+<h2 class="tg-U" id="8-footprinting-through-social-engineering">8. Footprinting through social engineering <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></h2>
+<p><strong>Social engineering</strong> is getting information from people by deceiving them. It is non-technical: the target does not realise anything was taken. The attacker first wins the confidence of someone authorised, then leads them to reveal what should have stayed private. Module 9 covers it in full; this section covers its use for footprinting.</p>
+<p>What it yields: card details, usernames and passwords, the security products in use, operating system and software versions, IP addresses, server names and the layout of the network.</p>
+<h3 class="tg-M" id="the-four-techniques">The four techniques <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>What the attacker does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Eavesdropping</td>
+<td>Intercepts communication of any kind (audio, video or written) without the consent of the people communicating</td>
+</tr>
+<tr>
+<td>Shoulder surfing</td>
+<td>Secretly watches a person type a password, PIN or account number, usually from behind in a crowded place</td>
+</tr>
+<tr>
+<td>Dumpster diving (trashing)</td>
+<td>Searches rubbish bins, printer waste and desk notes for bills, contact lists, printouts and other discarded information</td>
+</tr>
+<tr>
+<td>Impersonation</td>
+<td>Pretends to be someone legitimate (a courier, cleaner, technician, client or visitor), in person or by phone</td>
+</tr>
+</tbody>
+</table></div>
+<p>The courseware also names tailgating, piggybacking, third-party authorisation and reverse social engineering; Module 9 defines them. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<h3 class="tg-R" id="what-social-networks-give-away">What social networks give away <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>What users do</th>
+<th>What the attacker gets</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Maintain a profile</td>
+<td>Contact information, location</td>
+</tr>
+<tr>
+<td>Connect to friends, chat</td>
+<td>Friends list and information about friends</td>
+</tr>
+<tr>
+<td>Share photos and videos</td>
+<td>Identity of family members, interests</td>
+</tr>
+<tr>
+<td>Play games, join groups</td>
+<td>Interests</td>
+</tr>
+<tr>
+<td>Create events</td>
+<td>Activities</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>What organisations do</th>
+<th>What the attacker gets</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Run user surveys</td>
+<td>Business strategies</td>
+</tr>
+<tr>
+<td>Promote products</td>
+<td>Product profile</td>
+</tr>
+<tr>
+<td>Give user support</td>
+<td>An opening for social engineering</td>
+</tr>
+<tr>
+<td>Recruit</td>
+<td>Platform and technology information</td>
+</tr>
+<tr>
+<td>Check the background of new hires</td>
+<td>Type of business</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>No command for this one. From the lab's staff page and the web server's response headers, write a three-line phone script a caller could use to sound like a supplier's engineer. Then write the one question the help desk should ask to stop it. Do this on paper only; calling real people is out of scope everywhere without written permission.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 8</p>
+<ul>
+<li>Social engineering deceives people into revealing information; the victim does not notice.</li>
+<li>Eavesdropping intercepts communication; shoulder surfing watches; dumpster diving searches rubbish; impersonation pretends.</li>
+<li>Profiles reveal contacts and location; photos reveal family and interests; events reveal activities.</li>
+<li>Recruitment posts reveal platforms and technology; surveys reveal business strategy.</li>
+<li>Collecting posts is section 4; tricking people is this section.</li>
+</ul>
+</div>
+<h2 class="tg-R" id="9-footprinting-tools-and-ai">9. Footprinting tools and AI <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></h2>
+<p>The earlier sections each used one tool for one job. The tools here chain many jobs together.</p>
+<h3 class="tg-M" id="frameworks">Frameworks <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Maltego</strong></td>
+<td>Draws the relationships between people, groups, organisations, websites, domains, IP addresses and documents as a graph. Start from one entity, such as a website, and expand to its email addresses and phone numbers</td>
+</tr>
+<tr>
+<td><strong>Recon-ng</strong></td>
+<td>A web reconnaissance framework built from independent modules with their own database. The module <code>recon/domains-hosts/brute_hosts</code> lists hosts for a domain</td>
+</tr>
+<tr>
+<td><strong>FOCA</strong></td>
+<td>"Fingerprinting Organizations with Collected Archives". Downloads a domain's public documents (Office, OpenOffice, PDF) and extracts their <strong>metadata</strong>: usernames, software versions, internal server names</td>
+</tr>
+<tr>
+<td><strong>subfinder</strong></td>
+<td>Finds valid subdomains from passive online sources; output as JSON, file or screen</td>
+</tr>
+<tr>
+<td><strong>OSINT Framework</strong></td>
+<td>A website that arranges free OSINT tools as a tree by category. Each entry may carry a marker</td>
+</tr>
+<tr>
+<td><strong>Recon-Dog</strong></td>
+<td>All-in-one tool using public interfaces: Whois, name server lookup, port scan, CMS detection, honeypot detection, subdomains, reverse IP lookup</td>
+</tr>
+<tr>
+<td><strong>BillCipher</strong></td>
+<td>Information gathering for a website or IP address: DNS and Whois lookups, port scan, zone transfer, host finder, reverse IP lookup</td>
+</tr>
+</tbody>
+</table></div>
+<p>OSINT Framework's four markers: <strong>(T)</strong> a tool you must install and run locally; <strong>(D)</strong> a Google dork; <strong>(R)</strong> registration required; <strong>(M)</strong> a link whose address you must edit by hand.</p>
+<p>FOCA's features: web search, DNS search, IP resolution, PTR scanning, Bing IP and common names (a dictionary attack against DNS). <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<p>Others to recognise by name: Sudomy, whatweb, Raccoon, Orb, Web Check and OSINT.SH. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> match each tool to its description above.</p>
+<p><strong>In practice:</strong> several are showing their age. As checked in November 2026, FOCA runs only on Windows and needs a SQL Server database; Sublist3r's own page still recommends Python 2.7 and 3.4; Recon-Dog and BillCipher date from the Python 2 era. Working testers lean on maintained tools such as subfinder, amass and Recon-ng. The exam asks about all of them.</p>
+</div>
+<div class="admonition update">
+<p class="admonition-title">Updated: October 2024</p>
+<p><strong>What changed.</strong> The free edition of Maltego is now called Maltego Graph Community Edition and sits in the free "Basic" plan. In <strong>October 2024</strong> (version 4.8.1) Maltego introduced a credit system for it: a monthly allowance of 200 credits to spend on the included data sources, with a Maltego ID account required. Status checked 18 November 2026.</p>
+<p><strong>The exam still expects:</strong> "Maltego" as the tool that maps relationships and real-world links between entities.</p>
+</div>
+<h3 class="tg-M" id="ai-powered-osint">AI-powered OSINT <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<p><strong>Six use cases:</strong> web scraping; pattern recognition (finding entities and the links between them); content summarisation; sentiment analysis; image recognition (face recognition, metadata analysis, reverse image search and deepfake detection); and AI detection (spotting content another AI produced).</p>
+<p><strong>Four benefits:</strong> improved efficiency, greater scope, enhanced visibility and increased investigator safety.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What the courseware says it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td R="R"><strong>Taranis AI</strong></td>
+<td>Collects unstructured news articles from many sources, improves them with language processing, and helps analysts turn them into structured reports</td>
+</tr>
+<tr>
+<td R="R"><strong>OSS Insight</strong></td>
+<td>Analyses billions of GitHub events; answers plain-language questions about repositories, developers and trends</td>
+</tr>
+<tr>
+<td R="R">DorkGPT, DorkGenius</td>
+<td>Generate Google dorks from a description</td>
+</tr>
+<tr>
+<td R="R">Google Word Sniper</td>
+<td>Refines search queries with targeted keywords</td>
+</tr>
+<tr>
+<td R="R">Cylect.io</td>
+<td>Combines many OSINT databases in one interface</td>
+</tr>
+<tr>
+<td R="R">ChatPDF</td>
+<td>Answers questions about an uploaded PDF</td>
+</tr>
+<tr>
+<td R="R">Bardeen.ai</td>
+<td>Automates collecting data from websites</td>
+</tr>
+<tr>
+<td R="R">DarkGPT</td>
+<td>Queries leaked databases through a language model</td>
+</tr>
+<tr>
+<td R="R">PenLink Cobwebs</td>
+<td>Collects and analyses data from many online sources for investigations</td>
+</tr>
+<tr>
+<td R="R">Explore AI</td>
+<td>Searches inside YouTube videos</td>
+</tr>
+<tr>
+<td R="R">AnyPicker</td>
+<td>Visual web scraper that needs no code</td>
+</tr>
+</tbody>
+</table></div>
+<h3 class="tg-D" id="prompt-to-command">Prompt to command <span class="tag tag-D" title="A hands-on skill for the practical exams. Run it at a keyboard.">DO</span></h3>
+<p>In the AI-assisted steps you describe the task and the assistant returns a command. The exam may show the prompt and ask which command fits.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>You ask for</th>
+<th>A correct command looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td D="D">PDF files on a site, found with a search operator, saved to a file</td>
+<td><code>lynx --dump "https://www.google.com/search?q=site:example.com+filetype:pdf" &gt; recon1.txt</code></td>
+</tr>
+<tr>
+<td D="D">VPN login pages, using <code>inurl</code></td>
+<td>A <code>lynx --dump</code> of a Google search for <code>inurl:"remote login"</code> plus the vendor name, piped through <code>grep</code> to keep the links</td>
+</tr>
+<tr>
+<td D="D">Subdomains with Sublist3r, saved to a file</td>
+<td><code>sublist3r -d example.com -o subdomains.txt</code></td>
+</tr>
+<tr>
+<td D="D">200 email accounts from one source, saved</td>
+<td><code>theHarvester -d example.com -l 200 -b baidu -f emails.xml</code></td>
+</tr>
+<tr>
+<td D="D">Accounts for a username, saved</td>
+<td><code>sherlock &lt;username&gt; --output recon2.txt</code></td>
+</tr>
+<tr>
+<td D="D">Install and run DNS enumeration</td>
+<td><code>sudo apt-get update &amp;&amp; sudo apt-get install -y dnsrecon &amp;&amp; dnsrecon -d example.com -t std</code></td>
+</tr>
+<tr>
+<td D="D">The routers on the path to a host</td>
+<td><code>traceroute www.example.com</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>The courseware finishes with a short AI-written Python script. It wraps three shell commands (<code>dig &lt;domain&gt; ANY +noall +answer</code>, <code>whois &lt;domain&gt;</code> and <code>theHarvester -d &lt;domain&gt; -b all -l 100</code>) in functions and prints each result in turn.</p>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> the commands above are what the courseware shows for each prompt.</p>
+<p><strong>In practice:</strong> generated commands need checking. In the courseware's own examples the script is written to disk with a malformed <code>cat &lt;&lt;&lt;</code> line, the Sherlock option is printed as <code>- - output</code>, and search engines block scripted queries from <code>lynx</code>. Read every switch against the tool's help before you run it. A model drafting a command is not permission to run it.</p>
+</div>
+<div class="admonition coasp">
+<p class="admonition-title">COASP link: footprinting AI systems</p>
+<p>Everything in this chapter applies when the target is an AI system, with new things to look for.</p>
+<ul>
+<li><strong>Exposed model servers.</strong> IoT search engines index model-serving software on its default ports, often with no login (Module 3's COASP box lists the ports).</li>
+<li><strong>Leaked keys.</strong> API keys for AI services are among the secrets most often committed to public code repositories. The dorks in section 2 and the repository searches in section 3 find them.</li>
+<li><strong>Published models and data.</strong> A team's public model pages and datasets reveal what its system was trained on and how it is prompted.</li>
+<li><strong>Job adverts.</strong> "Experience with a named vector database and model gateway" is section 3's technology leak again.</li>
+</ul>
+<p>MITRE ATLAS, the AI counterpart of ATT&amp;CK, begins with a Reconnaissance tactic for this reason. And OSINT is itself becoming AI-assisted, so your own posts are now read by models as well as people.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>A footprinting script in one line. In the L01 attacker container:</p>
+<p><code>bash
+D=kestrel-freight.lab; for t in SOA NS TXT; do dig +noall +answer $D $t @10.77.0.10; done; curl -s http://10.77.0.20/staff | grep -oE '[a-z]+@[a-z.-]+' | sort -u</code></p>
+<p>It asks for three record types by name, not <code>ANY</code>, then harvests the email addresses. Ask an AI assistant to write the same thing and compare its answer with this one.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 9</p>
+<ul>
+<li>Maltego maps relationships; Recon-ng is a modular framework; FOCA extracts document metadata.</li>
+<li>OSINT Framework markers: (T) install, (D) dork, (R) register, (M) edit the URL.</li>
+<li>AI helps OSINT with scraping, pattern recognition, summarising, sentiment, images and AI detection.</li>
+<li>Taranis AI works on news; OSS Insight works on GitHub data.</li>
+<li>Know the commands for Sublist3r, theHarvester, Sherlock, DNSRecon and traceroute, and check generated ones.</li>
+</ul>
+</div>
+<h2 class="tg-M" id="10-footprinting-countermeasures">10. Footprinting countermeasures <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h2>
+<p>Footprinting cannot be blocked with a firewall, because most of it never reaches you. The defence is to publish less, and to find your own leaks first.</p>
+<h3 class="tg-M" id="the-list-grouped">The list, grouped <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Countermeasures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DNS and Whois</td>
+<td>Restrict zone transfers to authorised servers. Keep internal and external DNS apart (<strong>split DNS</strong>). Use privacy services on Whois records and keep the domain profile private. Sanitise the details given to registrars</td>
+</tr>
+<tr>
+<td>Web servers</td>
+<td>Disable directory listings. Configure servers (including IIS) so banners do not leak software details. Stop search engines caching pages. Avoid cross-linking critical assets at domain level. Ask archive.org to delete the site's history. Use CAPTCHAs and rate limiting against automated collection</td>
+</tr>
+<tr>
+<td>What you publish</td>
+<td>Limit information on the website, in press releases, annual reports, product catalogues and job adverts. Keep business plans and proprietary documents offline. Encrypt and password-protect sensitive information</td>
+</tr>
+<tr>
+<td>People</td>
+<td>Train staff regularly to recognise social engineering. Enforce policies on what may be shared with outsiders. Have staff use pseudonyms on blogs, groups and forums. Restrict access to social networks from the work network. Do not post locations or travel plans</td>
+</tr>
+<tr>
+<td>Devices and locations</td>
+<td>Disable geo-tagging on cameras; turn off location access on phones when it is not needed. Keep strategic information off noticeboards and walls</td>
+</tr>
+<tr>
+<td>Accounts and network</td>
+<td>Disable or delete the accounts of people who have left. Use multi-factor authentication. Switch off protocols that are not required. Use TCP/IP and IPsec filters. Hide server addresses behind a VPN or proxy. Have mail servers ignore mail from anonymous senders. Deploy honeypots to detect and divert footprinting</td>
+</tr>
+<tr>
+<td>Test yourself</td>
+<td>Run footprinting techniques against your own organisation and remove whatever sensitive information you find</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition exam">
+<p class="admonition-title">Exam answer / In practice</p>
+<p><strong>Exam answer:</strong> "prevent search engines from caching a web page" and "request archive.org to delete the history of the website" are listed countermeasures.</p>
+<p><strong>In practice:</strong> Google no longer offers cached pages (section 2), so the caching control matters mainly for other search engines and archives. Removing something from an archive does not remove the copies people already made. Treat anything that was once public as public.</p>
+</div>
+<div class="admonition hospital">
+<p class="admonition-title">Worked example: what a stranger can learn about a hospital</p>
+<p>A 300-bed hospital asks what an outsider could find without logging in to anything. One afternoon of footprinting returns this.</p>
+<ol>
+<li><strong>Staff and structure.</strong> The departments page lists the laboratory in-charge, the radiology technologist and the IT officer, with email addresses. The username pattern is obvious.</li>
+<li><strong>Technology.</strong> A job advert asks for experience with a named laboratory information system and imaging archive. A tender notice on a public procurement portal names the model of the new CT scanner.</li>
+<li><strong>Hosts.</strong> DNS names such as <code>pacs-archive</code> and <code>lis-legacy</code> say what each server does. An open zone transfer lists every one.</li>
+<li><strong>Old pages.</strong> An archived copy of the website still holds a staff phone directory that was removed two years ago.</li>
+<li><strong>Devices.</strong> An IoT search engine shows the hospital's address range answering on a medical imaging port.</li>
+</ol>
+<p>Put together, that is enough for a convincing phone call to the laboratory "from the vendor's support desk". The fixes are section 10: role mailboxes, vaguer adverts, neutral host names, closed zone transfers, imaging systems off the internet.</p>
+<p>Swap "hospital" for "freight company" and "CT scanner" for "warehouse scanners": the lab's generic skin is the same story.</p>
+</div>
+<div class="admonition try">
+<p class="admonition-title">Try it</p>
+<p>Be the defender. List what the lab web server would need to stop announcing:</p>
+<p><code>bash
+curl -s -D - -o /dev/null http://10.77.0.20/ | grep -i -E 'server|powered'</code></p>
+<p>Then name, from the table above, the fix for each of your findings in sections 2, 3, 4 and 6.</p>
+</div>
+<div class="admonition recap">
+<p class="admonition-title">Recap: section 10</p>
+<ul>
+<li>DNS: restrict zone transfers, use split DNS. Whois: privacy services.</li>
+<li>Web: disable directory listings, hide banners, control caching and archives.</li>
+<li>Publishing: say less in adverts, press releases and reports; keep sensitive documents offline and encrypted.</li>
+<li>People: awareness training, clear policy, no travel plans online, delete leavers' accounts.</li>
+<li>Footprint yourself and remove what you find.</li>
+</ul>
+</div>
+<h2 class="tg-D" id="11-lab-walk-through">11. Lab walk-through <span class="tag tag-D" title="A hands-on skill for the practical exams. Run it at a keyboard.">DO</span></h2>
+<p>Run this in course lab L01. The generic skin (Kestrel Freight, <code>kestrel-freight.lab</code>) and the healthcare skin (Aarogya Demo Hospital, <code>aarogya-demo.lab</code>) behave identically; swap the domain. Work from the attacker container. Allow about 60 minutes including notes.</p>
+<pre><code class="language-bash"># 1. Start the lab and open the attacker shell
+cd labs/L01-recon-enumeration
+docker compose up -d --build
+docker compose exec attacker bash
+
+# 2. Organisation information: who works here, and what is the username pattern?
+curl -s http://10.77.0.20/staff | grep -oE '[a-z]+@[a-z.-]+' | sort -u
+
+# 3. What did the developer leave in the page source?
+curl -s http://10.77.0.20/ | grep -o '&lt;!--.*--&gt;'
+
+# 4. What is the site asking search engines not to index?
+curl -s http://10.77.0.20/robots.txt
+
+# 5. System information: server software and language
+curl -s -D - -o /dev/null http://10.77.0.20/
+
+# 6. Network information: the zone's authority record, then the whole zone
+dig +noall +answer kestrel-freight.lab SOA @10.77.0.10
+dig axfr kestrel-freight.lab @10.77.0.10
+
+# 7. Hidden paths, the way a crawler would find them
+gobuster dir -q -u http://10.77.0.20 -w /usr/share/wordlists/common-small.txt
+</code></pre>
+<p>Answer these in your log as you go:</p>
+<ol>
+<li>Which of steps 2 to 7 are passive and which are active? (Careful: you are talking to the target every time.)</li>
+<li>Fill in the three-row table from section 1, organisation, network and system information, with what you found.</li>
+<li>Which host appears in step 6 that normal lookups deny? What does its name tell you?</li>
+<li>For each leak, write the countermeasure from section 10.</li>
+</ol>
+<p>That log is your footprint report. Module 3 starts from it.</p>
+<h2 id="quiz">Quiz</h2>
+<p>Twelve questions. The options are shuffled every time you load the page.</p>
+<div class="quiz">
+<div class="q"><p><b>1.</b> Which of these is passive footprinting? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">Requesting a DNS zone transfer from the target&#x27;s name server</button>
+<button type="button">Phoning the help desk while posing as a supplier</button>
+<button type="button" data-ok>Reading an archived copy of the target&#x27;s website on archive.org</button>
+<button type="button">Port scanning the target&#x27;s web server</button>
+<p class="why" hidden>Passive footprinting involves no direct interaction with the target. The other three all contact the target&#x27;s systems or people.</p></div>
+<div class="q"><p><b>2.</b> Which operator restricts results to pages that have ALL the given words in the page title? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button"><code>intitle:</code></button>
+<button type="button"><code>allinurl:</code></button>
+<button type="button" data-ok><code>allintitle:</code></button>
+<button type="button"><code>inanchor:</code></button>
+<p class="why" hidden>The all- prefix requires every word; intitle: needs only the one word that follows it, and allinurl: looks in the URL.</p></div>
+<div class="q"><p><b>3.</b> What is the Google Hacking Database? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">A list of Google employees&#x27; leaked passwords</button>
+<button type="button" data-ok>A collection of search queries (dorks) that find sensitive information, hosted on Exploit-DB</button>
+<button type="button">Google&#x27;s own vulnerability scanner</button>
+<button type="button">A database of websites Google has removed</button>
+<p class="why" hidden>The GHDB is the dork collection that forms part of Exploit-DB. SearchSploit searches Exploit-DB offline.</p></div>
+<div class="q"><p><b>4.</b> Startpage, MetaGer and eTools.ch are examples of what? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">IoT search engines</button>
+<button type="button">FTP search engines</button>
+<button type="button" data-ok>Meta search engines</button>
+<button type="button">People search services</button>
+<p class="why" hidden>Meta search engines send a query to other engines and merge the results; they keep no index of their own. Shodan and Censys are IoT search engines.</p></div>
+<div class="q"><p><b>5.</b> Which layer of the web is, by definition, not indexed by ordinary search engines and reachable only with special tools that allow anonymous use? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">Surface web</button>
+<button type="button">Deep web</button>
+<button type="button" data-ok>Dark web</button>
+<button type="button">Meta web</button>
+<p class="why" hidden>The deep web is everything unindexed; the dark web is the subset that needs tools such as Tor Browser.</p></div>
+<div class="q"><p><b>6.</b> Which site would you use to read a US company&#x27;s official financial filings? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">SimilarWeb</button>
+<button type="button" data-ok>EDGAR</button>
+<button type="button">SEMRush</button>
+<button type="button">Wikimapia</button>
+<p class="why" hidden>EDGAR is the SEC&#x27;s filing system. SimilarWeb estimates traffic, SEMRush researches keywords, Wikimapia is a map.</p></div>
+<div class="q"><p><b>7.</b> In <code>theHarvester -d example.com -l 200 -b baidu</code>, what does <code>-b</code> set? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">The number of results</button>
+<button type="button">A brute-force mode</button>
+<button type="button" data-ok>The data source to search</button>
+<button type="button">The output file</button>
+<p class="why" hidden>-d is the domain, -l the result limit, -b the data source and -f the output file.</p></div>
+<div class="q"><p><b>8.</b> On which port does the Whois protocol listen? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">TCP 53</button>
+<button type="button">UDP 161</button>
+<button type="button" data-ok>TCP 43</button>
+<button type="button">TCP 443</button>
+<p class="why" hidden>Whois is a query and response protocol on TCP port 43. Port 53 is DNS.</p></div>
+<div class="q"><p><b>9.</b> Which DNS record maps an IP address back to a hostname? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">CNAME</button>
+<button type="button" data-ok>PTR</button>
+<button type="button">MX</button>
+<button type="button">SOA</button>
+<p class="why" hidden>PTR records serve reverse lookups. CNAME is an alias, MX the mail server, SOA the authority record.</p></div>
+<div class="q"><p><b>10.</b> A Linux user runs <code>traceroute www.example.com</code> with no options. Which protocol carries the probes? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">ICMP</button>
+<button type="button" data-ok>UDP</button>
+<button type="button">TCP</button>
+<button type="button">ARP</button>
+<p class="why" hidden>Linux traceroute sends UDP by default; Windows tracert sends ICMP. tcptraceroute is the TCP variant.</p></div>
+<div class="q"><p><b>11.</b> An attacker dressed as a courier walks through an office reading notes left on desks. Which technique is this? <span class="tag tag-M" title="Likely to be asked directly. Know it exactly.">MEMORISE</span></p>
+<button type="button">Eavesdropping</button>
+<button type="button">Dumpster diving</button>
+<button type="button" data-ok>Impersonation</button>
+<button type="button">Shoulder surfing</button>
+<p class="why" hidden>Pretending to be a legitimate person is impersonation. Dumpster diving searches rubbish; shoulder surfing watches someone type.</p></div>
+<div class="q"><p><b>12.</b> A hospital&#x27;s name server gives its whole zone to anyone who asks. Which countermeasure fixes this directly? <span class="tag tag-U" title="Needed to reason through scenario questions. Do not recite it.">UNDERSTAND</span></p>
+<button type="button">Whois privacy services</button>
+<button type="button">Disabling directory listings</button>
+<button type="button" data-ok>Restricting zone transfers to authorised servers</button>
+<button type="button">Disabling geo-tagging</button>
+<p class="why" hidden>Only the organisation&#x27;s own secondary name servers should be allowed to transfer the zone. Split DNS further limits what the public zone contains.</p></div>
+<p class="score" aria-live="polite"></p></div>
+<h2 id="exam-cheat-sheet">Exam cheat sheet</h2>
+<p>Only the MEMORISE items from this chapter, collected automatically. If a fact is not here, you need to understand or recognise it, not recite it.</p>
+<div class="cheat">
+<p><strong>Footprinting concepts</strong></p>
+<ul>
+<li>Footprinting types: passive = no direct interaction (OSINT, proprietary databases and paid services, intelligence shared by partners); active = direct interaction (DNS interrogation, social engineering, network and port scanning, user and service enumeration). Reconnaissance = footprinting (exam)</li>
+<li>Footprinting collects three kinds of information: organization (employees, addresses, phone numbers, partners, web technologies, press releases, patents); network (domains and subdomains, network blocks, topology, reachable IP addresses, Whois and DNS records); system (web server OS, server locations, public email addresses, usernames and passwords)</li>
+<li>Six footprinting threats: social engineering; system and network attacks; information leakage; privacy loss; corporate espionage; business loss</li>
+</ul>
+<p><strong>Footprinting through search engines</strong></p>
+<ul>
+<li>Google operators: <code>site:</code> one site or domain; <code>inurl:</code> / <code>allinurl:</code> words in the URL; <code>intitle:</code> / <code>allintitle:</code> words in the page title; <code>intext:</code> words in the body; <code>inanchor:</code> / <code>allinanchor:</code> words in link text; <code>filetype:</code> file extension; <code>cache:</code> Google's stored copy; <code>link:</code> pages linking to a URL; <code>related:</code> similar sites; <code>info:</code> details of a page; <code>before:</code> / <code>after:</code> date. Syntax <code>operator:term</code>, no space. The <code>all...</code> forms need every word</li>
+<li>GHDB (Google Hacking Database): the collection of Google dorks hosted on Exploit-DB. SearchSploit: command-line tool that searches a local, offline copy of Exploit-DB, useful on air-gapped networks</li>
+<li>Search engine types: meta search engines (Startpage, MetaGer, eTools.ch) query other engines, hold no index of their own and hide the user's IP; FTP search engines (NAPALM FTP Indexer, FreewareWeb FTP File Search, Mamont, Globalfilesearch.com) find files on FTP servers; IoT search engines (Shodan, Censys, ZoomEye) find internet-connected devices with their IP, location and open ports</li>
+</ul>
+<p><strong>Footprinting through internet research services</strong></p>
+<ul>
+<li>Subdomain tools: Netcraft, DNSdumpster, Pentest-Tools Find Subdomains, Sublist3r (<code>sublist3r -d domain -o file</code>); dork <code>site:target.com -inurl:www</code>. Wayback Machine (archive.org) keeps old versions of web pages, including removed ones; Photon retrieves archived URLs (<code>--wayback</code>)</li>
+<li>Surface web = indexed by search engines; deep web = not indexed (behind logins and databases); dark web (darknet) = subset of the deep web reached only with special tools, allows anonymous use. Dark web tools: Tor Browser, ExoneraTor, OnionLand Search</li>
+<li>Competitive intelligence = legally gathering and analysing information about competitors; direct approach (trade shows, social engineering of employees and customers) or indirect (online sources). Sites. When did it begin, how did it develop: EDGAR, D&amp;B Hoovers, LexisNexis, Business Wire, Factiva. What are its plans: MarketWatch, The Wall Street Transcript, Euromonitor, Experian, The Search Monitor, USPTO. What do experts say: SEMRush, ABI/INFORM Global, SimilarWeb, SERanking</li>
+</ul>
+<p><strong>Footprinting through social networking sites</strong></p>
+<ul>
+<li>theHarvester: <code>-d</code> domain or company, <code>-l</code> limit on results, <code>-b</code> data source (for example <code>-b linkedin</code>, <code>-b baidu</code>), <code>-f</code> output file. Sherlock: searches many social networks for one username. Email Spider and theHarvester harvest email lists</li>
+</ul>
+<p><strong>Whois footprinting</strong></p>
+<ul>
+<li>Whois: query and response protocol on TCP port 43. Returns domain name details, registrar, owner contact details, name servers, NetRange, creation, expiry and last-updated dates, domain status. Whois models: thick (complete data from all registrars), thin (only the name of the registrar's Whois server), decentralized (several independent entities hold complete data)</li>
+<li>Five RIRs: ARIN (North America), RIPE NCC (Europe, Middle East, Central Asia), APNIC (Asia Pacific), LACNIC (Latin America and Caribbean), AFRINIC (Africa). Private IP ranges: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16</li>
+</ul>
+<p><strong>DNS footprinting</strong></p>
+<ul>
+<li>Zone transfer (AXFR): copies an entire DNS zone in one request; if allowed to anyone it hands over every host name. DNS tools: SecurityTrails, Fierce, DNSChecker, zdns, DNSdumpster. <code>dnsrecon -d domain -t std</code> standard enumeration; <code>dnsrecon -r first-last</code> reverse lookup of a range. Reverse DNS finds the PTR record for an IP address</li>
+</ul>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Record</th>
+<th>What it holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>The IPv4 address of a host</td>
+</tr>
+<tr>
+<td>AAAA</td>
+<td>The IPv6 address of a host</td>
+</tr>
+<tr>
+<td>MX</td>
+<td>The domain's mail server</td>
+</tr>
+<tr>
+<td>NS</td>
+<td>The domain's name server</td>
+</tr>
+<tr>
+<td>CNAME</td>
+<td>An alias: another name for a host</td>
+</tr>
+<tr>
+<td>SOA</td>
+<td>Start of authority: which server is authoritative for the domain</td>
+</tr>
+<tr>
+<td>SRV</td>
+<td>Service records: where a named service runs</td>
+</tr>
+<tr>
+<td>PTR</td>
+<td>Maps an IP address back to a hostname (reverse lookup)</td>
+</tr>
+<tr>
+<td>RP</td>
+<td>The responsible person</td>
+</tr>
+<tr>
+<td>HINFO</td>
+<td>Host information: CPU type and operating system</td>
+</tr>
+<tr>
+<td>TXT</td>
+<td>Unstructured text</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Network and email footprinting</strong></p>
+<ul>
+<li>Traceroute: sends probes with rising TTL; each router subtracts 1 and at 0 discards the packet and returns ICMP time exceeded, revealing itself. Windows <code>tracert</code> uses ICMP; Linux <code>traceroute</code> uses UDP; <code>tcptraceroute</code> uses TCP when ICMP is blocked. Tools: NetScanTools Pro, PingPlotter, Traceroute NG</li>
+<li>Email header shows: sender's mail server, sender's IP address, date and time sent and received, authentication system used by the sender's server, a unique message ID, sender's full name. Email tracking tools: eMailTrackerPro, IP2LOCATION Email Header Tracer, MxToolbox, Holehe, DNS Checker Email Header Analyzer, Social Catfish</li>
+</ul>
+<p><strong>Footprinting through social engineering</strong></p>
+<ul>
+<li>Social engineering for footprinting: eavesdropping (intercepting audio, video or written communication without consent); shoulder surfing (secretly watching someone enter passwords or PINs); dumpster diving, also called trashing (searching bins for bills, printouts, notes); impersonation (pretending to be a legitimate or authorised person)</li>
+</ul>
+<p><strong>Footprinting tools and AI</strong></p>
+<ul>
+<li>Footprinting tools: Maltego (maps relationships between people, organizations, domains, infrastructure); Recon-ng (modular web reconnaissance framework, e.g. module <code>recon/domains-hosts/brute_hosts</code>); FOCA (finds metadata and hidden information in documents); OSINT Framework (web directory of OSINT tools; markers (T) install locally, (D) Google dork, (R) registration required, (M) edit the URL manually); subfinder (passive subdomain discovery)</li>
+<li>AI in OSINT: use cases are web scraping, pattern recognition, content summarization, sentiment analysis, image recognition, AI detection; benefits are improved efficiency, greater scope, enhanced visibility, increased investigator safety. Tools: Taranis AI (news and situational analysis), OSS Insight (analyses GitHub events)</li>
+</ul>
+<p><strong>Footprinting countermeasures</strong></p>
+<ul>
+<li>Footprinting countermeasures: restrict zone transfers to authorized servers; use split DNS (separate internal and external); opt for Whois privacy services; disable directory listings; configure web servers to avoid information leakage; limit what is published on websites, press releases and job adverts; security awareness training against social engineering; stop search engines caching pages; ask archive.org to delete site history; disable geo-tagging; delete accounts of former employees; encrypt and password-protect sensitive information; use footprinting on yourself to find and remove leaks</li>
+</ul>
+</div>
+<h2 id="coverage-check-against-the-official-module-2">Coverage check against the official Module 2</h2>
+<p>Each sub-topic of the official module and where this chapter covers it. The section-by-section verification report is kept with the handbook source as <code>verification/ceh/m02-footprinting-and-reconnaissance.md</code>. No official text is reproduced.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Official sub-topic</th>
+<th>Covered in</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reconnaissance; passive and active footprinting</td>
+<td>1</td>
+<td>OK, exam/practice note on scanning and on the passive attack class</td>
+</tr>
+<tr>
+<td>Information obtained; objectives; footprinting threats; methodology</td>
+<td>1</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Advanced Google hacking techniques and operators</td>
+<td>2</td>
+<td>OK, exam/practice note and update on retired operators</td>
+</tr>
+<tr>
+<td>What a hacker can do with Google hacking; Google hacking with AI</td>
+<td>2, 9</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Google Hacking Database; SearchSploit</td>
+<td>2</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>VPN footprinting through the GHDB, with AI, and through Shodan</td>
+<td>2, 9</td>
+<td>OK, dork tables reduced to patterns</td>
+</tr>
+<tr>
+<td>Advanced search, image search, reverse image search</td>
+<td>2</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Video, meta, FTP and IoT search engines</td>
+<td>2</td>
+<td>OK, FTP dork table reduced to patterns</td>
+</tr>
+<tr>
+<td>Top-level domains and subdomains; tools; with AI</td>
+<td>3, 9</td>
+<td>OK, exam/practice note on the dig example</td>
+</tr>
+<tr>
+<td>Extracting website information from archive.org; Photon</td>
+<td>3</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>People search services; job sites</td>
+<td>3</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Dark web footprinting; advanced dark web search parameters</td>
+<td>3</td>
+<td>OK, exam/practice note; query table reduced to one example</td>
+</tr>
+<tr>
+<td>Determining the operating system (Netcraft, Shodan, Censys)</td>
+<td>3</td>
+<td>OK, update on Censys</td>
+</tr>
+<tr>
+<td>Competitive intelligence: sources and the three groups of sites</td>
+<td>3</td>
+<td>OK, update on USPTO</td>
+</tr>
+<tr>
+<td>Geographical location; financial services; business profile sites; alerts; online reputation; groups, forums and blogs; public source-code repositories</td>
+<td>3</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>People search on social networking sites; LinkedIn; harvesting email lists, and with AI</td>
+<td>4, 9</td>
+<td>OK, exam/practice note on theHarvester sources</td>
+</tr>
+<tr>
+<td>Analysing social media presence; tools; with AI</td>
+<td>4, 9</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Whois lookup, data models, RIRs, lookup tools; IP geolocation</td>
+<td>5</td>
+<td>OK, exam/practice note and update on RDAP</td>
+</tr>
+<tr>
+<td>DNS records; DNS interrogation tools; Fierce; DNS lookup with AI; reverse DNS lookup</td>
+<td>6, 9</td>
+<td>OK, update on ANY queries</td>
+</tr>
+<tr>
+<td>Locating the network range; traceroute (ICMP, TCP, UDP), with AI; traceroute analysis and tools</td>
+<td>7, 9</td>
+<td>OK, exam/practice note on TTL</td>
+</tr>
+<tr>
+<td>Tracking email communications; email headers; email tracking tools</td>
+<td>7</td>
+<td>OK, exam/practice note</td>
+</tr>
+<tr>
+<td>Footprinting through social engineering; information available on social networking sites</td>
+<td>8</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Footprinting tools: Maltego, Recon-ng, FOCA, subfinder, OSINT Framework, Recon-Dog, BillCipher, others</td>
+<td>9</td>
+<td>OK, update on Maltego</td>
+</tr>
+<tr>
+<td>AI-powered OSINT tools; custom Python script with AI</td>
+<td>9</td>
+<td>OK, exam/practice note</td>
+</tr>
+<tr>
+<td>Footprinting countermeasures</td>
+<td>10</td>
+<td>OK, grouped</td>
+</tr>
+<tr>
+<td>Module summary</td>
+<td>Recaps and cheat sheet</td>
+<td>OK</td>
+</tr>
+</tbody>
+</table></div><nav class="pn" aria-label="Chapters"><a href="m01-introduction-to-ethical-hacking.html">← Module 1</a><a href="m03-scanning-networks.html">Module 3 →</a></nav>
+<footer><p>Written and maintained by <b>Dr. Atul Tiwari</b>. &copy; 2026 Dr. Atul Tiwari. All rights reserved.</p><p>Unofficial, independent study material. Not affiliated with or endorsed by EC-Council. CEH, CPENT and COASP are trademarks of EC-Council. Written in our own words from public standards and tool documentation. Use these techniques only on systems you own or are authorised in writing to test.</p></footer></main></div>
+<script>(function(){
+var key='hb:'+location.pathname,done={};try{done=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}
+function save(){try{localStorage.setItem(key,JSON.stringify(done))}catch(e){}}
+// wrap each h2 block in a section so it can be filtered and marked
+var main=document.querySelector('main'),kids=[].slice.call(main.children),sec=null;
+kids.forEach(function(el){if(el.tagName==='H2'){sec=document.createElement('section');main.insertBefore(sec,el)}if(sec&&el.tagName!=='FOOTER'&&el.className!=='pn')sec.appendChild(el)});
+function paint(h){var on=!!done[h.id];h.classList.toggle('done',on);h.querySelector('.mark').textContent=on?'Done ✓':'Mark done';
+var a=document.querySelector('.side a[href="#'+h.id+'"]');if(a)a.parentNode.classList.toggle('done',on)}
+[].forEach.call(document.querySelectorAll('main h2'),function(h){var b=document.createElement('span');b.className='mark';b.setAttribute('role','button');b.tabIndex=0;h.appendChild(b);
+function t(){done[h.id]=!done[h.id];save();paint(h)}b.onclick=t;b.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}};paint(h)});
+document.getElementById('find').addEventListener('input',function(){var q=this.value.trim().toLowerCase();
+[].forEach.call(document.querySelectorAll('main section'),function(s){s.classList.toggle('hide',!!q&&s.textContent.toLowerCase().indexOf(q)<0)})});
+// quiz: options are shuffled on every load so the position of the answer cannot be learned
+[].forEach.call(document.querySelectorAll('.quiz'),function(z){var n=0,ok=0,tot=z.querySelectorAll('.q').length;
+[].forEach.call(z.querySelectorAll('.q'),function(q){var bs=[].slice.call(q.querySelectorAll('button')),why=q.querySelector('.why');
+for(var i=bs.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=bs[i];bs[i]=bs[j];bs[j]=t}bs.forEach(function(b){q.insertBefore(b,why)})});
+z.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var q=b.parentNode;if(q.dataset.done)return;q.dataset.done=1;n++;
+if(b.hasAttribute('data-ok'))ok++;else b.classList.add('wrong');q.querySelector('button[data-ok]').classList.add('right');q.querySelector('.why').hidden=false;
+z.querySelector('.score').textContent='Score: '+ok+' of '+n+' answered ('+tot+' questions)'})});
+// cheat sheet: print only that section
+var cheat=document.querySelector('.cheat');
+if(cheat){var s=cheat.closest('section');if(s)s.classList.add('sheet');var pb=document.createElement('button');pb.type='button';pb.className='pbtn';pb.textContent='Print the cheat sheet only';
+pb.onclick=function(){document.body.classList.add('sheet');window.print();setTimeout(function(){document.body.classList.remove('sheet')},500)};cheat.parentNode.insertBefore(pb,cheat)}
+// mobile contents menu
+var mb=document.getElementById('menu');if(mb){mb.onclick=function(){var on=document.body.classList.toggle('nav');mb.setAttribute('aria-expanded',on);mb.textContent=on?'Close':'Contents'};
+document.getElementById('side').addEventListener('click',function(e){if(e.target.tagName==='A'){document.body.classList.remove('nav');mb.setAttribute('aria-expanded',false);mb.textContent='Contents'}})}
+var links=[].slice.call(document.querySelectorAll('.side a'));
+if('IntersectionObserver'in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'-60px 0px -75% 0px'});
+[].forEach.call(document.querySelectorAll('main h2,main h3'),function(h){io.observe(h)})}
+})();
+</script></body></html>
