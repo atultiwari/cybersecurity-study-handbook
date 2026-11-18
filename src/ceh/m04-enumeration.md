@@ -334,6 +334,7 @@ Read an OID as directions: start at the root and take the numbered branch at eac
 - **snmp-check**: gathers and neatly prints contact, description, devices, domain, hardware, storage, host name, listening ports, network interfaces, routing, software, uptime and **user accounts**.
 - **SoftPerfect Network Scanner**: pings hosts, scans ports, finds shared folders and reads device details through SNMP, WMI, HTTP, SSH and PowerShell.
 - Also named: Network Performance Monitor and Engineer's Toolset (SolarWinds), OpUtils (ManageEngine), PRTG Network Monitor.
+- Not in the courseware, common in practice: **onesixtyone** guesses community strings from a word list, for example `onesixtyone -c words.txt <target>`. Run it before `snmpwalk` when `public` fails.
 
 !!! try "Try it"
     No lab host runs SNMP. See what "closed" looks like for a UDP port:
@@ -651,6 +652,8 @@ SMB enumeration usually starts with banner grabbing for the operating system and
 | `nmap -p 445 --script smb-enum-shares <target>` | The shares on the server |
 
 Tools named: **SMBMap**, **enum4linux**, nullinux, SMBeagle and NetScanTools Pro.
+
+Not in the courseware, common in practice: **rpcclient**, part of Samba. `rpcclient -U "" -N <target>` opens a null session where the server allows one; inside it, `enumdomusers` lists users and `querydominfo` describes the domain. {R}
 
 !!! trap "Exam traps"
     - ISAKMP is **UDP 500**. `ike-scan` fingerprints VPN gateways; `psk-crack` cracks the pre-shared key.

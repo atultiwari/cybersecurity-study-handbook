@@ -576,6 +576,8 @@ Traceroute sends probes with TTL 1, 2, 3 and so on. Each one dies one router fur
 
 Traceroute tools to recognise: **NetScanTools Pro** (ICMP, UDP or TCP traces, with the country of each hop), **PingPlotter** (graphs latency and packet loss over time), Traceroute NG and the built-in `tracert`. {R}
 
+Outside the courseware you will also meet **mtr**, which joins ping and traceroute in one live display: it repeats the trace and shows packet loss and delay for every hop. TryHackMe's Active Reconnaissance room teaches it. {R}
+
 !!! exam "Exam answer / In practice"
     **Exam answer:** traceroute uses ICMP and the TTL field; Windows `tracert` uses ICMP and Linux `traceroute` uses UDP. One line of the courseware places the TTL "in the ICMP header", and says the destination finally answers with a normal ping reply.
 

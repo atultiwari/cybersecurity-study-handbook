@@ -808,6 +808,7 @@ nmap -p 139,445 --reason 10.77.0.20</code></p>
 <li><strong>snmp-check</strong>: gathers and neatly prints contact, description, devices, domain, hardware, storage, host name, listening ports, network interfaces, routing, software, uptime and <strong>user accounts</strong>.</li>
 <li><strong>SoftPerfect Network Scanner</strong>: pings hosts, scans ports, finds shared folders and reads device details through SNMP, WMI, HTTP, SSH and PowerShell.</li>
 <li>Also named: Network Performance Monitor and Engineer's Toolset (SolarWinds), OpUtils (ManageEngine), PRTG Network Monitor.</li>
+<li>Not in the courseware, common in practice: <strong>onesixtyone</strong> guesses community strings from a word list, for example <code>onesixtyone -c words.txt &lt;target&gt;</code>. Run it before <code>snmpwalk</code> when <code>public</code> fails.</li>
 </ul>
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
@@ -1260,6 +1261,7 @@ dig axfr kestrel-freight.lab @10.77.0.10; dig @10.77.0.10 example.com A +norecur
 </tbody>
 </table></div>
 <p>Tools named: <strong>SMBMap</strong>, <strong>enum4linux</strong>, nullinux, SMBeagle and NetScanTools Pro.</p>
+<p>Not in the courseware, common in practice: <strong>rpcclient</strong>, part of Samba. <code>rpcclient -U "" -N &lt;target&gt;</code> opens a null session where the server allows one; inside it, <code>enumdomusers</code> lists users and <code>querydominfo</code> describes the domain. <span class="tag tag-R" title="Know the name and what it does when you see it in an option list.">RECOGNISE</span></p>
 <div class="admonition trap">
 <p class="admonition-title">Exam traps</p>
 <ul>
