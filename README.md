@@ -19,11 +19,11 @@ Original, plain-language study handbooks for ethical hacking (CEH), penetration 
 
 | Track | Chapters published |
 | --- | --- |
-| Ethical hacking (CEH v13 syllabus) | Modules 1 to 4 (review drafts) |
+| Ethical hacking (CEH v13 syllabus) | Modules 1 to 5 (review drafts) |
 | Penetration testing bridge | Not started |
 | Offensive AI security (COASP) | Not started |
 
-The hands-on labs the chapters refer to (L01 onwards) are not in this repository yet.
+The hands-on labs the chapters refer to (L01 onwards) are not in this repository yet. From Module 5 the practice boxes point to the official course labs and to named TryHackMe rooms and HTB Academy modules.
 
 ## Build it yourself
 
