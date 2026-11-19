@@ -251,6 +251,14 @@ def build(src):
         warns.append("no quiz")
     text = text.replace("[[legend]]", keep(legend())).replace("[[meta]]", "\n\nMETASTRIP\n\n")
 
+    def boxed_code(m):
+        """A fenced block indented inside a box: stash it as <pre>, or Markdown runs the lines together."""
+        ind, code = m.group(1), m.group(2)
+        code = "\n".join(l[len(ind):] if l.startswith(ind) else l.lstrip() for l in code.rstrip("\n").split("\n"))
+        stash.append(f"<pre><code>{html.escape(code)}</code></pre>")
+        return f"\n{ind}STASH{len(stash) - 1}END\n"
+    text = re.sub(r"^([ \t]+)```[\w-]*\n(.*?)^\1```[ \t]*$", boxed_code, text, flags=re.S | re.M)
+
     md = markdown.Markdown(extensions=["tables", "fenced_code", "admonition", "toc", "attr_list", "sane_lists", "md_in_html"],
                            extension_configs={"toc": {"toc_depth": "2-3"}})
     body = md.convert(text)

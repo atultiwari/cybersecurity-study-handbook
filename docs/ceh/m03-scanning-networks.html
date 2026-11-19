@@ -57,6 +57,7 @@ h2 .tag,h3 .tag{margin-left:6px}
 .quiz .why{font:14px system-ui,sans-serif;color:var(--mut);margin:6px 0 0}.score{font:600 15px system-ui,sans-serif}
 footer{margin-top:60px;padding-top:14px;border-top:1px solid var(--line);font:13px system-ui,sans-serif;color:var(--mut)}
 section.hide{display:none}
+.admonition.stop{border-color:var(--mut);border-width:1px 1px 1px 4px;border-style:dashed dashed dashed solid}.stop .admonition-title{color:var(--mut)}.stop .admonition-title::before{content:"\270B  "}
 .admonition.update{border-color:var(--ai);border-width:1px 1px 1px 4px;border-style:solid}.update .admonition-title{color:var(--ai)}.update .admonition-title::before{content:"\21BB  "}
 .mbtn{display:none;font:600 13px system-ui,sans-serif;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
 .byline{font:14.5px system-ui,sans-serif;color:var(--mut);margin:-.3em 0 1.2em}
@@ -565,8 +566,7 @@ body.sheet main>*{display:none}body.sheet main>section.sheet{display:block}body.
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>In lab L01, from the attacker container, watch the handshake rules happen. <code>--reason</code> prints why Nmap chose each state.</p>
-<p><code>bash
-nmap -sS -p 80,81 --reason 10.77.0.20</code></p>
+<pre><code>nmap -sS -p 80,81 --reason 10.77.0.20</code></pre>
 <p>Port 80 should show <code>syn-ack</code> (rule 1) and port 81 <code>reset</code> (rule 2).</p>
 </div>
 <div class="admonition recap">
@@ -685,8 +685,7 @@ nmap -sS -p 80,81 --reason 10.77.0.20</code></p>
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>hping3 is not installed in the L01 attacker container, so do the same Xmas probe with Nmap and watch the packets:</p>
-<p><code>bash
-nmap -sX -p 80 --packet-trace 10.77.0.20</code></p>
+<pre><code>nmap -sX -p 80 --packet-trace 10.77.0.20</code></pre>
 </div>
 <div class="admonition recap">
 <p class="admonition-title">Recap: section 2</p>
@@ -822,8 +821,7 @@ nmap -Pn -p 80,443 10.77.0.20              # skip discovery, assume the host is 
 </div>
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
-<p><code>bash
-nmap -sn -oG - 10.77.0.0/24 | awk '/Up$/{print $2}' &gt; live.txt</code></p>
+<pre><code>nmap -sn -oG - 10.77.0.0/24 | awk &#x27;/Up$/{print $2}&#x27; &gt; live.txt</code></pre>
 <p>This writes only the live IP addresses to <code>live.txt</code>. You should see five lab hosts plus your own.</p>
 </div>
 <div class="admonition recap">
@@ -1094,8 +1092,7 @@ nmap -sn -oG - 10.77.0.0/24 | awk '/Up$/{print $2}' &gt; live.txt</code></p>
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>Run a SYN scan and an ACK scan against the same host and compare the STATE columns.</p>
-<p><code>bash
-nmap -sS -p 21,80 10.77.0.20 ; nmap -sA -p 21,80 10.77.0.20</code></p>
+<pre><code>nmap -sS -p 21,80 10.77.0.20 ; nmap -sA -p 21,80 10.77.0.20</code></pre>
 </div>
 <div class="admonition recap">
 <p class="admonition-title">Recap: section 4</p>
@@ -1168,8 +1165,7 @@ nmap -sS -p 21,80 10.77.0.20 ; nmap -sA -p 21,80 10.77.0.20</code></p>
 </div>
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
-<p><code>bash
-nmap -sL 10.77.0.0/29</code></p>
+<pre><code>nmap -sL 10.77.0.0/29</code></pre>
 <p>No packet reaches the targets. If the lab DNS server answers, you get hostnames for free.</p>
 </div>
 <div class="admonition recap">
@@ -1319,8 +1315,7 @@ nmap -A 10.77.0.20                         # -sV, -sC, -O and traceroute togethe
 </table></div>
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
-<p><code>bash
-nmap -sV --version-light -p 21,25,80 10.77.0.20,30,40</code></p>
+<pre><code>nmap -sV --version-light -p 21,25,80 10.77.0.20,30,40</code></pre>
 <p>Three hosts, three ports, with the service version of whatever is open.</p>
 </div>
 <div class="admonition recap">
@@ -1518,8 +1513,7 @@ nmap -sV --version-light -p 21,25,80 10.77.0.20,30,40</code></p>
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>Guess the OS two ways and compare.</p>
-<p><code>bash
-ping -c 1 10.77.0.20 | grep ttl ; nmap -O --osscan-guess 10.77.0.20</code></p>
+<pre><code>ping -c 1 10.77.0.20 | grep ttl ; nmap -O --osscan-guess 10.77.0.20</code></pre>
 <p>Lab hosts are Linux containers, so expect a TTL of 64.</p>
 </div>
 <div class="admonition recap">
@@ -1620,8 +1614,7 @@ ping -c 1 10.77.0.20 | grep ttl ; nmap -O --osscan-guess 10.77.0.20</code></p>
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>Watch fragmentation and a decoy scan happen. <code>--packet-trace</code> prints every packet sent.</p>
-<p><code>bash
-nmap -sS -f -D RND:3 -p 80 --packet-trace 10.77.0.20</code></p>
+<pre><code>nmap -sS -f -D RND:3 -p 80 --packet-trace 10.77.0.20</code></pre>
 </div>
 <div class="admonition recap">
 <p class="admonition-title">Recap: section 8</p>
@@ -1724,8 +1717,7 @@ nmap -sS -f -D RND:3 -p 80 --packet-trace 10.77.0.20</code></p>
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>Be the defender. The lab web server announces its version. Read the banner you would have to hide:</p>
-<p><code>bash
-curl -s -D - -o /dev/null http://10.77.0.20/ | grep -i -E 'server|powered'</code></p>
+<pre><code>curl -s -D - -o /dev/null http://10.77.0.20/ | grep -i -E &#x27;server|powered&#x27;</code></pre>
 </div>
 <div class="admonition recap">
 <p class="admonition-title">Recap: section 9</p>

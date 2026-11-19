@@ -57,6 +57,7 @@ h2 .tag,h3 .tag{margin-left:6px}
 .quiz .why{font:14px system-ui,sans-serif;color:var(--mut);margin:6px 0 0}.score{font:600 15px system-ui,sans-serif}
 footer{margin-top:60px;padding-top:14px;border-top:1px solid var(--line);font:13px system-ui,sans-serif;color:var(--mut)}
 section.hide{display:none}
+.admonition.stop{border-color:var(--mut);border-width:1px 1px 1px 4px;border-style:dashed dashed dashed solid}.stop .admonition-title{color:var(--mut)}.stop .admonition-title::before{content:"\270B  "}
 .admonition.update{border-color:var(--ai);border-width:1px 1px 1px 4px;border-style:solid}.update .admonition-title{color:var(--ai)}.update .admonition-title::before{content:"\21BB  "}
 .mbtn{display:none;font:600 13px system-ui,sans-serif;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
 .byline{font:14.5px system-ui,sans-serif;color:var(--mut);margin:-.3em 0 1.2em}
@@ -366,8 +367,7 @@ body.sheet main>*{display:none}body.sheet main>section.sheet{display:block}body.
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>See integrity protection work. In the L01 attacker container, or any terminal:</p>
-<p><code>bash
-echo "pay 100 to Asha" &gt; m.txt; sha256sum m.txt; echo "pay 900 to Asha" &gt; m.txt; sha256sum m.txt</code></p>
+<pre><code>echo &quot;pay 100 to Asha&quot; &gt; m.txt; sha256sum m.txt; echo &quot;pay 900 to Asha&quot; &gt; m.txt; sha256sum m.txt</code></pre>
 <p>One changed character gives a completely different checksum. That is how tampering is detected.</p>
 </div>
 <div class="admonition recap">
@@ -824,8 +824,7 @@ echo "pay 100 to Asha" &gt; m.txt; sha256sum m.txt; echo "pay 900 to Asha" &gt; 
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>Be the defender. In L01, from your own computer's terminal (not the attacker container), start the lab, make one request, and find it in the target's log:</p>
-<p><code>bash
-docker compose exec attacker curl -s http://10.77.0.20/ &gt;/dev/null; docker compose logs --tail 3 h20</code></p>
+<pre><code>docker compose exec attacker curl -s http://10.77.0.20/ &gt;/dev/null; docker compose logs --tail 3 h20</code></pre>
 <p>The source address <code>10.77.0.100</code> in that log line is an <strong>atomic, network</strong> indicator.</p>
 </div>
 <div class="admonition recap">

@@ -57,6 +57,7 @@ h2 .tag,h3 .tag{margin-left:6px}
 .quiz .why{font:14px system-ui,sans-serif;color:var(--mut);margin:6px 0 0}.score{font:600 15px system-ui,sans-serif}
 footer{margin-top:60px;padding-top:14px;border-top:1px solid var(--line);font:13px system-ui,sans-serif;color:var(--mut)}
 section.hide{display:none}
+.admonition.stop{border-color:var(--mut);border-width:1px 1px 1px 4px;border-style:dashed dashed dashed solid}.stop .admonition-title{color:var(--mut)}.stop .admonition-title::before{content:"\270B  "}
 .admonition.update{border-color:var(--ai);border-width:1px 1px 1px 4px;border-style:solid}.update .admonition-title{color:var(--ai)}.update .admonition-title::before{content:"\21BB  "}
 .mbtn{display:none;font:600 13px system-ui,sans-serif;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
 .byline{font:14.5px system-ui,sans-serif;color:var(--mut);margin:-.3em 0 1.2em}
@@ -398,8 +399,7 @@ body.sheet main>*{display:none}body.sheet main>section.sheet{display:block}body.
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>Decide which sections apply to the lab network. In the L01 attacker container:</p>
-<p><code>bash
-nmap -p 21,25,53,80,111,139,389,445,2049 --open 10.77.0.10,20,30,40 | grep -E 'report|open'</code></p>
+<pre><code>nmap -p 21,25,53,80,111,139,389,445,2049 --open 10.77.0.10,20,30,40 | grep -E &#x27;report|open&#x27;</code></pre>
 <p>Four services answer: DNS, web, FTP and mail. Those are the ones you can enumerate hands-on. The Windows and Unix file-sharing ports are closed here.</p>
 </div>
 <div class="admonition recap">
@@ -645,8 +645,7 @@ nmap -p 21,25,53,80,111,139,389,445,2049 --open 10.77.0.10,20,30,40 | grep -E 'r
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>The lab hosts are Linux, so NetBIOS is absent. Confirm it, and read why Nmap says so:</p>
-<p><code>bash
-nmap -p 139,445 --reason 10.77.0.20</code></p>
+<pre><code>nmap -p 139,445 --reason 10.77.0.20</code></pre>
 <p>Both ports are <code>closed</code> with reason <code>reset</code>. On a Windows machine you own, run <code>nbtstat -n</code> and find the <code>&lt;00&gt;</code> and <code>&lt;20&gt;</code> entries.</p>
 </div>
 <div class="admonition recap">
@@ -813,8 +812,7 @@ nmap -p 139,445 --reason 10.77.0.20</code></p>
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>No lab host runs SNMP. See what "closed" looks like for a UDP port:</p>
-<p><code>bash
-nmap -sU -p 161,162 --reason 10.77.0.10</code></p>
+<pre><code>nmap -sU -p 161,162 --reason 10.77.0.10</code></pre>
 <p>The reason is <code>port-unreach</code>: the host itself said nothing is listening. Had the state been <code>open|filtered</code>, the next command would be <code>snmpwalk -v2c -c public 10.77.0.10</code>.</p>
 </div>
 <div class="admonition recap">
@@ -886,8 +884,7 @@ nmap -sU -p 161,162 --reason 10.77.0.10</code></p>
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>No lab host runs a directory. Check the three LDAP ports:</p>
-<p><code>bash
-nmap -p 389,636,3268 --reason 10.77.0.20</code></p>
+<pre><code>nmap -p 389,636,3268 --reason 10.77.0.20</code></pre>
 <p>Then, on paper, write the <code>ldapsearch</code> command you would run first if 389 were open, in both its exam form and its current form.</p>
 </div>
 <div class="admonition recap">
@@ -950,8 +947,7 @@ nmap -p 389,636,3268 --reason 10.77.0.20</code></p>
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>The lab has neither service. Confirm both in one line:</p>
-<p><code>bash
-nmap -sU -p 123 --reason 10.77.0.10; nmap -p 111,2049 --reason 10.77.0.30</code></p>
+<pre><code>nmap -sU -p 123 --reason 10.77.0.10; nmap -p 111,2049 --reason 10.77.0.30</code></pre>
 <p>Where 111 and 2049 are open, <code>rpcinfo -p</code> and <code>showmount -e</code> are the next two commands.</p>
 </div>
 <div class="admonition recap">
@@ -1047,8 +1043,7 @@ nmap -sU -p 123 --reason 10.77.0.10; nmap -p 111,2049 --reason 10.77.0.30</code>
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>Confirm three accounts by hand. In the L01 attacker container (use <code>mnair</code> in the healthcare skin):</p>
-<p><code>bash
-for u in mfernandes nobody svc_backup; do printf "VRFY $u\r\nQUIT\r\n" | nc -w 3 10.77.0.40 25 | sed -n 2p; done</code></p>
+<pre><code>for u in mfernandes nobody svc_backup; do printf &quot;VRFY $u\r\nQUIT\r\n&quot; | nc -w 3 10.77.0.40 25 | sed -n 2p; done</code></pre>
 <p>Two names get <code>250</code>, one gets <code>550</code>. The staff page from Module 2 has just become a confirmed account list.</p>
 </div>
 <div class="admonition recap">
@@ -1168,8 +1163,7 @@ for u in mfernandes nobody svc_backup; do printf "VRFY $u\r\nQUIT\r\n" | nc -w 3
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>Two questions for the lab's name server. In the L01 attacker container:</p>
-<p><code>bash
-dig axfr kestrel-freight.lab @10.77.0.10; dig @10.77.0.10 example.com A +norecurse | grep status</code></p>
+<pre><code>dig axfr kestrel-freight.lab @10.77.0.10; dig @10.77.0.10 example.com A +norecurse | grep status</code></pre>
 <p>The first hands over the zone: the leak. The second is <code>REFUSED</code>: this server answers only for its own zone and keeps no cache, so there is nothing to snoop. That second answer is what a well-separated authoritative server looks like.</p>
 </div>
 <div class="admonition recap">
@@ -1274,8 +1268,7 @@ dig axfr kestrel-freight.lab @10.77.0.10; dig @10.77.0.10 example.com A +norecur
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>FTP is in the port table and the lab has it. Enumerate the file server without a password:</p>
-<p><code>bash
-printf 'QUIT\r\n' | nc -w 3 10.77.0.30 21; curl -s ftp://10.77.0.30/pub/</code></p>
+<pre><code>printf &#x27;QUIT\r\n&#x27; | nc -w 3 10.77.0.30 21; curl -s ftp://10.77.0.30/pub/</code></pre>
 <p>The first line is the banner, with a software name and version. The listing is what "anonymous" is allowed to see. Read the files; one tells you which account to verify in section 6.</p>
 </div>
 <div class="admonition recap">
@@ -1368,8 +1361,7 @@ printf 'QUIT\r\n' | nc -w 3 10.77.0.30 21; curl -s ftp://10.77.0.30/pub/</code><
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>A real enumeration script: one banner per service, then a count of zone records. In the L01 attacker container:</p>
-<p><code>bash
-for p in "30 21" "40 25"; do set -- $p; printf 'QUIT\r\n' | nc -w 3 10.77.0.$1 $2 | head -1; done; dig +short axfr kestrel-freight.lab @10.77.0.10 | wc -l</code></p>
+<pre><code>for p in &quot;30 21&quot; &quot;40 25&quot;; do set -- $p; printf &#x27;QUIT\r\n&#x27; | nc -w 3 10.77.0.$1 $2 | head -1; done; dig +short axfr kestrel-freight.lab @10.77.0.10 | wc -l</code></pre>
 <p>Ask an AI assistant for the same thing and compare. Did it speak each service's own language, or did it just run more scans?</p>
 </div>
 <div class="admonition recap">
@@ -1451,8 +1443,7 @@ for p in "30 21" "40 25"; do set -- $p; printf 'QUIT\r\n' | nc -w 3 10.77.0.$1 $
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>Be the defender. This is the reply your mail server should never give:</p>
-<p><code>bash
-printf 'VRFY svc_backup\r\nQUIT\r\n' | nc -w 3 10.77.0.40 25 | sed -n 2p | cut -c1-40</code></p>
+<pre><code>printf &#x27;VRFY svc_backup\r\nQUIT\r\n&#x27; | nc -w 3 10.77.0.40 25 | sed -n 2p | cut -c1-40</code></pre>
 <p>Write the reply a hardened server would give to both a real and a made-up name, and say why they must be identical.</p>
 </div>
 <div class="admonition recap">

@@ -40,6 +40,7 @@ Each chapter needs at least one of every box. Write them as `!!! kind "Title"` w
 | `trap` | Exam traps |
 | `cpent`, `coasp` | Depth and link insets |
 | `hospital` | The one healthcare worked example. Add a line carrying it to another industry |
+| `stop` | Optional. "Where these notes stop": what was deliberately left out (for example working attack commands) and exactly where to read it: e-book section, lab task, practice room or module section |
 
 Markers on their own line: `[[meta]]` (reading time, lab time, difficulty), `[[legend]]`, `[[cheatsheet]]`.
 

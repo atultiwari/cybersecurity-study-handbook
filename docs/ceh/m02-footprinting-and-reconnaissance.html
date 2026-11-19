@@ -57,6 +57,7 @@ h2 .tag,h3 .tag{margin-left:6px}
 .quiz .why{font:14px system-ui,sans-serif;color:var(--mut);margin:6px 0 0}.score{font:600 15px system-ui,sans-serif}
 footer{margin-top:60px;padding-top:14px;border-top:1px solid var(--line);font:13px system-ui,sans-serif;color:var(--mut)}
 section.hide{display:none}
+.admonition.stop{border-color:var(--mut);border-width:1px 1px 1px 4px;border-style:dashed dashed dashed solid}.stop .admonition-title{color:var(--mut)}.stop .admonition-title::before{content:"\270B  "}
 .admonition.update{border-color:var(--ai);border-width:1px 1px 1px 4px;border-style:solid}.update .admonition-title{color:var(--ai)}.update .admonition-title::before{content:"\21BB  "}
 .mbtn{display:none;font:600 13px system-ui,sans-serif;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
 .byline{font:14.5px system-ui,sans-serif;color:var(--mut);margin:-.3em 0 1.2em}
@@ -341,8 +342,7 @@ body.sheet main>*{display:none}body.sheet main>section.sheet{display:block}body.
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>One request can yield system information. In the L01 attacker container:</p>
-<p><code>bash
-curl -s -D - -o /dev/null http://10.77.0.20/</code></p>
+<pre><code>curl -s -D - -o /dev/null http://10.77.0.20/</code></pre>
 <p>The <code>Server</code> and <code>X-Powered-By</code> lines name the web server software, its version and the language behind it. This touches the target, so it is active, and it is in scope here.</p>
 </div>
 <div class="admonition recap">
@@ -592,8 +592,7 @@ curl -s -D - -o /dev/null http://10.77.0.20/</code></p>
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>The lab has no internet, so look at the two things a search engine would have found. In the L01 attacker container:</p>
-<p><code>bash
-curl -s http://10.77.0.20/robots.txt ; curl -s http://10.77.0.20/backup/</code></p>
+<pre><code>curl -s http://10.77.0.20/robots.txt ; curl -s http://10.77.0.20/backup/</code></pre>
 <p><code>robots.txt</code> asks search engines to stay out of one folder, which tells every reader the folder exists. The second command shows that folder's open file listing: exactly the page an <code>intitle:"index of"</code> dork is built to find. <strong>With internet:</strong> search <code>site:example.com filetype:pdf</code> for a domain you own.</p>
 </div>
 <div class="admonition recap">
@@ -792,8 +791,7 @@ curl -s http://10.77.0.20/robots.txt ; curl -s http://10.77.0.20/backup/</code><
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>Guess subdomains the way the online tools do. In the L01 attacker container (use <code>aarogya-demo.lab</code> in the healthcare skin):</p>
-<p><code>bash
-for w in $(cat /usr/share/wordlists/common-small.txt) mail ns1 www; do a=$(dig +short $w.kestrel-freight.lab @10.77.0.10); [ -n "$a" ] &amp;&amp; echo "$w $a"; done</code></p>
+<pre><code>for w in $(cat /usr/share/wordlists/common-small.txt) mail ns1 www; do a=$(dig +short $w.kestrel-freight.lab @10.77.0.10); [ -n &quot;$a&quot; ] &amp;&amp; echo &quot;$w $a&quot;; done</code></pre>
 <p>Four names answer. Keep the list; section 6 shows a host that guessing cannot find. <strong>With internet:</strong> look up a domain you own on the Wayback Machine.</p>
 </div>
 <div class="admonition recap">
@@ -869,8 +867,7 @@ for w in $(cat /usr/share/wordlists/common-small.txt) mail ns1 www; do a=$(dig +
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>Harvest an email list by hand. In the L01 attacker container:</p>
-<p><code>bash
-curl -s http://10.77.0.20/staff | grep -oE '[a-z]+@[a-z.-]+' | sort -u</code></p>
+<pre><code>curl -s http://10.77.0.20/staff | grep -oE &#x27;[a-z]+@[a-z.-]+&#x27; | sort -u</code></pre>
 <p>Five addresses, and from them the username pattern: first initial plus surname. That one line is what theHarvester automates across many sources.</p>
 </div>
 <div class="admonition recap">
@@ -972,8 +969,7 @@ curl -s http://10.77.0.20/staff | grep -oE '[a-z]+@[a-z.-]+' | sort -u</code></p
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>The lab has no Whois server. Its DNS holds the nearest thing, the zone's start-of-authority record:</p>
-<p><code>bash
-dig +noall +answer kestrel-freight.lab SOA @10.77.0.10</code></p>
+<pre><code>dig +noall +answer kestrel-freight.lab SOA @10.77.0.10</code></pre>
 <p>It names the primary name server, the responsible mailbox (<code>hostmaster.</code> stands for <code>hostmaster@</code>) and a serial number that reads as a date. <strong>With internet:</strong> run <code>whois example.com</code>, or use ICANN's lookup page at lookup.icann.org, on a domain you own.</p>
 </div>
 <div class="admonition recap">
@@ -1135,8 +1131,7 @@ dnsrecon -r 192.0.2.0-192.0.2.255         # reverse lookup of every address in a
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>Ask the lab's name server for everything. In the L01 attacker container:</p>
-<p><code>bash
-dig axfr kestrel-freight.lab @10.77.0.10</code></p>
+<pre><code>dig axfr kestrel-freight.lab @10.77.0.10</code></pre>
 <p>Compare the answer with your list from section 3. One host is new: guessing could not find it and an ordinary lookup of its name returns NXDOMAIN. Read the TXT records too. The lab has no reverse zone, so <code>dig -x 10.77.0.20 @10.77.0.10</code> is refused.</p>
 </div>
 <div class="admonition recap">
@@ -1210,8 +1205,7 @@ dig axfr kestrel-freight.lab @10.77.0.10</code></p>
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>The lab is one network segment, so a traceroute there has nothing to show. Read the mail server's greeting instead; it names the host and its software:</p>
-<p><code>bash
-printf 'QUIT\r\n' | nc -w 3 10.77.0.40 25</code></p>
+<pre><code>printf &#x27;QUIT\r\n&#x27; | nc -w 3 10.77.0.40 25</code></pre>
 <p><strong>With internet:</strong> run <code>traceroute example.com</code> (macOS, Linux) or <code>tracert example.com</code> (Windows) from your own computer and count the hops. Then open any email you have received, choose "show original" or "view source", and find the bottom <code>Received:</code> line.</p>
 </div>
 <div class="admonition recap">
@@ -1501,8 +1495,7 @@ printf 'QUIT\r\n' | nc -w 3 10.77.0.40 25</code></p>
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>A footprinting script in one line. In the L01 attacker container:</p>
-<p><code>bash
-D=kestrel-freight.lab; for t in SOA NS TXT; do dig +noall +answer $D $t @10.77.0.10; done; curl -s http://10.77.0.20/staff | grep -oE '[a-z]+@[a-z.-]+' | sort -u</code></p>
+<pre><code>D=kestrel-freight.lab; for t in SOA NS TXT; do dig +noall +answer $D $t @10.77.0.10; done; curl -s http://10.77.0.20/staff | grep -oE &#x27;[a-z]+@[a-z.-]+&#x27; | sort -u</code></pre>
 <p>It asks for three record types by name, not <code>ANY</code>, then harvests the email addresses. Ask an AI assistant to write the same thing and compare its answer with this one.</p>
 </div>
 <div class="admonition recap">
@@ -1577,8 +1570,7 @@ D=kestrel-freight.lab; for t in SOA NS TXT; do dig +noall +answer $D $t @10.77.0
 <div class="admonition try">
 <p class="admonition-title">Try it</p>
 <p>Be the defender. List what the lab web server would need to stop announcing:</p>
-<p><code>bash
-curl -s -D - -o /dev/null http://10.77.0.20/ | grep -i -E 'server|powered'</code></p>
+<pre><code>curl -s -D - -o /dev/null http://10.77.0.20/ | grep -i -E &#x27;server|powered&#x27;</code></pre>
 <p>Then name, from the table above, the fix for each of your findings in sections 2, 3, 4 and 6.</p>
 </div>
 <div class="admonition recap">
